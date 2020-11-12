@@ -1,0 +1,20 @@
+stm32使用ITM调试
+
+2.1 硬件连接
+ITM机制要求使用SWD方式接口，并需要连接SWO线，一般的四线SWD方式（VCC SDCLK，SDIO，GND）是不行的。标准的20针JTAG接口是可以的，只需要在MDK里设置使用SWD接口即可。
+
+2.2 添加重定向文件
+将下面的文件保存成任意C文件，并添加到工程中fputc.c
+
+2.3 配置JLINK的初始化配置文件
+将下面文件放置在你的工程下，并取任意名称，这里笔者取名为 STM32DBG.ini
+
+2.4 Debug中选择jlink   initialzation file中添加STM32DBG.ini文件  
+setting中Debug对JLINK的配置，ITM仅支持SWD接口 
+setting中Trace 配置时钟72Mhz  32位将0处打勾
+
+2.5 烧录程序，并启动调试，View选择serial Windows，打开printf输出界面 
+
+
+
+%6.2f    按照浮点数打印，至少6个字符，小数点后由两位小数

@@ -1,0 +1,129 @@
+
+一、STM32的独立时钟源共有四个：
+
+1.HSE（外部高速时钟，4~16MHz）；
+2.HSI（内部高速时钟，8MHz，精度不高）；
+3.LSE（外部低速时钟，32.768kHz，一般用于产生精确秒信号）；
+4.LSI（内部低速时钟，40kHz）；
+还有几个衍生的时钟
+5.PLLCLK（锁相环时钟，来源可以是 HSE，HSE/2，HSI/2 这三种再进行倍频得到）；
+6.SYSCLK（系统时钟，来源可以是 HSE，HSI，PLL 这三种）；
+7.HCLK（AHB总线时钟，由SYSCLK分频得到）；
+8.PCLK1（APB1低速时钟，最高36MHz，由HCLK分频得到）；
+9.PCLK2（APB2高速时钟，最高72MHz，由HCLK分频得到）；
+10.RTCCLK（实时时钟，来源可以是LSI，LSE，HSE/128 这三种）；
+11.IWDGCLK（独立看门狗时钟，来自LSI）；
+在使用外设之前，应先使能其各自的时钟！
+
+若使用3.5版本的库函数进行开发，在启动代码（startup_stm32f10x_xx.s）中会默认调用SystemInit()函数（位于文件“system_stm32f10x.c”），
+如果定义了这个宏（#define SYSCLK_FREQ_72MHz  72000000），则会将时钟系统初始化为如下状态：
+SYSCLK：72MHz  /  AHB：72MHz  /  PCLK1：36MHz  /  PCLK2：72MHz  /  PLL：72MHz，如此一来便大大简化了编程，
+只需在设置中预先DEFINE这个宏（SYSCLK_FREQ_72MHz）即可。初始化以后可以通过SystemCoreClock变量来获取系统时钟（SYSCLK）的状态，
+例如，SYSCLK为72MHz，那么SystemCoreClock的值为72000000。
+
+
+
+二、RCC配置流程
+
+1、将RCC寄存器恢复为默认值   RCC_DeInit(void)
+
+2、打开外部高速时钟晶振    RCC_HSEConfig(u32 RCC_HSE)
+输入参数：
+RCC_HSE: HSE的新状态
+RCC_HSE_OFF  HSE晶振OFF
+RCC_HSE_ON  HSE晶振ON
+RCC_HSE_Bypass  HSE晶振被外部时钟旁路
+
+3、等待外部高速时钟晶振工作  ErrorStatus RCC_WaitForHSEStartUp(void)
+输出参数：
+一个ErrorStatus枚举值：
+SUCCESS：HSE晶振稳定且就绪
+ERROR：HSE晶振未就绪
+
+4、设置AHB时钟    RCC_HCLKConfig(u32 RCC_HCLK)
+输入参数：
+RCC_HCLK: 定义HCLK，该时钟源自系统时钟（SYSCLK）
+RCC_SYSCLK_Div1  AHB时钟 = 系统时钟
+RCC_SYSCLK_Div2  AHB时钟 = 系统时钟 / 2
+RCC_SYSCLK_Div4  AHB时钟 = 系统时钟 / 4
+RCC_SYSCLK_Div8  AHB时钟 = 系统时钟 / 8
+RCC_SYSCLK_Div16  AHB时钟 = 系统时钟 / 16
+RCC_SYSCLK_Div64  AHB时钟 = 系统时钟 / 64
+RCC_SYSCLK_Div128  AHB时钟 = 系统时钟 / 128
+RCC_SYSCLK_Div256  AHB时钟 = 系统时钟 / 256
+RCC_SYSCLK_Div512  AHB时钟 = 系统时钟 / 512
+
+5、设置高速APB时钟    RCC_PCLK2Config(u32 RCC_PCLK2)
+输入参数：
+RCC_PCLK2: 定义PCLK2，该时钟源自AHB时钟（HCLK）
+RCC_HCLK_Div1  APB2时钟 = HCLK
+RCC_HCLK_Div2  APB2时钟 = HCLK / 2
+RCC_HCLK_Div4  APB2时钟 = HCLK / 4
+RCC_HCLK_Div8  APB2时钟 = HCLK / 8
+RCC_HCLK_Div16  APB2时钟 = HCLK / 16
+
+6、设置低速APB时钟    RCC_PCLK1Config(u32 RCC_PCLK1)
+输入参数：
+RCC_PCLK1: 定义PCLK1，该时钟源自AHB时钟（HCLK）
+RCC_HCLK_Div1  APB1时钟 = HCLK
+RCC_HCLK_Div2  APB1时钟 = HCLK / 2
+RCC_HCLK_Div4  APB1时钟 = HCLK / 4
+RCC_HCLK_Div8  APB1时钟 = HCLK / 8
+RCC_HCLK_Div16  APB1时钟 = HCLK / 16
+
+7、设置PLL锁相环,设置PLL输入时钟源及输出倍频系数    RCC_PLLConfig(u32 RCC_PLLSource, u32 RCC_PLLMul)
+输入参数：
+RCC_PLLSource：PLL的输入时钟源
+RCC_PLLSource_HSI_Div2  PLL的输入时钟 = HSI时钟频率除以2
+RCC_PLLSource_HSE_Div1  PLL的输入时钟 = HSE时钟频率
+RCC_PLLSource_HSE_Div2  PLL的输入时钟 = HSE 时钟频率除以2
+RCC_PLLMul：PLL倍频系数
+RCC_PLLMul_2  PLL输入时钟 x 2
+RCC_PLLMul_3  PLL输入时钟 x 3
+......
+RCC_PLLMul_16  PLL输入时钟 x 16
+
+8、打开PLL锁相环    RCC_PLLCmd(FunctionalState NewState)
+NewState：PLL新状态
+这个参数可以取：ENABLE或者DISABLE
+
+9、等待PLL锁相环工作    while(RCC_GetFlagStatus(RCC_FLAG_PLLRDY)==RESET)
+
+10、设置系统时钟    RCC_SYSCLKConfig(u32 RCC_SYSCLKSource)
+输入参数：
+RCC_SYSCLKSource: 用作系统时钟的时钟源
+RCC_SYSCLKSource_HSI  选择HSI作为系统时钟
+RCC_SYSCLKSource_HSE  选择HSE作为系统时钟
+RCC_SYSCLKSource_PLLCLK  选择PLL作为系统时钟
+
+11、判断PLL是否为系统时钟    while(RCC_GetSYSCLKSource()!=0x08)
+输出参数：
+0x00：HSI作为系统时钟
+0x04：HSE作为系统时钟
+0x08：PLL作为系统时钟
+
+12、打开要使用的外设时钟 RCC_APB2PeriphClockCmd/RCC_APB1PeriphClockCmd
+
+void RCC_Configuration(void)  
+{  
+    //----------使用外部RC晶振-----------  
+1    RCC_DeInit();           //初始化为缺省值  
+2    RCC_HSEConfig(RCC_HSE_ON);  //使能外部的高速时钟   
+3    while(RCC_GetFlagStatus(RCC_FLAG_HSERDY) == RESET); //等待外部高速时钟使能就绪  
+      
+    FLASH_PrefetchBufferCmd(FLASH_PrefetchBuffer_Enable);   //Enable Prefetch Buffer  //FLASH时序延迟几个周期，等待总线同步操作。所有程序中必须的
+    FLASH_SetLatency(FLASH_Latency_2);      //Flash 2 wait state  
+      
+4    RCC_HCLKConfig(RCC_SYSCLK_Div1);        //HCLK = SYSCLK  
+5    RCC_PCLK2Config(RCC_HCLK_Div1);         //PCLK2 =  HCLK  
+6    RCC_PCLK1Config(RCC_HCLK_Div2);         //PCLK1 = HCLK/2  
+7    RCC_PLLConfig(RCC_PLLSource_HSE_Div1,RCC_PLLMul_9); //PLLCLK = 8MHZ * 9 =72MHZ  
+8    RCC_PLLCmd(ENABLE);         //Enable PLLCLK  
+  
+9    while(RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET); //Wait till PLLCLK is ready  
+10    RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);  //Select PLL as system clock  
+11    while(RCC_GetSYSCLKSource()!=0x08);         //Wait till PLL is used as system clock source  
+      
+    //---------打开相应外设时钟--------------------  
+12    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);    //使能APB2外设的GPIOA的时钟        
+}  

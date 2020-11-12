@@ -1,0 +1,111 @@
+事件控制块数据结构体
+typedef struct os_event 
+{
+    INT8U    OSEventType;      事件的类型             可以是信号量（OS_EVENT_SEM）、邮箱（OS_EVENT_TYPE_MBOX）或消息队列（OS_EVENT_TYPE_Q）中的一种。用户要根据该域的具体值来调用相应的系统函数，以保证对其进行的操作的正确性。     
+    void    *OSEventPtr;       消息或消息队列的指针    只有在所定义的事件是邮箱或者消息队列时才使用。当所定义的事件是邮箱时，它指向一个消息，而当所定义的事件是消息队列时，它指向一个数据结构。           
+    INT16U   OSEventCnt;       信号量计数器                  
+#if OS_LOWEST_PRIO <= 63
+    INT8U    OSEventGrp;        等待事件的任务组    （处于就绪状态）      包含的是系统中处于就绪状态的任务  OSRdyTbl[]和OSRdyGrp包含的是等待某事件的任务
+    INT8U    OSEventTbl[OS_EVENT_TBL_SIZE];    等待事件的任务列表
+#else
+    INT16U   OSEventGrp;                     
+    INT16U   OSEventTbl[OS_EVENT_TBL_SIZE];  
+#endif
+
+#if OS_EVENT_NAME_SIZE > 1
+    INT8U    OSEventName[OS_EVENT_NAME_SIZE];
+#endif
+} OS_EVENT;
+
+
+#define OS_TICKS_PER_SEC       	200u   /* Set the number of ticks in one second  在一秒内设置节拍数      延时一个节拍为5ms            */
+
+os_cfg_app.h设置时钟节拍频率，10Hz~1000Hz
+#define  OS_CFG_TICK_RATE_HZ   1000u
+OSTickCtr记录了系统时钟节拍数，在调用OSInit()时被初始化为0，以后每发生1个时钟节拍，OSTickCtr加1。
+
+
+//空闲任务 =====================================
+//描述:这个函数是uCOS-II内部函数,uCOS-II总要建立一个空闲任务,这个任务在没有其它任务进入  
+//     就绪态时投入运行。这个空闲任务永远设为最低优先级,即OS_LOWEST_PRIO.空闲任务不可能  
+//     被应用软件删除。  
+//注意:1)OSTaskIdleHook()可以允许用户在函数中写入自己的代码,可以借助OSTaskIdleHook(),让  
+//       CPU执行STOP指令,从而进入低功耗模式,当应用系统由电池供电时,这种方式特别有用。  
+//     2)这个函数永远处于就绪态,所以不要在OSTaskIdleHook()中调用可以使任务挂起的PEND函数,  
+//       OSTimeDly()函数和OSTaskSuspend()函数         
+//  
+void  OS_TaskIdle (void *pdata)  
+{  
+#if OS_CRITICAL_METHOD == 3                      //中断函数被设定为模式3  
+    OS_CPU_SR  cpu_sr;  
+#endif      
+      
+      
+    pdata = pdata;                               //参数等于本身,防止一些编译器不能编译  
+    for (;;) {                                   //无限循环  
+        OS_ENTER_CRITICAL();                     //关闭中断  
+        OSIdleCtr++;                             //32位空闲计数器加1,提供给统计任务消耗CPU事件  
+        OS_EXIT_CRITICAL();                      //打开中断  
+        OSTaskIdleHook();                        //空闲任务钩子程序  
+    }  
+}
+
+//统计任务  ====================================
+//描述:uCOS-II有一个提供运行时间统计的任务。这个任务叫做OSTaskStat(),如果用户将系统定义常  
+//     数OS_TASK_STAT_EN(见文件OS_CFG.H)设为1,这个任务就会建立。一旦得到了允许,OSTaskStat()  
+//     每秒钟运行一次(见文件OS_CORE.C)计算当前的CPU利用率。换句话说,OSTaskStat()告诉用户  
+//     应用程序使用了多少CPU时间,用百分比表示,这个值放在一个有符号8位整数OSCPUUsage中,精读  
+//     度是1个百分点。)  
+//     如果用户应用程序打算使用统计任务,用户必须在初始化时建立一个唯一的任务,在这个任务中  
+//     调用OSStatInit()(见文件OS_CORE.C)。换句话说,在调用系统启动函数OSStat()之前,用户初  
+//     始代码必须先建立一个任务,在这个任务中调用系统统计初始化函数OSStatInit(),然后再建立  
+//     应用程序中的其他任务  
+//  
+//                                         OSIdleCtr  
+//                OSCPUUsage = 100 * (1 - ------------)     (units are in %)  
+//                                        OSIdleCtrMax  
+//  
+//注意:1) uCOS-II已经将空闲任务的优先级设为最低,即OS_LOWEST_PRIO。统计任务的优先级设为次  
+//        低,OS_LOWEST_PRIO-1.  
+//     2) 因为用户的应用程序必须先建立一个起始任务TaskStart()。在使用统计任务前,用户必须首  
+//        先调用的是uCOS-II中的系统初始化函数OSInit().  
+//     3) 在创建统计任务之前,为了保持系统达到稳定状态,需要延迟5秒钟,你必须至少延时2秒钟  
+//        以设定最大空闲计数值  
+#if OS_TASK_STAT_EN > 0                          //允许生产OS_TaskStat()函数  
+void  OS_TaskStat (void *pdata)                 //统计任务(指向一个数据结构)  
+{  
+#if OS_CRITICAL_METHOD == 3                      //中断函数被设定为模式3  
+    OS_CPU_SR  cpu_sr;  
+#endif      
+    INT32U     run;                             //定义一个运算变量  
+    INT32U     max;  
+    INT8S      usage;                           //定义一个使用变量  
+  
+  
+    pdata = pdata;                               //数据结构指针等于本身,防止编译器不能编译  
+    while (OSStatRdy == FALSE) {                 //判断统计任务就绪标志OSStatRdy设为"假"  
+        OSTimeDly(2 * OS_TICKS_PER_SEC);         //延时2秒钟,等待统计任务做好准备  
+    }  
+    max = OSIdleCtrMax / 100L;  
+    for (;;) {                                   //无限循环  
+        OS_ENTER_CRITICAL();                     //关闭中断  
+        OSIdleCtrRun = OSIdleCtr;                //获得当前的空闲计数值  
+        run          = OSIdleCtr;                //并保存到运算变量中,以便运算  
+        OSIdleCtr    = 0L;                       //空闲计数器OSIdleCtr被清零  
+        OS_EXIT_CRITICAL();                      //打开中断  
+        if (max > 0L) {                           //如果最大空闲计数值>0  
+            usage = (INT8S)(100L - run / max);   //求CPU利用率  
+            if (usage >= 0) {                    //不能是负的百分值  
+                OSCPUUsage = usage;              //如果是正的值,保存它  
+            } else {  
+                OSCPUUsage = 0;                  //如果是负值，设为0  
+            }  
+        } else {                                 //如果最大空闲计数值不>0  
+            OSCPUUsage = 0;                      //如果是负值,设为0  
+            max        = OSIdleCtrMax / 100L;  
+        }  
+        OSTaskStatHook();                        //调用钩子函数，可添加自己的代码  
+        OSTimeDly(OS_TICKS_PER_SEC);             //调用延迟函数OSTimeDly()将自身延时1个时钟节拍以停止自身的运行  
+    }  
+}  
+#endif  

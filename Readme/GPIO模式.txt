@@ -1,0 +1,24 @@
+GPIO_Mode_AIN          模拟输入     0000
+GPIO_Mode_IN_FLOATING  浮空输入     0100
+GPIO_Mode_IPD          下拉输入     1000
+GPIO_Mode_IPU          上拉输入     1000     GPIOC->CRL&=0XFFF0FFFF;GPIOC->CRL|=8<<4;    将8=1000h左移4位  PORTC.4上拉输入  
+
+GPIO_Mode_Out_PP       推挽输出     0011     GPIOC->CRL&=0XFFF0FFFF;GPIOC->CRL|=3<<4;      PORTC.4推挽输出   速度50MHz
+GPIO_Mode_Out_OD       开漏输出     0111
+GPIO_Mode_AF_PP        复用推挽输出 1011
+GPIO_Mode_AF_OD        复用开漏输出 1111
+
+
+端口配置低寄存器(GPIOx_CRL) (x=A..E)
+CNF7[1:0]-MODE7[1:0]   CNF6[1:0]-MODE6[1:0]   CNF5[1:0]-MODE5[1:0]   CNF4[1:0]-MODE4[1:0]
+GPIOx.7                GPIOx.6                GPIOx.5                GPIOx.4 
+CNF3[1:0]-MODE3[1:0]   CNF2[1:0]-MODE2[1:0]   CNF1[1:0]-MODE1[1:0]   CNF0[1:0]-MODE0[1:0]
+GPIOx.3                GPIOx.2                GPIOx.1                GPIOx.0    
+
+GPIOC->ODR|=1<<4;      //PORTC.4输出1,且不影响其他引脚输出
+
+
+GPIOD->ODR ^= (1<<2);           //GPIOD.2取反
+复用推挽输出，此时IO受内部外设控制，比如定时器的PWM,比如SPI的MOSI,MISO等。
+而普通的推挽输出，则IO受ODR控制。
+设置为复用推挽输出，那么IO就不受ODR控制了

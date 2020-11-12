@@ -1,0 +1,151 @@
+cortex-M3移植uCOS-II启动流程分析：
+
+上电启动，分为两个阶段：
+
+第一个阶段：（主要是CPU内核的初始化）
+先运行启动代码（这个是ARM公司写的，跟具体的CPU相关）
+1.1 初始化堆栈
+1.2 初始化，规划好中断向量表
+    跳转到Reset_Handler中，执行复位后的中断
+1.3 在 Reset_Handler 中，调用C函数 SystemInit 来进行系统初始化
+    主要是做跟CPU初始化相关的工作，比如时钟PLL的配置等
+1.4 调用C函数 __main 将会跳转到主程序 main 函数中
+
+第二个阶段：（主要是外设模块的初始化，并且完成启动操作系统调度）
+2.1 初始化心跳时钟
+2.2 初始化中断分组
+2.3 初始化外设：串口，GPIO，等等
+
+操作系统相关初始化：
+2.4 调用OSInit: 初始化操作系统相关的全局变量，链表结构 
+    OSInitHookBegin();                                           /* Call port specific initialization code   */
+    OS_InitMisc();                                               /* Initialize miscellaneous variables       */
+    OS_InitRdyList();                                            /* Initialize the Ready List                */
+    OS_InitTCBList();                                            /* Initialize the free list of OS_TCBs      */
+    OS_InitEventList();                                          /* Initialize the free list of OS_EVENTs    */
+    
+    创建空闲任务，必须创建的任务！！！
+    OS_InitTaskIdle();                                           /* Create the Idle Task                     */
+    OSInitHookEnd();                                             /* Call port specific init. code            */
+2.5 创建应用程序的任务(可以不创建)
+2.6 调用函数 OSStart 启动操作系统
+2.6.1 找到就绪列表中，任务优先级最高的任务，获取其任务控制块TCB
+2.6.2 调用函数 OSStartHighRdy 启动优先级最高的任务
+    OSStartHighRdy 函数是与具体的CPU架构相关的。
+    在Cortex-M3架构的芯片中，是利用pendsv中断来进行任务间切换的。
+    
+=================================
+汇编语言实现 OSStartHighRdy 函数：
+
+OSStartHighRdy
+    LDR     R0, =NVIC_SYSPRI14         ; 设置PendSV的异常中断优先级
+    LDR     R1, =NVIC_PENDSV_PRI
+    STRB    R1, [R0]
+
+    MOVS    R0, #0                     ; 初始化PSP=0
+    MSR     PSP, R0
+
+    LDR     R0, =OS_CPU_ExceptStkBase  ; 初始化异常堆栈MSP地址
+    LDR     R1, [R0]
+    MSR     MSP, R1    
+
+    LDR     R0, =OSRunning             ; 置OSRunning = TRUE
+    MOVS    R1, #1
+    STRB    R1, [R0]
+
+    LDR     R0, =NVIC_INT_CTRL         ; 触发PendSV异常 (引起上下文切换)
+    LDR     R1, =NVIC_PENDSVSET
+    STR     R1, [R0]
+
+    CPSIE   I                          ; 开启中断，于是进入PendSV异常
+
+OSStartHang
+    B       OSStartHang                ; 正常情况下，不应运行到这
+    
+
+========================================================
+当使能了中断：CPSIE   I，将会触发 PendSV 的中断服务程序：
+
+;********************************************************************************************************
+;                                         HANDLE PendSV EXCEPTION
+;                                     void OS_CPU_PendSVHandler(void)
+;
+; Note(s) : 1) PendSV is used to cause a context switch.  This is a recommended method for performing
+;              context switches with Cortex-M3.  This is because the Cortex-M3 auto-saves half of the
+;              processor context on any exception, and restores same on return from exception.  So only
+;              saving of R4-R11 is required and fixing up the stack pointers.  Using the PendSV exception
+;              this way means that context saving and restoring is identical whether it is initiated from
+;              a thread or occurs due to an interrupt or exception.
+;
+;           2) Pseudo-code is:
+;              a) Get the process SP, if 0 then skip (goto d) the saving part (first context switch);
+                首次切换到最高优先级的就绪任务时，不需要保存CPU的寄存器（因为前面还没有运行任务！！）
+
+;              b) Save remaining regs r4-r11 on process stack;   在工艺堆栈上保存剩余的regs r4 r11;
+;              c) Save the process SP in its TCB, OSTCBCur->OSTCBStkPtr = SP;
+;              d) Call OSTaskSwHook();
+;              e) Get current high priority, OSPrioCur = OSPrioHighRdy;
+;              f) Get current ready thread TCB, OSTCBCur = OSTCBHighRdy;
+;              g) Get new process SP from TCB, SP = OSTCBHighRdy->OSTCBStkPtr;
+;              h) Restore R4-R11 from new process stack;
+;              i) Perform exception return which will restore remaining context.
+;
+;           3) On entry into PendSV handler:
+;              a) The following have been saved on the process stack (by processor):
+;                 xPSR, PC, LR, R12, R0-R3 （这些寄存器是CPU在中断过程中自动保存的）
+;              b) Processor mode is switched to Handler mode (from Thread mode) (CPU模式从用户模式自动切换到管理模式(特权模式))
+;              c) Stack is Main stack (switched from Process stack)  （PSP: 进程堆栈，用于用户模式， MSP: 主堆栈，用于特权模式）
+;              d) OSTCBCur      points to the OS_TCB of the task to suspend
+;                 OSTCBHighRdy  points to the OS_TCB of the task to resume
+;
+;           4) Since PendSV is set to lowest priority in the system (by OSStartHighRdy() above), we
+;              know that it will only be run when no other exception or interrupt is active, and
+;              therefore safe to assume that context being switched out was using the process stack (PSP).
+                注: PendSV设置成最低的中断优先级，所以只有所有的异常和中断完成后，才轮到pendsv执行，来完成任务切换，
+                确保了在中断过程中，是不能进行任务级别的任务切换的（因为在实时操作系统中，中断总是优先于任务去
+                处理的。）
+
+;********************************************************************************************************
+
+OS_CPU_PendSVHandler
+    CPSID   I                              ; 关中断
+    MRS     R0, PSP                        ; 获得PSP
+    CBZ     R0, OS_CPU_PendSVHandler_nosave; PSP为0跳到OS_CPU_PendSVHandler_nosave，即不保存上文，直接进入下文。
+                                           ; 问什么呢，因为首次调用，是没有上文的。
+                                    // CBZ表示跳转指令，判断PSP != 0，将直接往下执行，否则将跳转执行 OS_CPU_PendSVHandler_nosave
+                                           
+                                           ; 保存上文 （如果是第一次切换，则不执行下面的语句，直接执行OS_CPU_PendSVHandler_nosave）
+    SUBS    R0, R0, #0x20                  ; 因为寄存器是32位的，4字节对齐，自动压栈的寄存器有8个，所以偏移为8*0x04=0x20
+    STM     R0, {R4-R11}                   ; 除去自动压栈的寄存器外，需手动将R4-R11压栈
+
+    LDR     R1, =OSTCBCur                  ; 保存上文的SP指针 OSTCBCur->OSTCBStkPtr = SP;
+    LDR     R1, [R1]                       ; 注意：这里OSTCBCur的地址就是 OSTCBCur->OSTCBStkPtr 的地址
+    STR     R0, [R1]                                            
+
+                                                                
+OS_CPU_PendSVHandler_nosave                ; 切换下文
+    PUSH    {R14}                          ; LR压栈，下面要调用C函数， 因为LR调用C函数时，将用来保存返回的函数地址
+                                           ; 所以这里必须把之前LR的值保存起来
+
+    LDR     R0, =OSTaskSwHook              ; 调用OSTaskSwHook();
+    BLX     R0                             ; 调用OSTaskSwHook()结束并返回
+    POP     {R14}                          ; 恢复 LR 寄存器，与前面对应
+
+    LDR     R0, =OSPrioCur                 ; 置OSPrioCur = OSPrioHighRdy;
+    LDR     R1, =OSPrioHighRdy
+    LDRB    R2, [R1]
+    STRB    R2, [R0]
+
+    LDR     R0, =OSTCBCur                  ; 置OSTCBCur  = OSTCBHighRdy;
+    LDR     R1, =OSTCBHighRdy
+    LDR     R2, [R1]
+    STR     R2, [R0]
+                                               
+    LDR     R0, [R2]                       ; R0中的值为新任务的SP; SP = OSTCBHighRdy->OSTCBStkPtr;
+    LDM     R0, {R4-R11}                   ; 堆栈中的值手动弹出到寄存器：R4-R11
+    ADDS    R0, R0, #0x20
+        
+    MSR     PSP, R0                        ; PSP = 新任务SP，将SP的指针指向堆栈的顶端
+    ORR     LR, LR, #0x04                  ; 确保异常返回后使用PSP
+    CPSIE   I                              ; 重新打开中断
+    BX      LR                             ; 退出异常，从PSP自动弹出xPSR，PC，LR，R0-R3，进入新任务运行
