@@ -31,3 +31,4 @@
 ..\sys.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\sys.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\sys.o: ..\RTT\SEGGER_RTT.h
+..\sys.o: ..\HARDWARE\macro_define.h

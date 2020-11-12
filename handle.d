@@ -32,6 +32,7 @@
 ..\handle.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\handle.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\handle.o: ..\RTT\SEGGER_RTT.h
+..\handle.o: ..\HARDWARE\macro_define.h
 ..\handle.o: ..\USER\main.h
 ..\handle.o: ..\HARDWARE\longkey.h
 ..\handle.o: ..\HARDWARE\pid_control.h

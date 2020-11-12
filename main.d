@@ -1,4 +1,5 @@
 ..\main.o: main.c
+..\main.o: ..\HARDWARE\bsp.h
 ..\main.o: ..\SYSTEM\sys\sys.h
 ..\main.o: ..\USER\stm32f10x.h
 ..\main.o: ..\CORE\core_cm3.h
@@ -31,11 +32,7 @@
 ..\main.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\main.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\main.o: ..\RTT\SEGGER_RTT.h
-..\main.o: ..\SYSTEM\delay\delay.h
-..\main.o: ..\HARDWARE\bsp.h
-..\main.o: ..\HARDWARE\ctrl.h
-..\main.o: ..\USER\main.h
-..\main.o: ..\HARDWARE\longkey.h
+..\main.o: ..\HARDWARE\macro_define.h
 ..\main.o: ..\UCOSII\CONFIG\includes.h
 ..\main.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\main.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\ctype.h
@@ -45,12 +42,10 @@
 ..\main.o: ..\UCOSII\CONFIG\includes.h
 ..\main.o: ..\UCOSII\CONFIG\os_cfg.h
 ..\main.o: ..\UCOSII\PORT\os_cpu.h
-..\main.o: ..\HARDWARE\LCD\hmi_driver.h
-..\main.o: ..\SYSTEM\usart\usart.h
-..\main.o: ..\HARDWARE\LCD\cmd_queue.h
-..\main.o: ..\HARDWARE\LCD\cmd_process.h
+..\main.o: ..\SYSTEM\delay\delay.h
 ..\main.o: ..\HARDWARE\STMFLASH\stmflash.h
-..\main.o: ..\HARDWARE\handle.h
-..\main.o: ..\HARDWARE\pid_control.h
 ..\main.o: ..\HARDWARE\lcdtest.h
+..\main.o: main.h
+..\main.o: ..\HARDWARE\longkey.h
 ..\main.o: ..\HARDWARE\wdg.h
+..\main.o: ..\HARDWARE\modbus.h

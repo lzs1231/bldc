@@ -35,11 +35,10 @@ typedef  struct  MyPortFun{
 	u8  LKEY_Buf;               //用来判断按下时间
 	u8  IOState;                //IO口状态
 	u8  LastIOState;            //IO口上次状态
-	u16  DisNum;                //显示对应的图标控件编号
 }PortFunDef;
 
 
-extern PortFunDef PortFun[4];
+
 
 void KeyHandle(PortFunDef *Port,u16 *FuncFlag);
 void ReadLongIO(PortFunDef *PPort,u16 *FuncFlag);

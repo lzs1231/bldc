@@ -283,7 +283,11 @@ MOTOR_DIR huanxiang(void)
 {
 	char motor_dir;
 	u8 HallData = 0; 
-	HallData  = (u8)((GPIOC->IDR&0x000001c0)>>6);      //读转子位置    合成GPIOC8|GPIOC7|GPIOC6 
+	HallA_data=(u8)((GPIOC->IDR&0x00000100)>>8); 
+	HallB_data=(u8)((GPIOC->IDR&0x00000080)>>7); 
+	HallC_data=(u8)((GPIOC->IDR&0x00000040)>>6); 
+	HallData  = (u8)((GPIOC->IDR&0x000001c0)>>6);        //读转子位置    合成GPIOC8|GPIOC7|GPIOC6 
+	
 
 	if(HallData>=1&&HallData<=6)
 	{
@@ -334,6 +338,16 @@ void BLDC_Start(void)
 	}          
 }
 
+void shut_mos(void)
+{
+    TIM_CCxCmd(TIM1, TIM_Channel_1, TIM_CCx_Disable);
+    TIM_CCxNCmd(TIM1, TIM_Channel_1, TIM_CCxN_Disable);
+    TIM_CCxCmd(TIM1, TIM_Channel_2, TIM_CCx_Disable);
+    TIM_CCxNCmd(TIM1, TIM_Channel_2, TIM_CCxN_Disable);
+    TIM_CCxCmd(TIM1, TIM_Channel_3, TIM_CCx_Disable);
+    TIM_CCxNCmd(TIM1, TIM_Channel_3, TIM_CCxN_Disable);
+}
+
 /**************停止******************/
 void BLDC_Stop(void)
 {
@@ -345,7 +359,13 @@ void BLDC_Stop(void)
 	
 	__nop();__nop();           //延时（加死区）    减速一定时间，之后
 	PAout(8)=0;PAout(9)=0;PAout(10)=0;         //下管打开，进行能耗制动
-	
+//	while()
+//	{
+//		__nop();__nop();__nop();__nop();           //延时（加死区）    减速一定时间，之后
+//		PAout(8)=1;PAout(9)=1;PAout(10)=1;         //下管打开，进行能耗制动
+//		__nop();__nop();__nop();__nop();           //延时（加死区）    减速一定时间，之后
+//		PAout(8)=0;PAout(9)=0;PAout(10)=0;         //下管打开，进行能耗制动
+//	}
 //	TIM1->CCER=0;               //关闭TIM1的六路输出，关刹车      
 	                           
 /**不要关闭定时器3触发中断TIM_IT_Trigger，防止人为改变电机位置而中断关闭无法捕获记录电机位置**/

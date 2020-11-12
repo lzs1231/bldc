@@ -32,3 +32,4 @@
 ..\fputc.o: ..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 ..\fputc.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\fputc.o: ..\RTT\SEGGER_RTT.h
+..\fputc.o: ..\HARDWARE\macro_define.h

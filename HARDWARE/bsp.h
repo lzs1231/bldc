@@ -2,7 +2,9 @@
 #define __BSP_H
 
 #include "sys.h"
-#include "ctrl.h"
+#include "includes.h"
+#include "delay.h"
+
 
 //#define	LED_GPIO		GPIOA      //定义LED输出IO口
 //#define	LED_PIN		  GPIO_Pin_3   //定义LED输出引脚位

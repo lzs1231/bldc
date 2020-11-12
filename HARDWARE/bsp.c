@@ -1,16 +1,14 @@
-#include "includes.h"
 #include "bsp.h"
-#include "delay.h"
 #include "ctrl.h"
 #include "adc.h"
 #include "usart.h"
 #include "pwrchk.h"
 #include "pid_control.h"
 #include "wdg.h"
+#include "doublebuf.h"
 
-//#define SPEED_PPRINTF
-//#define USE_MAX_485
-#define USE_MAX_232
+
+
 
 void RCC_Configuration(void); 
 void Init_GPIO(void);            //初始化IO口
@@ -38,9 +36,8 @@ void BSP_Init(void)
 #elif  defined USE_MAX_232
 	uart3_init(115200);
 #endif
-	 
-	Adc_Init(); 
-	delay_ms(3000);       //延时等待串口屏初始化完毕,必须等待300ms 	
+	Adc_Init();  	
+	delay_ms(1000);       //延时等待串口屏初始化完毕,必须等待300ms 	
 }
 
 void RCC_Configuration(void)  
@@ -77,7 +74,7 @@ void Init_GPIO(void)
 	GPIO_InitStructure.GPIO_Pin = LEDL_PIN;           //引脚号
 	GPIO_Init(LEDL_GPIO,&GPIO_InitStructure);         //根据定义设置引脚
 	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;         //引脚号
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;         //引脚号，控制继电器
 	GPIO_Init(GPIOD,&GPIO_InitStructure);             //根据定义设置引脚
 	GPIO_ResetBits(GPIOD,GPIO_InitStructure.GPIO_Pin);//该引脚置为低电平
 	
@@ -142,7 +139,7 @@ void Interrupt_Config(void)   //NVIC 中断优先级配置
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 	
-//	NVIC_InitStructure.NVIC_IRQChannel = WWDG_IRQn;      //开TIM4更新中断，每隔1ms中断一次
+//	NVIC_InitStructure.NVIC_IRQChannel = WWDG_IRQn;      //窗口看门狗中断
 //	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
 //	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
 //	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;

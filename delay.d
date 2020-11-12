@@ -32,6 +32,7 @@
 ..\delay.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\delay.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\delay.o: ..\RTT\SEGGER_RTT.h
+..\delay.o: ..\HARDWARE\macro_define.h
 ..\delay.o: ..\UCOSII\CONFIG\includes.h
 ..\delay.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\delay.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\ctype.h

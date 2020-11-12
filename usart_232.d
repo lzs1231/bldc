@@ -1,4 +1,4 @@
-..\usart_232.o: ..\HARDWARE\usart_232.c
+..\usart_232.o: ..\SYSTEM\usart\usart_232.c
 ..\usart_232.o: ..\SYSTEM\sys\sys.h
 ..\usart_232.o: ..\USER\stm32f10x.h
 ..\usart_232.o: ..\CORE\core_cm3.h
@@ -31,10 +31,14 @@
 ..\usart_232.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\usart_232.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\usart_232.o: ..\RTT\SEGGER_RTT.h
+..\usart_232.o: ..\HARDWARE\macro_define.h
 ..\usart_232.o: ..\SYSTEM\usart\usart.h
 ..\usart_232.o: ..\HARDWARE\LCD\cmd_queue.h
 ..\usart_232.o: ..\HARDWARE\LCD\hmi_driver.h
 ..\usart_232.o: ..\SYSTEM\delay\delay.h
+..\usart_232.o: ..\USER\main.h
+..\usart_232.o: ..\HARDWARE\longkey.h
+..\usart_232.o: ..\HARDWARE\modbus.h
 ..\usart_232.o: ..\UCOSII\CONFIG\includes.h
 ..\usart_232.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\usart_232.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\ctype.h

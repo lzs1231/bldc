@@ -1,4 +1,4 @@
-..\usart_485.o: ..\HARDWARE\usart_485.c
+..\usart_485.o: ..\SYSTEM\usart\usart_485.c
 ..\usart_485.o: ..\SYSTEM\sys\sys.h
 ..\usart_485.o: ..\USER\stm32f10x.h
 ..\usart_485.o: ..\CORE\core_cm3.h
@@ -31,10 +31,14 @@
 ..\usart_485.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\usart_485.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\usart_485.o: ..\RTT\SEGGER_RTT.h
+..\usart_485.o: ..\HARDWARE\macro_define.h
 ..\usart_485.o: ..\SYSTEM\usart\usart.h
 ..\usart_485.o: ..\HARDWARE\LCD\cmd_queue.h
 ..\usart_485.o: ..\HARDWARE\LCD\hmi_driver.h
 ..\usart_485.o: ..\SYSTEM\delay\delay.h
+..\usart_485.o: ..\USER\main.h
+..\usart_485.o: ..\HARDWARE\longkey.h
+..\usart_485.o: ..\HARDWARE\modbus.h
 ..\usart_485.o: ..\UCOSII\CONFIG\includes.h
 ..\usart_485.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\usart_485.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\ctype.h

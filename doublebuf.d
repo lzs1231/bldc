@@ -32,5 +32,6 @@
 ..\doublebuf.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\doublebuf.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\doublebuf.o: ..\RTT\SEGGER_RTT.h
+..\doublebuf.o: ..\HARDWARE\macro_define.h
 ..\doublebuf.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 ..\doublebuf.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h

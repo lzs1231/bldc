@@ -1,7 +1,6 @@
 ..\hmi_driver.o: ..\HARDWARE\LCD\hmi_driver.c
 ..\hmi_driver.o: ..\HARDWARE\LCD\hmi_driver.h
 ..\hmi_driver.o: ..\SYSTEM\usart\usart.h
-..\hmi_driver.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\hmi_driver.o: ..\SYSTEM\sys\sys.h
 ..\hmi_driver.o: ..\USER\stm32f10x.h
 ..\hmi_driver.o: ..\CORE\core_cm3.h
@@ -32,4 +31,6 @@
 ..\hmi_driver.o: ..\STM32F10x_FWLib\inc\stm32f10x_usart.h
 ..\hmi_driver.o: ..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 ..\hmi_driver.o: ..\STM32F10x_FWLib\inc\misc.h
+..\hmi_driver.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\hmi_driver.o: ..\RTT\SEGGER_RTT.h
+..\hmi_driver.o: ..\HARDWARE\macro_define.h

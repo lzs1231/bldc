@@ -32,10 +32,10 @@
 ..\stm32f10x_it.o: ..\SYSTEM\sys\sys.h
 ..\stm32f10x_it.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\stm32f10x_it.o: ..\RTT\SEGGER_RTT.h
+..\stm32f10x_it.o: ..\HARDWARE\macro_define.h
 ..\stm32f10x_it.o: ..\HARDWARE\ctrl.h
 ..\stm32f10x_it.o: ..\USER\main.h
 ..\stm32f10x_it.o: ..\HARDWARE\longkey.h
-..\stm32f10x_it.o: ..\SYSTEM\usart\usart.h
 ..\stm32f10x_it.o: ..\HARDWARE\handle.h
 ..\stm32f10x_it.o: ..\HARDWARE\lcdtest.h
 ..\stm32f10x_it.o: ..\HARDWARE\pid_control.h

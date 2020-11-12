@@ -31,5 +31,6 @@
 ..\pwrchk.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\pwrchk.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\pwrchk.o: ..\RTT\SEGGER_RTT.h
+..\pwrchk.o: ..\HARDWARE\macro_define.h
 ..\pwrchk.o: ..\HARDWARE\STMFLASH\stmflash.h
 ..\pwrchk.o: ..\HARDWARE\pwrchk.h

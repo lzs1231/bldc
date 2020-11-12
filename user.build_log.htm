@@ -21,25 +21,20 @@ Target DLL:      Segger\JL2CM3.dll V2.99.36.0
 Dialog DLL:      TCM.DLL V1.36.5.0
  
 <h2>Project:</h2>
-G:\FV-5000(232V1.0.0)\motor control4_1(f103)(DMA)(FV-5000)\USER\user.uvprojx
+G:\FV-5000(232modbusV1.0.0)\motor control4_1(f103)(DMA)(FV-5000)\USER\user.uvprojx
 Project File Date:  11/12/2020
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'F:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Target 1'
-compiling lcd.c...
-..\HARDWARE\LCD\lcd.c(1239): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "char *restrict"
-  				strcpy(PasswordSet.PPassword,PasswordSet.t_Password);
-..\HARDWARE\LCD\lcd.c(1239): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *restrict"
-  				strcpy(PasswordSet.PPassword,PasswordSet.t_Password);
-..\HARDWARE\LCD\lcd.c(878): warning:  #177-D: variable "cpu_sr"  was declared but never referenced
-  	OS_CPU_SR  cpu_sr;
-..\HARDWARE\LCD\lcd.c: 3 warnings, 0 errors
+compiling modbus.c...
+compiling bsp.c...
+compiling usart_232.c...
 linking...
-Program Size: Code=45886 RO-data=630 RW-data=1048 ZI-data=8008  
+Program Size: Code=36784 RO-data=1208 RW-data=932 ZI-data=8468  
 FromELF: creating hex file...
 After Build - User command #1: fromelf.exe --bin -o "..\user.bin" "..\user.axf"
-"..\user.axf" - 0 Error(s), 3 Warning(s).
+"..\user.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 

@@ -32,6 +32,7 @@
 ..\adc.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\adc.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\adc.o: ..\RTT\SEGGER_RTT.h
+..\adc.o: ..\HARDWARE\macro_define.h
 ..\adc.o: ..\SYSTEM\delay\delay.h
 ..\adc.o: ..\HARDWARE\ctrl.h
 ..\adc.o: ..\USER\main.h

@@ -1,17 +1,10 @@
-#include "sys.h"
-#include "delay.h"
 #include "bsp.h"
-#include "includes.h"
-#include "hmi_driver.h"
-#include "cmd_queue.h"
-#include "cmd_process.h"
 #include "stmflash.h"
-#include "handle.h"
-#include "pid_control.h"
 #include "lcdtest.h"
 #include "main.h"
 #include "wdg.h"
- 
+#include "modbus.h"
+
 //以下是要存储的参数
 
 __noinit__ u16   gCheckFlag;		           //校验标志
@@ -65,17 +58,6 @@ __noinit__ u16   gAFlexDec;                //自动柔性减速
 __noinit__ u16   gMFlexAcc;                //手动柔性加速
 __noinit__ u16   gMFlexDec;                //手动柔性减速
 
-__noinit__ u16   gAFlexSacc; 
-__noinit__ u16   gAFlexSdec; 
-__noinit__ u16   gMFlexSacc;
-__noinit__ u16   gMFlexSdec;
-
-__noinit__ u16   gLanguageChoice;             //中文
-__noinit__ u16   gLockTime;
-__noinit__ u16   gBrightness;
-__noinit__ u16   gBuzzer;
-__noinit__ u8    Password[6];                   //用户密码
-char  *SysPassword = "888888";      //系统密码
 
 __noinit__ u16   g_Mat0_Sensor1_H;      //左传感器的高信号值
 __noinit__ u16   g_Mat0_Sensor1_L;      //左传感器的低信号值 
@@ -130,7 +112,6 @@ u8 	 Warm[WarmNum];               	 /*******报警标志******/
 u16  ClickButton;                    //点动按键属性
 u16  LongPortFun[FunNum];      	  	 /*******远程IO控制******/
 
-u8   cmd_buffer[CMD_MAX_SIZE];       //指令缓存
 volatile u16    g_ADC_Buf[4];        //DMA目标地址
 volatile bool   g_ADC_OK = FALSE;    //ADC采集成功标志
 
@@ -144,6 +125,9 @@ u8   LastHallData;
 
 
 OS_EVENT *iMbox;                    //接收邮箱 
+OS_EVENT *sem_p;
+OS_EVENT *sem_v;
+OS_EVENT *mutex;            		 //互斥信号量
 
 //start任务
 #define	START_TASK_PRIO				22      //任务创建优先级
@@ -157,9 +141,15 @@ void    start_task(void *pdata);
 OS_STK  READ_IO_TASK_STK[READ_IO_STK_SIZE];
 void    readio_task(void *pdata);
 
-//LCD任务
-#define	LCD_TASK_PRIO				13    		//任务创建优先级
-#define	LCD_STK_SIZE				128
+//LCD1任务
+#define	MODBUS_TASK_PRIO			6      //任务创建优先级
+#define	MODBUS_STK_SIZE				64
+OS_STK  MODBUS_TASK_STK[MODBUS_STK_SIZE];
+void    modbus_task(void *pdata);
+
+//LCD1任务
+#define	LCD_TASK_PRIO				7      //任务创建优先级
+#define	LCD_STK_SIZE				64
 OS_STK  LCD_TASK_STK[LCD_STK_SIZE];
 void    lcd_task(void *pdata);
 
@@ -222,7 +212,6 @@ void SensorInit(void)
 
 void SetDataInit()                 //设置参数初始化
 {
-	u8 i;
 	gCheckFlag = 0xee55;		 //校验标志
 	gIwdgFlag = 0;               //触发独立看门狗计数
 	gBackupFlag = 0;             //是否有备份，1表示有备份，0表示没有备份
@@ -272,28 +261,14 @@ void SetDataInit()                 //设置参数初始化
 	gAFlexAcc=AFlexAcc;          //自动柔性加速
 	gAFlexDec=AFlexDec;          //自动柔性减速
 	gMFlexAcc=MFlexAcc;          //手动柔性加速
-	gMFlexDec=MFlexDec;          //手动柔性减速
-	
-	gAFlexSacc=0; 
-	gAFlexSdec=0; 
-	gMFlexSacc=0;
-	gMFlexSdec=0;
-
-	gLanguageChoice=0;           //中文
-	gLockTime=3;
-	gBrightness = 4;
-	gBuzzer = 1;
-	for(i=0;i<6;i++)
-	{
-		Password[i]=i+0x31;
-	}
+	gMFlexDec=MFlexDec;          //手动柔性减速	
 }
 
 void ParameterInit()             //参数出厂设置
 {
 	SetDataInit();               //设置参数初始化
 	SensorInit();                //传感器参数初始化
-//	Clearing();                  //清零备份
+	Modbus_Init();
 }
 
 int main(void)
@@ -310,8 +285,7 @@ void start_task(void *pdata)
 	u8 icnt;
 	pdata=pdata;
 	
-    BSP_Init();   
-    queue_reset();       		//清空串口接收缓冲区    
+    BSP_Init();     
     for(icnt=0;icnt<FunNum;icnt++)
 	{
 		LongPortFun[icnt] = 0;
@@ -334,17 +308,16 @@ void start_task(void *pdata)
 	if(gCheckFlag!=0xee55)  			SetDataInit();  	 //如果参数读取错误，就重新初始化参数
 	if(g_Mat0_Sensor1_H == 0xffff)  	SensorInit();		 //如果参数读取错误，就重新初始化传感器参数
 	
-	switch(gPowerOnMode)             //查询开机时的工作状态
+	
+	switch(gPowerOnMode)                    		 //查询开机时的工作状态
 	{
-	   case 0: gWorkMode=0;    SetScreen(Manu_ID);        break;      //开机手动
-	   case 1: gWorkMode=1;    SetScreen(Auto_ID);        break;      //开机时为自动状态
-	   case 2: gWorkMode=2;    SetScreen(Center_ID);      break;      //开机时为中心状态
-	   case 3:                           
-		   if(gWorkMode==0)        SetScreen(Manu_ID);
-		   else if(gWorkMode==1)   SetScreen(Auto_ID);
-	       else if(gWorkMode==2)   SetScreen(Center_ID);   break;     //恢复关机的状态
-	   default: SetDataInit();    break;    //系统初始化          
+	   case 0: gWorkMode=0;          	break;      //开机手动
+	   case 1: gWorkMode=1;          	break;      //开机时为自动状态
+	   case 2: gWorkMode=2;             break;      //开机时为中心状态
+	   case 3: 						 	break;      //恢复关机的状态
+	   default: SetDataInit();    		break;      //系统初始化          
 	}
+	*pHWorkMode = gWorkMode;			//0=手动   1=自动  2=对中
 	
 	switch(gMotorType)                  //查询电机类型
     {
@@ -352,7 +325,7 @@ void start_task(void *pdata)
 			NUMBERTURN = 7500000;       //3次换相转过角度45度   （45/(t1+t2+t3)）*60/360  乘以60表示1分钟转过角度
 		    SERIES     =   24;
 		break;                   
-        case BrushlessMotor5:                         //5对级
+        case BrushlessMotor5:                    //5对级
 			NUMBERTURN = 6000000;
 		    SERIES     =   30;
 		break; 
@@ -362,13 +335,14 @@ void start_task(void *pdata)
 	/***********霍尔位置读取***********/
 	LastHallData  = (u8)((GPIOC->IDR&0x000001c0)>>6);   //读转子位置    合成GPIOC8|GPIOC7|GPIOC6 	                                                            
 	
-	InitLCD();              //画面初始化
-#if (OS_TASK_STAT_EN > 0)   //允许统计任务
+	Modbus_Init();       			//根据读取的全局变量更新保持寄存器
+#if (OS_TASK_STAT_EN > 0)   		//允许统计任务
 	OSStatInit();     
 #endif	
 	OS_ENTER_CRITICAL();             //进入临界区(开中断)
 	//OSTaskCreate();                创建任务
 	OSTaskCreate(readio_task, (void*)0, &READ_IO_TASK_STK[READ_IO_STK_SIZE-1],READ_IO_TASK_PRIO);
+	OSTaskCreate(modbus_task, (void*)0, &MODBUS_TASK_STK[MODBUS_STK_SIZE-1],MODBUS_TASK_PRIO);
 	OSTaskCreate(lcd_task, (void*)0, &LCD_TASK_STK[LCD_STK_SIZE-1],LCD_TASK_PRIO);
 	OSTaskCreate(led_task, (void*)0, &LED_TASK_STK[LED_STK_SIZE-1],LED_TASK_PRIO);
 	OSTaskSuspend(START_TASK_PRIO);  //挂起开始任务
@@ -389,41 +363,174 @@ void readio_task(void *pdata)
 	}
 }
 
-/**-----------------LED3任务---------------------**/
-void lcd_task(void *pdata)
+/**-----------------modbus_task任务---------------------**/
+void modbus_task(void *pdata)
 {
-    qsize  size = 0;  
-
+	u8 err;
+	
+	iMbox = OSMboxCreate(NULL);                  //建立并初始化一个消息邮箱，空邮箱 
+	sem_p = OSSemCreate(1);
+	sem_v = OSSemCreate(1);
+	mutex = OSMutexCreate(1,&err);               //建立并初始化一个互斥信号量，优先级为1    
 	for(;;)
 	{
-		size = queue_find_cmd(cmd_buffer,CMD_MAX_SIZE);                              //从缓冲区中获取一条指令 
-
-        if(size>0&&cmd_buffer[1]!=0x07)                              //接收到指令 ，及判断是否为开机提示
-        {                    
-            ProcessMessage((PCTRL_MSG) cmd_buffer, size);                            //指令处理  
-        }                                                                           
-        else if(size>0&&cmd_buffer[1]==0x07)                         //如果为指令0x07就软重置STM32  
-        {                                                                           
-            __disable_fault_irq();                                                   
-            NVIC_SystemReset();                                                                                                                                          
-        }                                                                            
-
-        //    特别注意
-        //    MCU不要频繁向串口屏发送数据，否则串口屏的内部缓存区会满，从而导致数据丢失(缓冲区大小：标准型8K，基本型4.7K)
-        //    1) 一般情况下，控制MCU向串口屏发送数据的周期大于100ms，就可以避免数据丢失的问题；
-        //    2) 如果仍然有数据丢失的问题，请判断串口屏的BUSY引脚，为高时不能发送数据给串口屏。
-
-        //    TODO: 添加用户代码
-        //    数据有更新时标志位发生改变，定时100毫秒刷新屏幕
+		Modbus_Event();
 		
-		//画面更新
-		UpdateUI();
+		/********需要快速处理的指令********/
+		ClickButton 	= *pHClickBut;
 		
-		delay_ms(20);
+		/*********根据*pHAdjustFlag调用调节参数，完成后*pHAdjustFlag=255**********/
+		if(*pHAdjustFlag!=255)  AddSub();
+		
+		if(*pHTCaliFlag == 1)   //读取校准标志，查看是否启动校准
+		{
+			TravelCal.CaliFlag = 1;
+			*pHTCaliFlag = 0;
+		}
+			 
+		if(*pHTCaliCancel == 1)              //取消校准按下
+		{   
+			*pHTCaliCancel = 0;
+			TravelCal.CaliFlag = 0;
+			TravelCal.CaliStep = 0;
+			TravelCal.StallDir = 0;
+		}
+		
+		delay_ms(5);
 	}
 }
 
+/**-----------------LCD任务---------------------**/
+void lcd_task(void *pdata)
+{
+	u16 *pd;
+	u8 HallData,SensorTips;
+	u8 WarmFlag = 0,i;
+	static u16 TimeCnt,PowerOnFlag;
+	static u16 LastSwitch1EPC,LastSwitch2EPC;
+	for(;;)
+	{
+//		OSSemPend(sem_v, 0, &err);
+		/*****************************串口屏下发指令，修改保持寄存器，然后更新全局变量***********************************/
 
+		/*********根据屏幕指令修改变量值**********/
+		if(*pHTCaliTorque == 0)			gCaliTorque	 =10;
+		else if(*pHTCaliTorque == 1)	gCaliTorque	 =15;
+		else if(*pHTCaliTorque == 2)	gCaliTorque	 =20;
+		else if(*pHTCaliTorque == 3)	gCaliTorque	 =30;
+		
+		
+		if(LongPortFun[Switch1_EPC] != LastSwitch1EPC)
+		{
+			*pHSensorMode=LongPortFun[Switch1_EPC];
+		}
+		if(LongPortFun[Switch2_EPC] != LastSwitch2EPC)
+		{
+			*pHSensorMode=LongPortFun[Switch2_EPC];
+			*pHAutoPolar=LongPortFun[Switch2_EPC];
+		}
+		gWorkMode		 =*pHWorkMode;
+		gSensorMode		 =*pHSensorMode;
+		gAutoPolar		 =*pHAutoPolar;
+		gManuPolar		 =*pHManuPolar;	
+		gMotorType		 =*pHMotorType;
+		switch(gMotorType)                  //查询电机类型
+		{
+			case 0:                         //如果选择的无刷电机就开CAP,和外部中断作为霍尔检测    4对级
+				NUMBERTURN = 7500000;       //3次换相转过角度45度   （45/(t1+t2+t3)）*60/360  乘以60表示1分钟转过角度
+				SERIES     =   24;
+			break;                   
+			case 1:                         //5对级
+				NUMBERTURN = 6000000;
+				SERIES     =   30;
+			break; 
+			default:SetDataInit();          break;            //系统初始化  
+		}
+		gPowerOnMode = *pHPowerOnMode;    //保存上电状态
+		gCurMatNum	 = *pHMatNum;         //保存当前材料标号
+		
+		gLimitMode	 = *pHLimitMode;
+		gSPCMode	 = *pHSPCMode;        //保存SPC模式
+		gNoWaitEN	 = *pHNoWaitEN;       //保存无料使能
+
+		gLongIo0Mode = *pHPort0Fun;
+		gLongIo1Mode = *pHPort1Fun;
+		gLongIo2Mode = *pHPort2Fun;
+		gLongIo3Mode = *pHPort3Fun;
+		
+		
+//		OSMutexPend(mutex,0,&err);             //提高任务优先级
+//		OSMutexPost(mutex);                    //恢复任务优先级
+		
+		switch(*pHFlexSpeed)
+		{
+			case 1:		gAFlexAcc = AFlexAcc;*pHFlexSpeed = 0;	break;
+			case 2:		gAFlexDec = AFlexDec;*pHFlexSpeed = 0;  break;
+			case 3:		gMFlexAcc = MFlexAcc;*pHFlexSpeed = 0;  break;
+			case 4:		gMFlexDec = MFlexDec;*pHFlexSpeed = 0;  break;
+			default:	break;
+		}
+		/*****************************更新输入寄存器,读取输入寄存器器用于显示***********************************/
+		
+		BackupRestore();
+		
+		/**********警告标志计算***************/
+		HallData  = (u8)((GPIOC->IDR&0x000001c0)>>6);        //读转子位置    合成GPIOC8|GPIOC7|GPIOC6 
+		
+		if(HallData>6||HallData<1)   	Warm[NotConFlag] = NotConFlag;
+		else 						   	Warm[NotConFlag] = NoErrFlag; 
+		
+		if(*pHWarmFlag == 1)     		Warm[LockFlag] = LockFlag;
+		else if(*pHWarmFlag == 3)  		Warm[ProhibitFlag] = ProhibitFlag;
+		else 					   	   {Warm[LockFlag] = NoErrFlag;     Warm[ProhibitFlag] = NoErrFlag;}
+		
+		for(i=WarmNum-1;i>0;i--)
+		{
+			if(Warm[i] != 0)   {WarmFlag = Warm[i];  break;}
+			else               {WarmFlag = 0;              }	
+		}
+	
+		PDout(2) = (Warm[LimitFlag]==LimitFlag?1:0);        //限位则打开继电器
+		
+		/*********更新输入寄存器参数，以便主机读取**********/
+		if(TravelCal.CaliStep==3)  
+		{
+			if(TimeCnt==20)	{TravelCal.CaliStep = 0;TimeCnt=0;}   
+			TimeCnt++;
+		}
+		*pCurrentPara	= (u16)(g_ADC_Buf[0]*0.08)|gFuncTorque<<8|*pHTCaliTorque<<12|TravelCal.CaliStep<<14;
+		
+		/*********更新传感器显示******pSensorRate****/
+		SensorMode.fun[gSensorMode]();          //根据主机更新的传感器模式调用不同程序，显示传感器参数
+		
+		/*********更新校准传感器显示*****pSensorValue、pMatDis*****/
+		
+		SensorTips = MatCal.fun[*pHSCaliStep]();               //根据主机更新的校准步骤调用不同程序，显示传感器参数 
+		
+		*pGainDead 		= gGainData|(gDeadZone<<8);
+		*pFineTune  	= (gFineTune|(WarmFlag<<8))|(gPowerOnMode<<12)|SensorTips<<14;
+		*pDisPulseNum  	= HallRate|(gMotorType<<10)|gAutoPolar<<12|gManuPolar<<13;
+		*pMatDis       	= Mat0EPC12|Mat1EPC12<<2|Mat2EPC12<<4|Mat3EPC12<<6|Mat4EPC12<<8|Mat5EPC12<<10|Mat6EPC12<<12|Mat7EPC12<<14;
+		*pLimitFun1    	= gLimitMode|gBehindLimit<<8;
+		*pLimitFun2		= gCenterLimit|gFrontLimit<<8;
+		*pSPCFun1		= gSPCMode|gSPCStopTime<<8;
+		*pSPCFun2		= gSPCBehindLimit|gSPCFrontLimit<<8;
+		*pNoMatFun1		= gNoWaitEN|gNoDetectValve<<8;
+		*pNoMatFun2		= gNoDetectTime|gNoWaitTime<<8;
+		*pAFlex			= gAFlexAcc|gAFlexDec<<8;
+		*pMFlex			= gMFlexAcc|gMFlexDec<<8;
+		*pLongIoMode	= gLongIo0Mode|gLongIo1Mode<<4|gLongIo2Mode<<8|gLongIo3Mode<<12;
+		*pAutoSpeed		= gAutoSpeed;
+		*pManuSpeed		= gManuSpeed;
+		*pCentSpeed		= gCentSpeed;
+		*pOtherPara     = gBackupFlag|gWorkMode<<1|LongPortFun[PusherCenter]<<3|LongPortFun[ManuDef]<<6|LongPortFun[AutoDef]<<9;
+		
+		LastSwitch1EPC = LongPortFun[Switch1_EPC];
+		LastSwitch2EPC = LongPortFun[Switch2_EPC];
+		//		OSSemPost(sem_p);
+		delay_ms(50);
+	}
+}
 
 /**-----------------LED任务---------------------**/
 void led_task(void *pdata)

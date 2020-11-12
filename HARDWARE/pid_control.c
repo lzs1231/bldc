@@ -5,7 +5,7 @@
 
 #include "lcdtest.h"
 #include "usart.h"	 
-
+#include "doublebuf.h"    //双缓冲区
 
 
 //增量式PID

@@ -1,7 +1,8 @@
 Dependencies for Project 'user', Target 'Target 1': (DO NOT MODIFY !)
 CompilerVersion: 5060750::V5.06 update 6 (build 750)::ARMCC
-F (.\main.c)(0x5FACB359)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\main.o --omf_browse ..\main.crf --depend ..\main.d)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+F (.\main.c)(0x5FAD2105)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\main.o --omf_browse ..\main.crf --depend ..\main.d)
+I (..\HARDWARE\bsp.h)(0x5FAD2105)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -32,11 +33,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
 I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
-I (..\SYSTEM\delay\delay.h)(0x55CC2E59)
-I (..\HARDWARE\bsp.h)(0x5FACAA7D)
-I (..\HARDWARE\ctrl.h)(0x5FACE11E)
-I (..\USER\main.h)(0x5FACB359)
-I (..\HARDWARE\longkey.h)(0x5FAA7BB5)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
 I (..\UCOSII\CONFIG\includes.h)(0x55095738)
 I (F:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9AD218)
 I (F:\Keil_v5\ARM\ARMCC\include\ctype.h)(0x5D9AD21A)
@@ -45,16 +42,14 @@ I (F:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9AD21A)
 I (..\UCOSII\CORE\ucos_ii.h)(0x5CEE5400)
 I (..\UCOSII\CONFIG\os_cfg.h)(0x5F4CA7DF)
 I (..\UCOSII\PORT\os_cpu.h)(0x5CE5FF5D)
-I (..\HARDWARE\LCD\hmi_driver.h)(0x5F486962)
-I (..\SYSTEM\usart\usart.h)(0x5FACE431)
-I (..\HARDWARE\LCD\cmd_queue.h)(0x5EBE6143)
-I (..\HARDWARE\LCD\cmd_process.h)(0x5F508437)
+I (..\SYSTEM\delay\delay.h)(0x55CC2E59)
 I (..\HARDWARE\STMFLASH\stmflash.h)(0x5F602B3F)
-I (..\HARDWARE\handle.h)(0x5FAB4E61)
-I (..\HARDWARE\pid_control.h)(0x5FAB99D5)
-I (..\HARDWARE\lcdtest.h)(0x5FACB359)
+I (..\HARDWARE\lcdtest.h)(0x5FACF95A)
+I (main.h)(0x5FAD2692)
+I (..\HARDWARE\longkey.h)(0x5FAD2649)
 I (..\HARDWARE\wdg.h)(0x5F5B6634)
-F (.\stm32f10x_it.c)(0x5FAB83A0)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\stm32f10x_it.o --omf_browse ..\stm32f10x_it.crf --depend ..\stm32f10x_it.d)
+I (..\HARDWARE\modbus.h)(0x5F7D681D)
+F (.\stm32f10x_it.c)(0x5FAD2649)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\stm32f10x_it.o --omf_browse ..\stm32f10x_it.crf --depend ..\stm32f10x_it.d)
 I (stm32f10x_it.h)(0x4D99A426)
 I (stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
@@ -85,15 +80,15 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x5ED1B21B)
 I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
 I (..\HARDWARE\ctrl.h)(0x5FACE11E)
-I (..\USER\main.h)(0x5FACB359)
-I (..\HARDWARE\longkey.h)(0x5FAA7BB5)
-I (..\SYSTEM\usart\usart.h)(0x5FACE431)
+I (..\USER\main.h)(0x5FAD2692)
+I (..\HARDWARE\longkey.h)(0x5FAD2649)
 I (..\HARDWARE\handle.h)(0x5FAB4E61)
-I (..\HARDWARE\lcdtest.h)(0x5FACB359)
+I (..\HARDWARE\lcdtest.h)(0x5FACF95A)
 I (..\HARDWARE\pid_control.h)(0x5FAB99D5)
 I (..\HARDWARE\wdg.h)(0x5F5B6634)
 F (.\system_stm32f10x.c)(0x5EE19C93)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\system_stm32f10x.o --omf_browse ..\system_stm32f10x.crf --depend ..\system_stm32f10x.d)
@@ -128,8 +123,8 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
 F (.\fputc.c)(0x5F56F055)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\fputc.o --omf_browse ..\fputc.crf --depend ..\fputc.d)
 I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
-I (..\SYSTEM\usart\usart.h)(0x5FACE431)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (..\SYSTEM\usart\usart.h)(0x5FAD2186)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -159,12 +154,13 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x5ED1B21B)
 I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
 F (..\CORE\core_cm3.c)(0x4C0C587E)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\core_cm3.o --omf_browse ..\core_cm3.crf --depend ..\core_cm3.d)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
 F (..\CORE\startup_stm32f10x_md.s)(0x4D783CD2)(--cpu Cortex-M3 -g --apcs=interwork -I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include--pd "__UVISION_VERSION SETA 529" --pd "STM32F10X_MD SETA 1"--list ..\obj\startup_stm32f10x_md.lst --xref -o ..\startup_stm32f10x_md.o --depend ..\startup_stm32f10x_md.d)
 F (..\SYSTEM\delay\delay.c)(0x5CEBAFB9)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\delay.o --omf_browse ..\delay.crf --depend ..\delay.d)
 I (..\SYSTEM\delay\delay.h)(0x55CC2E59)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -195,6 +191,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
 I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
 I (..\UCOSII\CONFIG\includes.h)(0x55095738)
 I (F:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9AD218)
 I (F:\Keil_v5\ARM\ARMCC\include\ctype.h)(0x5D9AD21A)
@@ -204,7 +201,7 @@ I (..\UCOSII\CORE\ucos_ii.h)(0x5CEE5400)
 I (..\UCOSII\CONFIG\os_cfg.h)(0x5F4CA7DF)
 I (..\UCOSII\PORT\os_cpu.h)(0x5CE5FF5D)
 F (..\SYSTEM\sys\sys.c)(0x55CC2E79)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\sys.o --omf_browse ..\sys.crf --depend ..\sys.d)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -235,8 +232,9 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
 I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
-F (..\HARDWARE\usart_232.c)(0x5FACCB34)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\usart_232.o --omf_browse ..\usart_232.crf --depend ..\usart_232.d)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
+F (..\SYSTEM\usart\usart_485.c)(0x5FAD135B)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\usart_485.o --omf_browse ..\usart_485.crf --depend ..\usart_485.d)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -267,10 +265,14 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
 I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
-I (..\SYSTEM\usart\usart.h)(0x5FACE431)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
+I (..\SYSTEM\usart\usart.h)(0x5FAD2186)
 I (..\HARDWARE\LCD\cmd_queue.h)(0x5EBE6143)
 I (..\HARDWARE\LCD\hmi_driver.h)(0x5F486962)
 I (..\SYSTEM\delay\delay.h)(0x55CC2E59)
+I (..\USER\main.h)(0x5FAD2692)
+I (..\HARDWARE\longkey.h)(0x5FAD2649)
+I (..\HARDWARE\modbus.h)(0x5F7D681D)
 I (..\UCOSII\CONFIG\includes.h)(0x55095738)
 I (F:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9AD218)
 I (F:\Keil_v5\ARM\ARMCC\include\ctype.h)(0x5D9AD21A)
@@ -279,16 +281,8 @@ I (F:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9AD21A)
 I (..\UCOSII\CORE\ucos_ii.h)(0x5CEE5400)
 I (..\UCOSII\CONFIG\os_cfg.h)(0x5F4CA7DF)
 I (..\UCOSII\PORT\os_cpu.h)(0x5CE5FF5D)
-F (..\HARDWARE\bsp.c)(0x5FACE45F)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\bsp.o --omf_browse ..\bsp.crf --depend ..\bsp.d)
-I (..\UCOSII\CONFIG\includes.h)(0x55095738)
-I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
-I (F:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9AD218)
-I (F:\Keil_v5\ARM\ARMCC\include\ctype.h)(0x5D9AD21A)
-I (F:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9AD21A)
-I (F:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9AD21A)
-I (..\UCOSII\CORE\ucos_ii.h)(0x5CEE5400)
-I (..\UCOSII\CONFIG\os_cfg.h)(0x5F4CA7DF)
-I (..\UCOSII\PORT\os_cpu.h)(0x5CE5FF5D)
+F (..\SYSTEM\usart\usart_232.c)(0x5FAD3A0A)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\usart_232.o --omf_browse ..\usart_232.crf --depend ..\usart_232.d)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -317,19 +311,77 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x5ED1B21B)
 I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
-I (..\HARDWARE\bsp.h)(0x5FACAA7D)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
-I (..\HARDWARE\ctrl.h)(0x5FACE11E)
-I (..\USER\main.h)(0x5FACB359)
-I (..\HARDWARE\longkey.h)(0x5FAA7BB5)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
+I (..\SYSTEM\usart\usart.h)(0x5FAD2186)
+I (..\HARDWARE\LCD\cmd_queue.h)(0x5EBE6143)
+I (..\HARDWARE\LCD\hmi_driver.h)(0x5F486962)
 I (..\SYSTEM\delay\delay.h)(0x55CC2E59)
+I (..\USER\main.h)(0x5FAD2692)
+I (..\HARDWARE\longkey.h)(0x5FAD2649)
+I (..\HARDWARE\modbus.h)(0x5F7D681D)
+I (..\UCOSII\CONFIG\includes.h)(0x55095738)
+I (F:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9AD218)
+I (F:\Keil_v5\ARM\ARMCC\include\ctype.h)(0x5D9AD21A)
+I (F:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9AD21A)
+I (F:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9AD21A)
+I (..\UCOSII\CORE\ucos_ii.h)(0x5CEE5400)
+I (..\UCOSII\CONFIG\os_cfg.h)(0x5F4CA7DF)
+I (..\UCOSII\PORT\os_cpu.h)(0x5CE5FF5D)
+F (..\HARDWARE\bsp.c)(0x5FAD2ECC)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\bsp.o --omf_browse ..\bsp.crf --depend ..\bsp.d)
+I (..\HARDWARE\bsp.h)(0x5FAD2105)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
+I (..\USER\stm32f10x.h)(0x5EE19C93)
+I (..\CORE\core_cm3.h)(0x5CEBAFBB)
+I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
+I (..\USER\system_stm32f10x.h)(0x4D783CAA)
+I (..\USER\stm32f10x_conf.h)(0x55B0C93D)
+I (..\STM32F10x_FWLib\inc\stm32f10x_adc.h)(0x5EC482E8)
+I (..\STM32F10x_FWLib\inc\stm32f10x_bkp.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_can.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_cec.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_crc.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_dac.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_dbgmcu.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_dma.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_exti.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_flash.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_gpio.h)(0x532AE24E)
+I (..\STM32F10x_FWLib\inc\stm32f10x_i2c.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_iwdg.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_pwr.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_rcc.h)(0x5F377501)
+I (..\STM32F10x_FWLib\inc\stm32f10x_rtc.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_sdio.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x5ED1B21B)
+I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
+I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
+I (..\RTT\SEGGER_RTT.h)(0x5491B595)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
+I (..\UCOSII\CONFIG\includes.h)(0x55095738)
+I (F:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9AD218)
+I (F:\Keil_v5\ARM\ARMCC\include\ctype.h)(0x5D9AD21A)
+I (F:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9AD21A)
+I (F:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9AD21A)
+I (..\UCOSII\CORE\ucos_ii.h)(0x5CEE5400)
+I (..\UCOSII\CONFIG\os_cfg.h)(0x5F4CA7DF)
+I (..\UCOSII\PORT\os_cpu.h)(0x5CE5FF5D)
+I (..\SYSTEM\delay\delay.h)(0x55CC2E59)
+I (..\HARDWARE\ctrl.h)(0x5FACE11E)
+I (..\USER\main.h)(0x5FAD2692)
+I (..\HARDWARE\longkey.h)(0x5FAD2649)
 I (..\HARDWARE\ADC\adc.h)(0x5FAB997A)
-I (..\SYSTEM\usart\usart.h)(0x5FACE431)
+I (..\SYSTEM\usart\usart.h)(0x5FAD2186)
 I (..\HARDWARE\pwrchk.h)(0x5EC8FF65)
 I (..\HARDWARE\pid_control.h)(0x5FAB99D5)
 I (..\HARDWARE\wdg.h)(0x5F5B6634)
-F (..\HARDWARE\ctrl.c)(0x5FACE2B9)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\ctrl.o --omf_browse ..\ctrl.crf --depend ..\ctrl.d)
+I (..\HARDWARE\PRINTF\doublebuf.h)(0x5F7EDA0B)
+F (..\HARDWARE\ctrl.c)(0x5FACF9BF)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\ctrl.o --omf_browse ..\ctrl.crf --depend ..\ctrl.d)
 I (..\UCOSII\CONFIG\includes.h)(0x55095738)
 I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (F:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9AD218)
@@ -368,17 +420,17 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x5ED1B21B)
 I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
 I (..\HARDWARE\ctrl.h)(0x5FACE11E)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
-I (..\USER\main.h)(0x5FACB359)
-I (..\HARDWARE\longkey.h)(0x5FAA7BB5)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
+I (..\USER\main.h)(0x5FAD2692)
+I (..\HARDWARE\longkey.h)(0x5FAD2649)
 I (..\SYSTEM\delay\delay.h)(0x55CC2E59)
 I (..\HARDWARE\handle.h)(0x5FAB4E61)
 F (..\HARDWARE\LCD\hmi_driver.c)(0x5F5A084B)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\hmi_driver.o --omf_browse ..\hmi_driver.crf --depend ..\hmi_driver.d)
 I (..\HARDWARE\LCD\hmi_driver.h)(0x5F486962)
-I (..\SYSTEM\usart\usart.h)(0x5FACE431)
-I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (..\SYSTEM\usart\usart.h)(0x5FAD2186)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -407,13 +459,14 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x5ED1B21B)
 I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
+I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
 F (..\HARDWARE\LCD\cmd_queue.c)(0x5F56F055)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\cmd_queue.o --omf_browse ..\cmd_queue.crf --depend ..\cmd_queue.d)
 I (..\HARDWARE\LCD\cmd_queue.h)(0x5EBE6143)
 I (..\HARDWARE\LCD\hmi_driver.h)(0x5F486962)
-I (..\SYSTEM\usart\usart.h)(0x5FACE431)
-I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (..\SYSTEM\usart\usart.h)(0x5FAD2186)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -442,10 +495,12 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x5ED1B21B)
 I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
+I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
 F (..\HARDWARE\ADC\adc.c)(0x5F3F63E9)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\adc.o --omf_browse ..\adc.crf --depend ..\adc.d)
 I (..\HARDWARE\ADC\adc.h)(0x5FAB997A)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -476,60 +531,13 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
 I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
 I (..\SYSTEM\delay\delay.h)(0x55CC2E59)
 I (..\HARDWARE\ctrl.h)(0x5FACE11E)
-I (..\USER\main.h)(0x5FACB359)
-I (..\HARDWARE\longkey.h)(0x5FAA7BB5)
-F (..\HARDWARE\LCD\lcd.c)(0x5FACED7B)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\lcd.o --omf_browse ..\lcd.crf --depend ..\lcd.d)
-I (F:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9AD218)
-I (..\HARDWARE\LCD\cmd_process.h)(0x5F508437)
-I (..\HARDWARE\LCD\hmi_driver.h)(0x5F486962)
-I (..\SYSTEM\usart\usart.h)(0x5FACE431)
-I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
-I (..\USER\stm32f10x.h)(0x5EE19C93)
-I (..\CORE\core_cm3.h)(0x5CEBAFBB)
-I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
-I (..\USER\system_stm32f10x.h)(0x4D783CAA)
-I (..\USER\stm32f10x_conf.h)(0x55B0C93D)
-I (..\STM32F10x_FWLib\inc\stm32f10x_adc.h)(0x5EC482E8)
-I (..\STM32F10x_FWLib\inc\stm32f10x_bkp.h)(0x4D783BB4)
-I (..\STM32F10x_FWLib\inc\stm32f10x_can.h)(0x4D783BB4)
-I (..\STM32F10x_FWLib\inc\stm32f10x_cec.h)(0x4D783BB4)
-I (..\STM32F10x_FWLib\inc\stm32f10x_crc.h)(0x4D783BB4)
-I (..\STM32F10x_FWLib\inc\stm32f10x_dac.h)(0x4D783BB4)
-I (..\STM32F10x_FWLib\inc\stm32f10x_dbgmcu.h)(0x4D783BB4)
-I (..\STM32F10x_FWLib\inc\stm32f10x_dma.h)(0x4D783BB4)
-I (..\STM32F10x_FWLib\inc\stm32f10x_exti.h)(0x4D783BB4)
-I (..\STM32F10x_FWLib\inc\stm32f10x_flash.h)(0x4D783BB4)
-I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x4D783BB4)
-I (..\STM32F10x_FWLib\inc\stm32f10x_gpio.h)(0x532AE24E)
-I (..\STM32F10x_FWLib\inc\stm32f10x_i2c.h)(0x4D783BB4)
-I (..\STM32F10x_FWLib\inc\stm32f10x_iwdg.h)(0x4D783BB4)
-I (..\STM32F10x_FWLib\inc\stm32f10x_pwr.h)(0x4D783BB4)
-I (..\STM32F10x_FWLib\inc\stm32f10x_rcc.h)(0x5F377501)
-I (..\STM32F10x_FWLib\inc\stm32f10x_rtc.h)(0x4D783BB4)
-I (..\STM32F10x_FWLib\inc\stm32f10x_sdio.h)(0x4D783BB4)
-I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x4D783BB4)
-I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x4D783BB4)
-I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x5ED1B21B)
-I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
-I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
-I (..\RTT\SEGGER_RTT.h)(0x5491B595)
-I (..\SYSTEM\delay\delay.h)(0x55CC2E59)
-I (..\HARDWARE\lcdtest.h)(0x5FACB359)
-I (..\USER\main.h)(0x5FACB359)
-I (..\HARDWARE\longkey.h)(0x5FAA7BB5)
-I (..\HARDWARE\STMFLASH\stmflash.h)(0x5F602B3F)
-I (..\UCOSII\CONFIG\includes.h)(0x55095738)
-I (F:\Keil_v5\ARM\ARMCC\include\ctype.h)(0x5D9AD21A)
-I (F:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9AD21A)
-I (F:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9AD21A)
-I (..\UCOSII\CORE\ucos_ii.h)(0x5CEE5400)
-I (..\UCOSII\CONFIG\os_cfg.h)(0x5F4CA7DF)
-I (..\UCOSII\PORT\os_cpu.h)(0x5CE5FF5D)
-F (..\HARDWARE\STMFLASH\stmflash.c)(0x5FACB2ED)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\stmflash.o --omf_browse ..\stmflash.crf --depend ..\stmflash.d)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (..\USER\main.h)(0x5FAD2692)
+I (..\HARDWARE\longkey.h)(0x5FAD2649)
+F (..\HARDWARE\STMFLASH\stmflash.c)(0x5FAD1D9A)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\stmflash.o --omf_browse ..\stmflash.crf --depend ..\stmflash.d)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -560,10 +568,11 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
 I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
 I (..\HARDWARE\STMFLASH\stmflash.h)(0x5F602B3F)
 I (..\SYSTEM\delay\delay.h)(0x55CC2E59)
-I (..\USER\main.h)(0x5FACB359)
-I (..\HARDWARE\longkey.h)(0x5FAA7BB5)
+I (..\USER\main.h)(0x5FAD2692)
+I (..\HARDWARE\longkey.h)(0x5FAD2649)
 I (..\UCOSII\CONFIG\includes.h)(0x55095738)
 I (F:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9AD218)
 I (F:\Keil_v5\ARM\ARMCC\include\ctype.h)(0x5D9AD21A)
@@ -573,7 +582,7 @@ I (..\UCOSII\CORE\ucos_ii.h)(0x5CEE5400)
 I (..\UCOSII\CONFIG\os_cfg.h)(0x5F4CA7DF)
 I (..\UCOSII\PORT\os_cpu.h)(0x5CE5FF5D)
 F (..\HARDWARE\pwrchk.c)(0x5ED36FC1)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\pwrchk.o --omf_browse ..\pwrchk.crf --depend ..\pwrchk.d)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -604,11 +613,12 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
 I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
 I (..\HARDWARE\STMFLASH\stmflash.h)(0x5F602B3F)
 I (..\HARDWARE\pwrchk.h)(0x5EC8FF65)
 F (..\HARDWARE\handle.c)(0x5FACD631)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\handle.o --omf_browse ..\handle.crf --depend ..\handle.d)
 I (..\HARDWARE\handle.h)(0x5FAB4E61)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -639,16 +649,17 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
 I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
-I (..\USER\main.h)(0x5FACB359)
-I (..\HARDWARE\longkey.h)(0x5FAA7BB5)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
+I (..\USER\main.h)(0x5FAD2692)
+I (..\HARDWARE\longkey.h)(0x5FAD2649)
 I (..\HARDWARE\pid_control.h)(0x5FAB99D5)
 I (..\HARDWARE\LCD\hmi_driver.h)(0x5F486962)
-I (..\SYSTEM\usart\usart.h)(0x5FACE431)
+I (..\SYSTEM\usart\usart.h)(0x5FAD2186)
 I (..\HARDWARE\STMFLASH\stmflash.h)(0x5F602B3F)
-I (..\HARDWARE\lcdtest.h)(0x5FACB359)
-F (..\HARDWARE\pid_control.c)(0x5FACE436)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\pid_control.o --omf_browse ..\pid_control.crf --depend ..\pid_control.d)
+I (..\HARDWARE\lcdtest.h)(0x5FACF95A)
+F (..\HARDWARE\pid_control.c)(0x5FACF9DD)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\pid_control.o --omf_browse ..\pid_control.crf --depend ..\pid_control.d)
 I (..\HARDWARE\pid_control.h)(0x5FAB99D5)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -679,15 +690,18 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
 I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
 I (F:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9AD218)
-I (..\USER\main.h)(0x5FACB359)
-I (..\HARDWARE\longkey.h)(0x5FAA7BB5)
-I (..\HARDWARE\lcdtest.h)(0x5FACB359)
-I (..\SYSTEM\usart\usart.h)(0x5FACE431)
-F (..\HARDWARE\longkey.c)(0x5FAB481B)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\longkey.o --omf_browse ..\longkey.crf --depend ..\longkey.d)
-I (..\USER\main.h)(0x5FACB359)
-I (..\HARDWARE\longkey.h)(0x5FAA7BB5)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (..\USER\main.h)(0x5FAD2692)
+I (..\HARDWARE\longkey.h)(0x5FAD2649)
+I (..\HARDWARE\lcdtest.h)(0x5FACF95A)
+I (..\SYSTEM\usart\usart.h)(0x5FAD2186)
+I (..\HARDWARE\PRINTF\doublebuf.h)(0x5F7EDA0B)
+I (F:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9AD21A)
+F (..\HARDWARE\longkey.c)(0x5FACF56C)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\longkey.o --omf_browse ..\longkey.crf --depend ..\longkey.d)
+I (..\USER\main.h)(0x5FAD2692)
+I (..\HARDWARE\longkey.h)(0x5FAD2649)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -718,8 +732,9 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
 I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
 F (..\HARDWARE\wdg.c)(0x5FAB4746)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\wdg.o --omf_browse ..\wdg.crf --depend ..\wdg.d)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -750,6 +765,97 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
 I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
+F (..\HARDWARE\modbus.c)(0x5FAD3A09)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\modbus.o --omf_browse ..\modbus.crf --depend ..\modbus.d)
+I (..\HARDWARE\modbus.h)(0x5F7D681D)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
+I (..\USER\stm32f10x.h)(0x5EE19C93)
+I (..\CORE\core_cm3.h)(0x5CEBAFBB)
+I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
+I (..\USER\system_stm32f10x.h)(0x4D783CAA)
+I (..\USER\stm32f10x_conf.h)(0x55B0C93D)
+I (..\STM32F10x_FWLib\inc\stm32f10x_adc.h)(0x5EC482E8)
+I (..\STM32F10x_FWLib\inc\stm32f10x_bkp.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_can.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_cec.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_crc.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_dac.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_dbgmcu.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_dma.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_exti.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_flash.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_gpio.h)(0x532AE24E)
+I (..\STM32F10x_FWLib\inc\stm32f10x_i2c.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_iwdg.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_pwr.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_rcc.h)(0x5F377501)
+I (..\STM32F10x_FWLib\inc\stm32f10x_rtc.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_sdio.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x5ED1B21B)
+I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
+I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
+I (..\RTT\SEGGER_RTT.h)(0x5491B595)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
+I (..\SYSTEM\usart\usart.h)(0x5FAD2186)
+I (..\USER\main.h)(0x5FAD2692)
+I (..\HARDWARE\longkey.h)(0x5FAD2649)
+I (..\HARDWARE\PRINTF\doublebuf.h)(0x5F7EDA0B)
+I (F:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9AD21A)
+I (F:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9AD218)
+F (..\HARDWARE\lcdtest.c)(0x5FACF910)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\lcdtest.o --omf_browse ..\lcdtest.crf --depend ..\lcdtest.d)
+I (F:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9AD218)
+I (..\HARDWARE\LCD\cmd_process.h)(0x5F508437)
+I (..\HARDWARE\LCD\hmi_driver.h)(0x5F486962)
+I (..\SYSTEM\usart\usart.h)(0x5FAD2186)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
+I (..\USER\stm32f10x.h)(0x5EE19C93)
+I (..\CORE\core_cm3.h)(0x5CEBAFBB)
+I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
+I (..\USER\system_stm32f10x.h)(0x4D783CAA)
+I (..\USER\stm32f10x_conf.h)(0x55B0C93D)
+I (..\STM32F10x_FWLib\inc\stm32f10x_adc.h)(0x5EC482E8)
+I (..\STM32F10x_FWLib\inc\stm32f10x_bkp.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_can.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_cec.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_crc.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_dac.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_dbgmcu.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_dma.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_exti.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_flash.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_fsmc.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_gpio.h)(0x532AE24E)
+I (..\STM32F10x_FWLib\inc\stm32f10x_i2c.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_iwdg.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_pwr.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_rcc.h)(0x5F377501)
+I (..\STM32F10x_FWLib\inc\stm32f10x_rtc.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_sdio.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_spi.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x5ED1B21B)
+I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
+I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
+I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
+I (..\RTT\SEGGER_RTT.h)(0x5491B595)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
+I (..\SYSTEM\delay\delay.h)(0x55CC2E59)
+I (..\HARDWARE\lcdtest.h)(0x5FACF95A)
+I (..\USER\main.h)(0x5FAD2692)
+I (..\HARDWARE\longkey.h)(0x5FAD2649)
+I (..\HARDWARE\STMFLASH\stmflash.h)(0x5F602B3F)
+I (..\HARDWARE\modbus.h)(0x5F7D681D)
+I (..\UCOSII\CONFIG\includes.h)(0x55095738)
+I (F:\Keil_v5\ARM\ARMCC\include\ctype.h)(0x5D9AD21A)
+I (F:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9AD21A)
+I (F:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9AD21A)
+I (..\UCOSII\CORE\ucos_ii.h)(0x5CEE5400)
+I (..\UCOSII\CONFIG\os_cfg.h)(0x5F4CA7DF)
+I (..\UCOSII\PORT\os_cpu.h)(0x5CE5FF5D)
 F (..\STM32F10x_FWLib\src\misc.c)(0x4D783BB4)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\misc.o --omf_browse ..\misc.crf --depend ..\misc.d)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
@@ -1540,7 +1646,7 @@ I (F:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9AD21A)
 I (F:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x5D9AD21A)
 F (..\HARDWARE\PRINTF\doublebuf.c)(0x5F801767)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\doublebuf.o --omf_browse ..\doublebuf.crf --depend ..\doublebuf.d)
 I (..\HARDWARE\PRINTF\doublebuf.h)(0x5F7EDA0B)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -1571,11 +1677,12 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
 I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
 I (F:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9AD21A)
 I (F:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9AD218)
 F (..\HARDWARE\PRINTF\ringbuf.c)(0x5F7E7D1F)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\ringbuf.o --omf_browse ..\ringbuf.crf --depend ..\ringbuf.d)
 I (..\HARDWARE\PRINTF\ringbuf.h)(0x5F7E7D1F)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -1606,8 +1713,9 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
 I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
 F (..\HARDWARE\PRINTF\usart1.c)(0x5F85560D)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\usart1_1.o --omf_browse ..\usart1_1.crf --depend ..\usart1_1.d)
-I (..\SYSTEM\sys\sys.h)(0x5FAB98DD)
+I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
 I (..\CORE\core_cm3.h)(0x5CEBAFBB)
 I (F:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5D9AD218)
@@ -1638,7 +1746,8 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x5CE5FF5D)
 I (F:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9AD21A)
 I (..\RTT\SEGGER_RTT.h)(0x5491B595)
-I (..\SYSTEM\usart\usart.h)(0x5FACE431)
+I (..\HARDWARE\macro_define.h)(0x5FAD173C)
+I (..\SYSTEM\usart\usart.h)(0x5FAD2186)
 I (..\HARDWARE\LCD\cmd_queue.h)(0x5EBE6143)
 I (..\HARDWARE\LCD\hmi_driver.h)(0x5F486962)
 I (..\SYSTEM\delay\delay.h)(0x55CC2E59)

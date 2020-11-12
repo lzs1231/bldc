@@ -31,6 +31,7 @@
 ..\usart1_1.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\usart1_1.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\usart1_1.o: ..\RTT\SEGGER_RTT.h
+..\usart1_1.o: ..\HARDWARE\macro_define.h
 ..\usart1_1.o: ..\SYSTEM\usart\usart.h
 ..\usart1_1.o: ..\HARDWARE\LCD\cmd_queue.h
 ..\usart1_1.o: ..\HARDWARE\LCD\hmi_driver.h

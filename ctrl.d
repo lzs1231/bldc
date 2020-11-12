@@ -41,6 +41,7 @@
 ..\ctrl.o: ..\HARDWARE\ctrl.h
 ..\ctrl.o: ..\SYSTEM\sys\sys.h
 ..\ctrl.o: ..\RTT\SEGGER_RTT.h
+..\ctrl.o: ..\HARDWARE\macro_define.h
 ..\ctrl.o: ..\USER\main.h
 ..\ctrl.o: ..\HARDWARE\longkey.h
 ..\ctrl.o: ..\SYSTEM\delay\delay.h

@@ -187,19 +187,7 @@ void SavePara(void)
 	save_para[37]=gAFlexDec;
 	save_para[38]=gMFlexAcc;
 	save_para[39]=gMFlexDec;
-	
-	save_para[40]=gAFlexSacc;
-	save_para[41]=gAFlexSdec;
-	save_para[42]=gMFlexSacc;
-	save_para[43]=gMFlexSdec;
-	
-	save_para[44]=gLanguageChoice;
-	save_para[45]=gLockTime;
-	save_para[46]=gBuzzer ;
-	save_para[47]=gBrightness ;
-	save_para[48]=((Password[1]<<8)|Password[0]);
-	save_para[49]=((Password[3]<<8)|Password[2]);
-	save_para[50]=((Password[5]<<8)|Password[4]);
+
 	OS_ENTER_CRITICAL();   //关闭中断
 	STMFLASH_Write(FLASH_SAVE_ADDR, (u16*)save_para, SIZE);        //WriteAddr:起始地址    pBuffer:数据指针    NumToWrite:半字(16位)数 
 	OS_EXIT_CRITICAL();    //打开中断  
@@ -262,24 +250,7 @@ void ReadPara(void)
 	gAFlexAcc           =save_para[36];
 	gAFlexDec           =save_para[37];
 	gMFlexAcc           =save_para[38];
-	gMFlexDec           =save_para[39];
-	
-	gAFlexSacc             =save_para[40];
-	gAFlexSdec             =save_para[41];
-	gMFlexSacc             =save_para[42];
-	gMFlexSdec             =save_para[43];
-	
-	gLanguageChoice			=save_para[44];
-	gLockTime            	=save_para[45];
-	gBuzzer                 =save_para[46];
-	gBrightness             =save_para[47] ;
-	Password[0]				=save_para[48]&0xff;
-	Password[1]				=save_para[48]>>8;
-	Password[2]				=save_para[49]&0xFf;
-	Password[3]				=save_para[49]>>8;
-	Password[4]				=save_para[50]&0xff;
-	Password[5]				=save_para[50]>>8;
-	
+	gMFlexDec           =save_para[39];	
 }
 
 void Clearing()   //清零备份
@@ -353,18 +324,6 @@ void Backup()   //系统备份
 	rest_para[38]=gMFlexAcc;
 	rest_para[39]=gMFlexDec;
 	
-	rest_para[40]=gAFlexSacc;
-	rest_para[41]=gAFlexSdec;
-	rest_para[42]=gMFlexSacc;
-	rest_para[43]=gMFlexSdec;
-	
-	rest_para[44]=gLanguageChoice;
-	rest_para[45]=gLockTime;
-	rest_para[46]=gBuzzer;
-	rest_para[47]=gBrightness ;
-	rest_para[48]=((Password[1]<<8)|Password[0]);
-	rest_para[49]=((Password[3]<<8)|Password[2]);
-	rest_para[50]=((Password[5]<<8)|Password[4]);
 	
 	OS_ENTER_CRITICAL();   //关闭中断
 	STMFLASH_Write(FLASH_REST_ADDR, (u16*)rest_para, SIZE);        //WriteAddr:起始地址    pBuffer:数据指针    NumToWrite:半字(16位)数 
@@ -429,22 +388,6 @@ void Restore()    //系统还原
 	gAFlexDec           =rest_para[37];
 	gMFlexAcc           =rest_para[38];
 	gMFlexDec           =rest_para[39];
-	
-	gAFlexSacc            =rest_para[40];
-	gAFlexSdec            =rest_para[41];
-	gMFlexSacc            =rest_para[42];
-	gMFlexSdec            =rest_para[43];
-	
-	gLanguageChoice		  =rest_para[44];
-	gLockTime             =rest_para[45];
-	gBuzzer                =rest_para[46];
-	gBrightness            =rest_para[47];
-	Password[0]				=rest_para[48]&0xff;
-	Password[1]				=rest_para[48]>>8;
-	Password[2]				=rest_para[49]&0xff;
-	Password[3]				=rest_para[49]>>8;
-	Password[4]				=rest_para[50]&0xff;
-	Password[5]				=rest_para[50]>>8;
 }
 
 void WriteSensor()   //传感器值保存

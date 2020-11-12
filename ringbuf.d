@@ -32,3 +32,4 @@
 ..\ringbuf.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\ringbuf.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\ringbuf.o: ..\RTT\SEGGER_RTT.h
+..\ringbuf.o: ..\HARDWARE\macro_define.h

@@ -35,6 +35,7 @@
 ..\lcd.o: ..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 ..\lcd.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\lcd.o: ..\RTT\SEGGER_RTT.h
+..\lcd.o: ..\HARDWARE\macro_define.h
 ..\lcd.o: ..\SYSTEM\delay\delay.h
 ..\lcd.o: ..\HARDWARE\lcdtest.h
 ..\lcd.o: ..\USER\main.h

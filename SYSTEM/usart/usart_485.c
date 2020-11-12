@@ -2,6 +2,8 @@
 #include "usart.h"	  
 #include "cmd_queue.h"
 #include "delay.h"
+#include "main.h"
+#include "modbus.h"
 
 ////////////////////////////////////////////////////////////////////////////////// 	 
 //如果使用ucos,则包括下面的头文件即可.
@@ -118,16 +120,16 @@ void uart2_init(u32 BaudRate)
 */
 void  Send485Char(u8 t)        //发送数据，需要使能DMA发送通道，并且设置引脚为发送模式
 {
-	static u16 i=0;         //需要知道发送的位数
+	static u16 len=0;         //需要知道发送的位数
 	static u32 cmd_state;
 	
-	RS485_TX_BUFF[i++]=t;                       //将需要发送的值赋值到DMA发送源地址
+	RS485_TX_BUFF[len++]=t;                       //将需要发送的值赋值到DMA发送源地址
 //	SEGGER_RTT_printf(0,"%3d\t",t);	
 	cmd_state = ((cmd_state<<8)|t);          //拼接最后4个字节，组成一个32位整数
 	if(cmd_state==0XFFFCFFFF)                
 	{
-		DMA1_Channel7_Send(i);
-		i=0;
+		DMA1_Channel7_Send(len);
+		len=0;
 	}
 }
 
@@ -138,7 +140,6 @@ void  Send485Char(u8 t)        //发送数据，需要使能DMA发送通道，并且设置引脚为发
 void RS485_SendData(u8 *buff,u8 len)
 {
 	memcpy(RS485_TX_BUFF,buff,len);
-
 	DMA1_Channel7_Send(len);
 }
 
@@ -197,21 +198,15 @@ void Receive_DataPack(void)
 	DMA_Cmd(DMA1_Channel6, DISABLE);    /* 暂时关闭dma，数据尚未处理， 关闭DMA ，防止干扰 */
 	DMA_ClearFlag( DMA1_FLAG_TC6 ); 	/* 清DMA标志位 */
 //	DMA_ClearITPendingBit(DMA1_IT_GL6); //清除全部中断标志
-	buff_length = CMD_MAX_SIZE - DMA_GetCurrDataCounter(DMA1_Channel6);        //设置DMA接收大小（一旦接收数据超过CMD_MAX_SIZE，就产生中断）-获取剩余字节空间 = 本次接收数据的大小
-    
+	modbus.recount = CMD_MAX_SIZE-DMA_GetCurrDataCounter(DMA1_Channel6); 
 	
-	if(USART2_RX_Buf[0] != 0xee)   return;
-	for(i=4; i>0; i--)
-	{
-		cmd_state = ((cmd_state<<8)|USART2_RX_Buf[buff_length-i]);
-	}
-	
-	if(cmd_state != 0XFFFCFFFF)   return;
 
-	for(i=0;i<buff_length;i++)
+	for(i=0;i<modbus.recount;i++)
 	{
-//		printf("%x  ",USART_RX_Buf[i]);
-		queue_push(USART2_RX_Buf[i]);
+		modbus.rcbuf[i] = RS485_RX_BUFF[i];
+		#ifdef _TEST_DMA
+		printf("%d\t%d\n",modbus.rcbuf[i],i);
+		#endif
 	}
 	
 	DMA1_Channel6->CNDTR = CMD_MAX_SIZE;    /* 重新赋值计数值，必须大于等于最大可能接收到的数据帧数目 */
@@ -232,16 +227,13 @@ void USART2_IRQHandler(void)          //接收液晶显示屏返回参数
 		(void)USART2->SR;     //对USART_DR的读操作可以将接收中断标志位清零
 		(void)USART2->DR;     //先读SR再读DR寄存器
 		Receive_DataPack();
-		
-		DMA1_Channel6->CNDTR = CMD_MAX_SIZE;    /* 重新赋值计数值，必须大于等于最大可能接收到的数据帧数目 */
-		DMA_Cmd(DMA1_Channel6, ENABLE);   /* 此处应该在处理完数据再打开，如在 DataPack_Process() 打开*/
-		USART_ITConfig(USART2, USART_IT_IDLE, ENABLE);
+		modbus.reflag = 1;
 	}
 	
 	if (USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)//进入一次中断，说明接收到一帧指令
 	{
 		uint8_t data = USART_ReceiveData(USART2);
-        queue_push(data);
+//      queue_push(data);
 	}  
 	
 	if (USART_GetITStatus(USART2, USART_IT_TC) != RESET)  //发送完成中断   丢失

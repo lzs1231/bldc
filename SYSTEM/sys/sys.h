@@ -3,6 +3,7 @@
 #include "stm32f10x.h"
 #include "stdio.h"
 #include "SEGGER_RTT.h"
+#include "macro_define.h"
 
 #define __noinit__ __attribute__((zero_init))// 变量不初始化为0
 

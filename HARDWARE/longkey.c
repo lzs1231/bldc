@@ -3,10 +3,10 @@
 
 
 PortFunDef PortFun[4] = {
-	{&gLongIo0Mode,GPIOC,GPIO_Pin_11,0,0,0,33},
-	{&gLongIo1Mode,GPIOC,GPIO_Pin_12,0,0,0,34},
-	{&gLongIo2Mode,GPIOB,GPIO_Pin_8,0,0,0,35},
-	{&gLongIo3Mode,GPIOB,GPIO_Pin_9,0,0,0,36}
+	{&gLongIo0Mode,GPIOC,GPIO_Pin_11,0,0,0},
+	{&gLongIo1Mode,GPIOC,GPIO_Pin_12,0,0,0},
+	{&gLongIo2Mode,GPIOB,GPIO_Pin_8,0,0,0},
+	{&gLongIo3Mode,GPIOB,GPIO_Pin_9,0,0,0}
 };
 
 void KeyHandle(PortFunDef *PPort,u16 *pLongPortFun)

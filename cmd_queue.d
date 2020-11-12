@@ -2,7 +2,6 @@
 ..\cmd_queue.o: ..\HARDWARE\LCD\cmd_queue.h
 ..\cmd_queue.o: ..\HARDWARE\LCD\hmi_driver.h
 ..\cmd_queue.o: ..\SYSTEM\usart\usart.h
-..\cmd_queue.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\cmd_queue.o: ..\SYSTEM\sys\sys.h
 ..\cmd_queue.o: ..\USER\stm32f10x.h
 ..\cmd_queue.o: ..\CORE\core_cm3.h
@@ -33,4 +32,6 @@
 ..\cmd_queue.o: ..\STM32F10x_FWLib\inc\stm32f10x_usart.h
 ..\cmd_queue.o: ..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 ..\cmd_queue.o: ..\STM32F10x_FWLib\inc\misc.h
+..\cmd_queue.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\cmd_queue.o: ..\RTT\SEGGER_RTT.h
+..\cmd_queue.o: ..\HARDWARE\macro_define.h

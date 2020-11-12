@@ -26,7 +26,6 @@
 #include "sys.h"
 #include "ctrl.h"
 #include "main.h"
-#include "usart.h"
 #include "handle.h"
 #include "lcdtest.h"
 #include "pid_control.h"
@@ -200,8 +199,8 @@ void TIM3_IRQHandler(void)
 
 void TIM4_IRQHandler(void)             //1msÖÐ¶Ï1´Î
 {
-	static u8   iCnt,State;
-	static int  LastPlaceOut,SpeedIn,LastSpeedIn;
+	static u8   iCnt;
+	static int  LastPlaceOut,SpeedIn;
 	static u16  valueL_buf[4],valueR_buf[4];
 	
 	if(TIM4->SR&0x0001) 

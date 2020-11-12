@@ -32,8 +32,11 @@
 ..\pid_control.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\pid_control.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\pid_control.o: ..\RTT\SEGGER_RTT.h
+..\pid_control.o: ..\HARDWARE\macro_define.h
 ..\pid_control.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\pid_control.o: ..\USER\main.h
 ..\pid_control.o: ..\HARDWARE\longkey.h
 ..\pid_control.o: ..\HARDWARE\lcdtest.h
 ..\pid_control.o: ..\SYSTEM\usart\usart.h
+..\pid_control.o: ..\HARDWARE\PRINTF\doublebuf.h
+..\pid_control.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

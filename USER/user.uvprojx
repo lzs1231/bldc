@@ -433,9 +433,14 @@
               <FilePath>..\SYSTEM\sys\sys.c</FilePath>
             </File>
             <File>
+              <FileName>usart_485.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SYSTEM\usart\usart_485.c</FilePath>
+            </File>
+            <File>
               <FileName>usart_232.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\HARDWARE\usart_232.c</FilePath>
+              <FilePath>..\SYSTEM\usart\usart_232.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -468,11 +473,6 @@
               <FilePath>..\HARDWARE\ADC\adc.c</FilePath>
             </File>
             <File>
-              <FileName>lcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\LCD\lcd.c</FilePath>
-            </File>
-            <File>
               <FileName>stmflash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\STMFLASH\stmflash.c</FilePath>
@@ -501,6 +501,16 @@
               <FileName>wdg.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\wdg.c</FilePath>
+            </File>
+            <File>
+              <FileName>modbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\modbus.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcdtest.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\lcdtest.c</FilePath>
             </File>
           </Files>
         </Group>
