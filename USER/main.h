@@ -4,29 +4,35 @@
 #include "longkey.h"
 #include "sys.h"
 
-
-
 extern u16 *const pGainDead 	 ;
 extern u16 *const pFineTune	     ;
 extern u16 *const pDisPulseNum   ;
 extern u16 *const pSensorRate    ;
+extern u16 *const pSensorMode    ;
 extern u16 *const pSensorValue   ;
 extern u16 *const pMatDis        ;
 extern u16 *const pLimitFun1     ;
 extern u16 *const pLimitFun2     ;
-extern u16 *const pSPCFun1		 ;
-extern u16 *const pSPCFun2		 ;
-extern u16 *const pNoMatFun1 	 ;
-extern u16 *const pNoMatFun2 	 ;
+
 extern u16 *const pAFlex 		 ;
 extern u16 *const pMFlex 		 ;
-extern u16 *const pLongIoMode    ;
-extern u16 *const pAutoSpeed 	 ;
-extern u16 *const pManuSpeed	 ;
-extern u16 *const pCentSpeed 	 ;
+
 extern u16 *const pCurrentPara   ;
 extern u16 *const pAdjustData	 ;
 extern u16 *const pOtherPara	 ;
+
+extern u16 *const pLongIoMode    ;
+
+extern u16 *const pAutoSpeed 	 ;
+extern u16 *const pManuSpeed	 ;
+extern u16 *const pCentSpeed 	 ;
+
+extern u16 *const pSPCFun1		 ;
+extern u16 *const pSPCFun2		 ;
+
+extern u16 *const pNoMatFun1 	 ;
+extern u16 *const pNoMatFun2 	 ;
+
 
 
 

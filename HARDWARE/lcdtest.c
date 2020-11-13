@@ -71,58 +71,56 @@ ConfirmDataDef ConfirmData = {
 
 
 /************4种传感器模式对应的显示程序***************/
-void SensorEPC1Dis()    //EPC1                   15位和7位置0
+void SensorEPC1Dis()    //EPC1                
 {
+	*pSensorMode = EPC1;
 	if(OcclusionL_rate>=0)   //0~100
 	{
-		*pSensorRate = OcclusionL_rate&0x007f;             //低8位显示正   
+		*pSensorRate = OcclusionL_rate&0x00ff;             //低8位显示正   
 	}
 	else                    //-100~0
 	{
-		*pSensorRate = ((-OcclusionL_rate)<<7)&0x3F80;       //高8位显示负，十进制移位也是乘2  
+		*pSensorRate = ((-OcclusionL_rate)<<8)&0xff00;       //高8位显示负，十进制移位也是乘2  
 	}
-	
-	*pSensorRate = (*pSensorRate&0x3fff)|0x0000;     //先清零最高两位，然后设置模式
 }
 
-void SensorEPC2Dis()    //EPC2				15位置0  7位置1
+void SensorEPC2Dis()    //EPC2			
 {
+	*pSensorMode = EPC2;
 	if(OcclusionR_rate>=0)
 	{
-		*pSensorRate = OcclusionR_rate&0x007f;             //低8位显示正  
+		*pSensorRate = OcclusionR_rate&0x00ff;             //低8位显示正  
 	}
 	else
 	{
-		*pSensorRate = ((-OcclusionR_rate)<<7)&0x3F80;       //高8位显示负，十进制移位也是乘2    
+		*pSensorRate = ((-OcclusionR_rate)<<8)&0xff00;       //高8位显示负，十进制移位也是乘2    
 	}
-	*pSensorRate = (*pSensorRate&0x3fff)|0x4000;
 }
 
-void SensorCPCDis()   //CPC         15位置1  7位置0
+void SensorCPCDis()   //CPC      
 {
 	s16 DisRate;
 	DisRate = (OcclusionR_rate-OcclusionL_rate)>>1;
-	
+	*pSensorMode = CPC;
 	if(OcclusionR_rate-OcclusionL_rate>=0)
 	{
-		*pSensorRate = DisRate&0x007f;             //低8位显示正  
+		*pSensorRate = DisRate&0x00ff;             //低8位显示正  
 	}
 	else
 	{
-		*pSensorRate = ((-DisRate)<<7)&0x3F80;       //高8位显示负，十进制移位也是乘2 
+		*pSensorRate = ((-DisRate)<<8)&0xff00;       //高8位显示负，十进制移位也是乘2 
 	}
-	*pSensorRate = (*pSensorRate&0x3fff)|0x8000;
 }
 
-void SensorSPCDis()   //SPC        15位置1  7位置1
-{
+void SensorSPCDis()   //SPC      
+{	
+	*pSensorMode = SPC;
 	if(gSPCMode == 0)    //0：内部编码器  1：外部传感器
 	{
 	
 	}
 	
-	*pSensorRate = (((OcclusionL_rate>>1)+50)<<7)|((OcclusionR_rate>>1)+50);             //高8位显示负 左传感器 低8位显示正 右传感器 
-	*pSensorRate = (*pSensorRate&0x3fff)|0xC000;	
+	*pSensorRate = (((OcclusionL_rate>>1)+50)<<8)|((OcclusionR_rate>>1)+50);             //高8位显示负 左传感器 低8位显示正 右传感器 
 }
 
 /**************传感器校准界面显示程序*******************/

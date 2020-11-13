@@ -23,33 +23,51 @@ u8 RS485_TxFlag=0;			//发送一帧结束标记
 u16   Slave_InputIO[RegData];  //输入开关量寄存器(这里使用的是位带操作)   注意： 这里储存从机返回的数据。    开关量的数据只能是0，1 例如 Slave_InputIO[5]=0；Slave_InputIO[8]=1；
 u16   Slave_OutputIO[RegData]; //输出开关量寄存器(这里使用的是位带操作)    功能码 05 15
 
-u16   Slave_ReadReg[30]={0};    //只读寄存器----存储数据，主机只能读取          功能码 03
-u16   Slave_WriteReg[35]={0};   //写寄存器-------主机可以修改该寄存器   功能码 06 16
+u16   Slave_ReadReg[40]={0};    //只读寄存器----存储数据，主机只能读取          功能码 03
+u16   Slave_WriteReg[40]={0};   //写寄存器-------主机可以修改该寄存器   功能码 06 16
 
+
+/**************04功能码读取输入寄存器****************/
 u16 *const pGainDead 	 = &Slave_ReadReg[0];
 u16 *const pFineTune	 = &Slave_ReadReg[1];
 u16 *const pDisPulseNum  = &Slave_ReadReg[2];
 u16 *const pSensorRate   = &Slave_ReadReg[3];
-u16 *const pSensorValue  = &Slave_ReadReg[4];
-u16 *const pMatDis       = &Slave_ReadReg[5];
-u16 *const pLimitFun1    = &Slave_ReadReg[6];
-u16 *const pLimitFun2    = &Slave_ReadReg[7];
-u16 *const pSPCFun1		 = &Slave_ReadReg[8];
-u16 *const pSPCFun2		 = &Slave_ReadReg[9];
-u16 *const pNoMatFun1 	 = &Slave_ReadReg[0x0a];
-u16 *const pNoMatFun2 	 = &Slave_ReadReg[0x0b];
-u16 *const pAFlex 		 = &Slave_ReadReg[0x0c];
-u16 *const pMFlex 		 = &Slave_ReadReg[0x0d];
-u16 *const pLongIoMode   = &Slave_ReadReg[0x0e];
-u16 *const pAutoSpeed 	 = &Slave_ReadReg[0x0f];
-u16 *const pManuSpeed	 = &Slave_ReadReg[0x10];
-u16 *const pCentSpeed 	 = &Slave_ReadReg[0x11];
-u16 *const pCurrentPara  = &Slave_ReadReg[0x12];
-u16 *const pAdjustData	 = &Slave_ReadReg[0x13];
-u16 *const pOtherPara	 = &Slave_ReadReg[0x14];
+u16 *const pSensorMode    = &Slave_ReadReg[4];
+u16 *const pSensorValue  = &Slave_ReadReg[5];
+u16 *const pMatDis       = &Slave_ReadReg[6];
+u16 *const pLimitFun1    = &Slave_ReadReg[7];
+u16 *const pLimitFun2    = &Slave_ReadReg[8];
+
+u16 *const pAFlex 		 = &Slave_ReadReg[0x0e];
+u16 *const pMFlex 		 = &Slave_ReadReg[0x0f];
+
+u16 *const pCurrentPara  = &Slave_ReadReg[0x11];
+u16 *const pAdjustData	 = &Slave_ReadReg[0x12];
+u16 *const pOtherPara	 = &Slave_ReadReg[0x13];
+
+u16 *const pLongIoMode   = &Slave_ReadReg[0x15];
+
+u16 *const pAutoSpeed 	 = &Slave_ReadReg[0x17];
+u16 *const pManuSpeed	 = &Slave_ReadReg[0x18];
+u16 *const pCentSpeed 	 = &Slave_ReadReg[0x19];
+
+u16 *const pSPCFun1		 = &Slave_ReadReg[0x1b];
+u16 *const pSPCFun2		 = &Slave_ReadReg[0x1c];
+
+u16 *const pNoMatFun1 	 = &Slave_ReadReg[0x1e];
+u16 *const pNoMatFun2 	 = &Slave_ReadReg[0x1f];
 
 
 
+
+
+
+
+
+
+
+
+/**************06功能码写入保持寄存器****************/
 u16 *const pHAdjustFlag  = &Slave_WriteReg[0];
 u16 *const pHClickBut    = &Slave_WriteReg[5];
 u16 *const pHAddSub      = &Slave_WriteReg[6];

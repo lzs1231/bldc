@@ -1,16 +1,2 @@
----- SensorL_value Matches (15 in 5 files) ----
-NoShelterDis in lcdtest.c (HARDWARE) : 			MatCal.t_Sensor1_valueH = SensorL_value;
-NoShelterDis in lcdtest.c (HARDWARE) : 			*pSensorValue	=	(SensorL_value|(*pHMatNum<<12))&0x7fff;  //最高位为0，表示EPC1
-ShelterDis in lcdtest.c (HARDWARE) : 			MatCal.t_Sensor1_valueL = SensorL_value;
-ShelterDis in lcdtest.c (HARDWARE) : 			*pSensorValue	=	(SensorL_value|(*pHMatNum<<12))&0x7fff;  //最高位为0，表示EPC1
-RealTimeDis in lcdtest.c (HARDWARE) : 			*pSensorValue	=	(SensorL_value|(*pHMatNum<<12))&0x7fff;  //最高位为0，表示EPC1
-NoShelterDis in lcd.c (HARDWARE\LCD) : 			MatCal.t_Sensor1_valueH = SensorL_value;
-NoShelterDis in lcd.c (HARDWARE\LCD) : //			*MatCal.MatValue[*MatCal.CurMatNum].PSensor1_H = SensorL_value;                     //保存传感器1（左边）最大值
-NoShelterDis in lcd.c (HARDWARE\LCD) : 			SetTextInt32(current_screen_id,1,SensorL_value,0,1);        //更新到进度条和文本框
-ShelterDis in lcd.c (HARDWARE\LCD) : 			MatCal.t_Sensor1_valueL = SensorL_value;			
-ShelterDis in lcd.c (HARDWARE\LCD) : //			*MatCal.MatValue[*MatCal.CurMatNum].PSensor1_L = SensorL_value;       //保存传感器1（左边）最小值
-ShelterDis in lcd.c (HARDWARE\LCD) : 			SetTextInt32(current_screen_id,1,SensorL_value,0,1);        //更新到进度条和文本框
-main.c (USER) line 117 : u16  SensorL_value;                  //传感器1的值
-main.h (USER) line 209 : extern  u16  SensorL_value;                  //传感器1的值
-TIM4_IRQHandler in stm32f10x_it.c (USER) : 		SensorL_value = filter(valueL_buf,iCnt,g_ADC_Buf[1]);
-TIM4_IRQHandler in stm32f10x_it.c (USER) : 			PlaceOut = PlaceOutHandle(SensorL_value,SensorR_value);                           //反向信号，延时
+---- SensorTips Matches (2 in 0 files) ----
+on_variant_upate in script.c (G:\fourth(modbus)\新版 （海绿色 按下发送）\Project) : 		SensorTips	=	 FineTune.SensorTips     +Language*2;
