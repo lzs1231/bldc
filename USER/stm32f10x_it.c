@@ -233,14 +233,14 @@ void TIM4_IRQHandler(void)             //1ms中断1次
 					if(stateMachine.state != state_1b)                 	 //减速状态
 					{
 						stateMachine.state = state_1a;
-						SpeedIn = decspeed(LastPlaceOut,gMFlexDec<<1);
+						SpeedIn = decspeed(LastPlaceOut,gMFlexDec);
 						LastPlaceOut = SpeedIn;
 						if(SpeedIn == 0)		    	 //减速状态结束
 						{
 							stateMachine.state = state_1b;
 						}
 					}else{
-						SpeedIn = T_Mplan(reversal(PlaceOut,10), LastPlaceOut, gMFlexAcc, gMFlexDec<<1);
+						SpeedIn = T_Mplan(reversal(PlaceOut,10), LastPlaceOut, gMFlexAcc, gMFlexDec);
 						LastPlaceOut = SpeedIn;
 					}
 				break;
@@ -254,14 +254,14 @@ void TIM4_IRQHandler(void)             //1ms中断1次
 						if(stateMachine.state != state_2b)                 	 //减速状态
 						{
 							stateMachine.state = state_2a;
-							SpeedIn = decspeed(LastPlaceOut,gMFlexDec<<1);
+							SpeedIn = decspeed(LastPlaceOut,gMFlexDec);
 							LastPlaceOut = SpeedIn;
 							if(SpeedIn == 0)		    	 //减速状态结束
 							{
 								stateMachine.state = state_2b;
 							}
 						}else{
-							SpeedIn = T_Mplan(reversal(PlaceOut,10), LastPlaceOut, gMFlexAcc, gMFlexDec<<1);
+							SpeedIn = T_Mplan(reversal(PlaceOut,10), LastPlaceOut, gMFlexAcc, gMFlexDec);
 							LastPlaceOut = SpeedIn;
 						}
 					}else{	
@@ -272,7 +272,7 @@ void TIM4_IRQHandler(void)             //1ms中断1次
 						if(stateMachine.state != state_3b)                 	 //减速状态
 						{
 							stateMachine.state = state_3a;
-							SpeedIn = decspeed(LastPlaceOut,gMFlexDec<<1);
+							SpeedIn = decspeed(LastPlaceOut,gMFlexDec);
 							LastPlaceOut = SpeedIn;
 							if(SpeedIn == 0)		    	 //减速状态结束
 							{
@@ -280,7 +280,7 @@ void TIM4_IRQHandler(void)             //1ms中断1次
 							}
 						}else{
 							
-							SpeedIn = T_Aplan(reversal(PlaceOut,5), LastPlaceOut, gAFlexAcc, gAFlexDec<<1);
+							SpeedIn = T_Aplan(reversal(PlaceOut,5), LastPlaceOut, gAFlexAcc, gAFlexDec);
 							LastPlaceOut = SpeedIn;
 						}
 					}
@@ -302,7 +302,7 @@ void TIM4_IRQHandler(void)             //1ms中断1次
 								stateMachine.state = state_4b;
 							}
 						}else{
-							SpeedIn = T_Mplan(reversal(PlaceOut,10), LastPlaceOut, gMFlexAcc, gMFlexDec<<1);
+							SpeedIn = T_Mplan(reversal(PlaceOut,10), LastPlaceOut, gMFlexAcc, gMFlexDec);
 							LastPlaceOut = SpeedIn;
 						}
 					}else{	
@@ -313,14 +313,14 @@ void TIM4_IRQHandler(void)             //1ms中断1次
 						if(stateMachine.state != state_5b)                 	 //减速状态
 						{
 							stateMachine.state = state_5a;
-							SpeedIn = decspeed(LastPlaceOut,gMFlexDec<<1);
+							SpeedIn = decspeed(LastPlaceOut,gMFlexDec);
 							LastPlaceOut = SpeedIn;
 							if(SpeedIn == 0)		    	 //减速状态结束
 							{
 								stateMachine.state = state_5b;
 							}
 						}else{
-							SpeedIn = T_Cplan(reversal(PlaceOut,10), LastPlaceOut, gMFlexAcc, gMFlexDec<<1);
+							SpeedIn = T_Cplan(reversal(PlaceOut,10), LastPlaceOut, gMFlexAcc, gMFlexDec);
 							LastPlaceOut = SpeedIn;
 						}						
 					}						

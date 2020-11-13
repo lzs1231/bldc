@@ -2,6 +2,7 @@
 #include "stmflash.h"
 #include "delay.h"
 #include "main.h"
+#include "modbus.h"
 
 #if SYSTEM_SUPPORT_OS
 #include "includes.h"					//ucos 使用	  
@@ -136,17 +137,15 @@ void SavePara(void)
 	OS_CPU_SR  cpu_sr;
 	
 	save_para[0]=gCheckFlag;
-	save_para[1]=gIwdgFlag;	    
+	save_para[1]=gIwdgFlag;
 	save_para[2]=gBackupFlag;
-	
 	
 	save_para[3]=gWorkMode;
 	save_para[4]=gSensorMode;
-	
 	save_para[5]=gAutoPolar;
 	save_para[6]=gManuPolar;
 	save_para[7]=gMotorType;
-	save_para[8]=gPowerOnMode;	
+	save_para[8]=gPowerOnMode;
 	save_para[9]=gCurMatNum;
 	
 	save_para[10]=gGainData;
@@ -187,7 +186,7 @@ void SavePara(void)
 	save_para[37]=gAFlexDec;
 	save_para[38]=gMFlexAcc;
 	save_para[39]=gMFlexDec;
-
+	
 	OS_ENTER_CRITICAL();   //关闭中断
 	STMFLASH_Write(FLASH_SAVE_ADDR, (u16*)save_para, SIZE);        //WriteAddr:起始地址    pBuffer:数据指针    NumToWrite:半字(16位)数 
 	OS_EXIT_CRITICAL();    //打开中断  
@@ -250,7 +249,7 @@ void ReadPara(void)
 	gAFlexAcc           =save_para[36];
 	gAFlexDec           =save_para[37];
 	gMFlexAcc           =save_para[38];
-	gMFlexDec           =save_para[39];	
+	gMFlexDec           =save_para[39];
 }
 
 void Clearing()   //清零备份
@@ -294,8 +293,8 @@ void Backup()   //系统备份
 	rest_para[15]=gCentSpeed;
 	
 	
-	rest_para[16]=gFuncTorque;
-	rest_para[17]=gCaliTorque;
+	rest_para[16]=gCaliTorque;
+	rest_para[17]=gFuncTorque;
 //	rest_para[18]=gCurrentPulseNum;
 //	rest_para[19]=gMAXPulseNum;
 
@@ -323,7 +322,6 @@ void Backup()   //系统备份
 	rest_para[37]=gAFlexDec;
 	rest_para[38]=gMFlexAcc;
 	rest_para[39]=gMFlexDec;
-	
 	
 	OS_ENTER_CRITICAL();   //关闭中断
 	STMFLASH_Write(FLASH_REST_ADDR, (u16*)rest_para, SIZE);        //WriteAddr:起始地址    pBuffer:数据指针    NumToWrite:半字(16位)数 
@@ -388,6 +386,8 @@ void Restore()    //系统还原
 	gAFlexDec           =rest_para[37];
 	gMFlexAcc           =rest_para[38];
 	gMFlexDec           =rest_para[39];
+	
+	Modbus_Init();
 }
 
 void WriteSensor()   //传感器值保存
@@ -441,7 +441,7 @@ void WriteSensor()   //传感器值保存
 	SensorValue[37]=g_Mat7_Sensor2_H;
 	SensorValue[38]=g_Mat7_Sensor2_L;
 	SensorValue[39]=Mat7EPC12;
-
+	
 	OS_ENTER_CRITICAL();   //关闭中断
 	STMFLASH_Write(FLASH_SV_ADDR, (u16*)SensorValue, SIZE);        //WriteAddr:起始地址    pBuffer:数据指针    NumToWrite:半字(16位)数 
 	OS_EXIT_CRITICAL();    //打开中断  
@@ -503,7 +503,6 @@ void ReadSensor()    //传感器值读取
 	g_Mat7_Sensor2_H		=SensorValue[37];
 	g_Mat7_Sensor2_L	    =SensorValue[38];
 	Mat7EPC12               =SensorValue[39];
-	
 }
 
 

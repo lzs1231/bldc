@@ -11,8 +11,6 @@
 "..\usart_232.o"
 "..\bsp.o"
 "..\ctrl.o"
-"..\hmi_driver.o"
-"..\cmd_queue.o"
 "..\adc.o"
 "..\stmflash.o"
 "..\pwrchk.o"

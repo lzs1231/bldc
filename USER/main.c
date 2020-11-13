@@ -6,7 +6,6 @@
 #include "modbus.h"
 
 //以下是要存储的参数
-
 __noinit__ u16   gCheckFlag;		           //校验标志
 __noinit__ u16   gIwdgFlag;                 //看门狗复位标志
 __noinit__ u16   gBackupFlag;               //备份标志     0表示无备份，1表示有备份
@@ -308,7 +307,6 @@ void start_task(void *pdata)
 	if(gCheckFlag!=0xee55)  			SetDataInit();  	 //如果参数读取错误，就重新初始化参数
 	if(g_Mat0_Sensor1_H == 0xffff)  	SensorInit();		 //如果参数读取错误，就重新初始化传感器参数
 	
-	
 	switch(gPowerOnMode)                    		 //查询开机时的工作状态
 	{
 	   case 0: gWorkMode=0;          	break;      //开机手动
@@ -419,7 +417,6 @@ void lcd_task(void *pdata)
 		else if(*pHTCaliTorque == 2)	gCaliTorque	 =20;
 		else if(*pHTCaliTorque == 3)	gCaliTorque	 =30;
 		
-		
 		if(LongPortFun[Switch1_EPC] != LastSwitch1EPC)
 		{
 			*pHSensorMode=LongPortFun[Switch1_EPC];
@@ -458,16 +455,15 @@ void lcd_task(void *pdata)
 		gLongIo2Mode = *pHPort2Fun;
 		gLongIo3Mode = *pHPort3Fun;
 		
-		
 //		OSMutexPend(mutex,0,&err);             //提高任务优先级
 //		OSMutexPost(mutex);                    //恢复任务优先级
 		
 		switch(*pHFlexSpeed)
 		{
-			case 1:		gAFlexAcc = AFlexAcc;*pHFlexSpeed = 0;	break;
-			case 2:		gAFlexDec = AFlexDec;*pHFlexSpeed = 0;  break;
-			case 3:		gMFlexAcc = MFlexAcc;*pHFlexSpeed = 0;  break;
-			case 4:		gMFlexDec = MFlexDec;*pHFlexSpeed = 0;  break;
+			case 1:		gAFlexAcc = AFlexAcc; *pHFlexSpeed = 0;	break;
+			case 2:		gAFlexDec = AFlexDec; *pHFlexSpeed = 0;  break;
+			case 4:		gMFlexAcc = MFlexAcc; *pHFlexSpeed = 0;  break;
+			case 8:		gMFlexDec = MFlexDec; *pHFlexSpeed = 0;  break;
 			default:	break;
 		}
 		/*****************************更新输入寄存器,读取输入寄存器器用于显示***********************************/

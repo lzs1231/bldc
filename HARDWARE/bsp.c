@@ -7,9 +7,6 @@
 #include "wdg.h"
 #include "doublebuf.h"
 
-
-
-
 void RCC_Configuration(void); 
 void Init_GPIO(void);            //初始化IO口
 void Interrupt_Config(void);     //中断优先级配置
@@ -144,14 +141,15 @@ void Interrupt_Config(void)   //NVIC 中断优先级配置
 //	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
 //	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 //	NVIC_Init(&NVIC_InitStructure);
-	
+
+#ifdef USE_MAX_485 
 	//Usart2 中断向量配置
-//	NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;       			//中断向量表
-//	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3; 			//抢占优先级3
-//	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;		  		//子优先级3
-//	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;		    		//IRQ通道使能
-//	NVIC_Init(&NVIC_InitStructure);	                        		//根据指定的参数初始化VIC寄存器
-//	
+	NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;       			//中断向量表
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3; 			//抢占优先级3
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;		  		//子优先级3
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;		    		//IRQ通道使能
+	NVIC_Init(&NVIC_InitStructure);	                        		//根据指定的参数初始化VIC寄存器
+	
 //	/* Enable DMA channel6 IRQ Channel */
 //	NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel6_IRQn;      //串口2接收的DMA通道
 //	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
@@ -164,7 +162,7 @@ void Interrupt_Config(void)   //NVIC 中断优先级配置
 //	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
 //	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 //	NVIC_Init(&NVIC_InitStructure);
-	
+#elif	defined USE_MAX_232
 	//Usart3 中断向量配置
 	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;       			//中断向量表
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3; 			//抢占优先级3
@@ -172,18 +170,19 @@ void Interrupt_Config(void)   //NVIC 中断优先级配置
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;		    		//IRQ通道使能
 	NVIC_Init(&NVIC_InitStructure);	                        		//根据指定的参数初始化VIC寄存器
 	
-	/* Enable DMA channel6 IRQ Channel */
-	NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel2_IRQn;      //串口2接收的DMA通道
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_Init(&NVIC_InitStructure);
-	/* Enable DMA channel7 IRQ Channel */
-	NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel3_IRQn;      //串口2发送的DMA通道
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_Init(&NVIC_InitStructure);
+//	/* Enable DMA channel6 IRQ Channel */
+//	NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel2_IRQn;      //串口2接收的DMA通道
+//	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
+//	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+//	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+//	NVIC_Init(&NVIC_InitStructure);
+//	/* Enable DMA channel7 IRQ Channel */
+//	NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel3_IRQn;      //串口2发送的DMA通道
+//	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
+//	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+//	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+//	NVIC_Init(&NVIC_InitStructure);
+#endif
 }
 
 

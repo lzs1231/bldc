@@ -1,8 +1,6 @@
 ..\lcdtest.o: ..\HARDWARE\lcdtest.c
 ..\lcdtest.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-..\lcdtest.o: ..\HARDWARE\LCD\cmd_process.h
-..\lcdtest.o: ..\HARDWARE\LCD\hmi_driver.h
-..\lcdtest.o: ..\SYSTEM\usart\usart.h
+..\lcdtest.o: ..\SYSTEM\delay\delay.h
 ..\lcdtest.o: ..\SYSTEM\sys\sys.h
 ..\lcdtest.o: ..\USER\stm32f10x.h
 ..\lcdtest.o: ..\CORE\core_cm3.h
@@ -36,7 +34,6 @@
 ..\lcdtest.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\lcdtest.o: ..\RTT\SEGGER_RTT.h
 ..\lcdtest.o: ..\HARDWARE\macro_define.h
-..\lcdtest.o: ..\SYSTEM\delay\delay.h
 ..\lcdtest.o: ..\HARDWARE\lcdtest.h
 ..\lcdtest.o: ..\USER\main.h
 ..\lcdtest.o: ..\HARDWARE\longkey.h

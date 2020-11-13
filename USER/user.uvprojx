@@ -458,16 +458,6 @@
               <FilePath>..\HARDWARE\ctrl.c</FilePath>
             </File>
             <File>
-              <FileName>hmi_driver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\LCD\hmi_driver.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\LCD\cmd_queue.c</FilePath>
-            </File>
-            <File>
               <FileName>adc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\ADC\adc.c</FilePath>

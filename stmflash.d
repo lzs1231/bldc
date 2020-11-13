@@ -36,6 +36,7 @@
 ..\stmflash.o: ..\SYSTEM\delay\delay.h
 ..\stmflash.o: ..\USER\main.h
 ..\stmflash.o: ..\HARDWARE\longkey.h
+..\stmflash.o: ..\HARDWARE\modbus.h
 ..\stmflash.o: ..\UCOSII\CONFIG\includes.h
 ..\stmflash.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\stmflash.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\ctype.h

@@ -36,7 +36,5 @@
 ..\handle.o: ..\USER\main.h
 ..\handle.o: ..\HARDWARE\longkey.h
 ..\handle.o: ..\HARDWARE\pid_control.h
-..\handle.o: ..\HARDWARE\LCD\hmi_driver.h
-..\handle.o: ..\SYSTEM\usart\usart.h
 ..\handle.o: ..\HARDWARE\STMFLASH\stmflash.h
 ..\handle.o: ..\HARDWARE\lcdtest.h

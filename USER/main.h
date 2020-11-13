@@ -4,16 +4,6 @@
 #include "longkey.h"
 #include "sys.h"
 
-//#define _TEST_DMA
-//#define _TEST_Place        //打开速度PID测试参数显示
-//#define _TEST_Speed          //打开速度PID测试参数显示
-//#define _TEST_Cent         //打开对中PID测试参数显示
-//#define _TEST_SPC          //打开SPCPID测试参数显示
-
-#define  AFlexAcc   50                //自动柔性加速
-#define  AFlexDec   100               //自动柔性减速
-#define  MFlexAcc   20                //手动柔性加速
-#define  MFlexDec   80                //手动柔性减速
 
 
 extern u16 *const pGainDead 	 ;
@@ -99,12 +89,8 @@ extern  u16   gAutoSpeed;                //自动速度
 extern  u16   gManuSpeed;                //手动速度
 extern  u16   gCentSpeed;                //对中速度
 
-
 extern  u16   gCaliTorque;            //校准转矩
 extern  u16   gFuncTorque;              //正常支行时转矩限制，最大为10A
-
-
- 
 
 extern  s16   gCurrentPulseNum;         //当前所在位置脉冲数	
 extern  s16   gMAXPulseNum;             //脉冲数0到最大值MAX_pulse_num
@@ -113,9 +99,6 @@ extern  u16   gLimitMode;                //限位方式
 extern  u16   gBehindLimit;              //前限位点设置
 extern  u16   gCenterLimit;		    	 //中心限位点设置
 extern  u16   gFrontLimit;				 //后限位点设置
-
-
-
 
 extern  u16   gSPCMode;                  //蛇形纠偏模式  0：内部编码器  1：外部传感器
 extern  u16   gSPCStopTime;              //sps停止时间=0.2秒
@@ -188,6 +171,9 @@ extern  u16   g_Mat7_Sensor2_L;      //右传感器的低信号值
 extern  u16    Mat7EPC12;
 
 
+
+
+
 /*******报警标志******/
 enum   WarmFlagType
 {
@@ -215,8 +201,10 @@ extern  volatile bool g_ADC_OK;
 extern  u32  time0,time1,time2;
 extern  u16  SensorL_value;                  //传感器1的值
 extern  u16  SensorR_value;                  //传感器2的值
+
 extern  u32  NUMBERTURN;
 extern  u8   SERIES;
+
 extern  u8   LastHallData;
 extern  u16  HallRate;             //当前脉冲点总行程中的比例
 

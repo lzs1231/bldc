@@ -1,5 +1,4 @@
 #include <string.h>
-#include "cmd_process.h"
 #include "delay.h"
 #include "lcdtest.h"
 #include "main.h"

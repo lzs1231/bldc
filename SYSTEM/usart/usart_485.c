@@ -11,6 +11,18 @@
 #include "includes.h"					//ucos 使用	  
 #endif
 
+#define CMD_MAX_SIZE 128           // 单条指令大小，根据需要调整，尽量设置大一些
+
+extern OS_EVENT *Uart1RecMbox;    
+
+u8   RS485_RX_BUFF[CMD_MAX_SIZE];          //DMA目标地址,内存地址    接收缓冲区
+u8   RS485_TX_BUFF[CMD_MAX_SIZE];           //DMA目标地址,内存地址    发送缓冲区
+
+
+void DMA1_Channel7_Send(u8 size);
+
+
+
 void max485Enable_RX()
 {
 	GPIO_ResetBits(GPIOA,GPIO_Pin_1);               //该引脚置为低电平，表示接收模式
@@ -20,13 +32,6 @@ void max485Enable_TX()
 {
 	GPIO_SetBits(GPIOA,GPIO_Pin_1);                //该引脚置为高电平，表示发送模式
 }
- 
-extern OS_EVENT *Uart1RecMbox;    
-
-u8   RS485_RX_BUFF[CMD_MAX_SIZE];          //DMA目标地址,内存地址    接收缓冲区
-u8   RS485_TX_BUFF[CMD_MAX_SIZE];           //DMA目标地址,内存地址    发送缓冲区
-
-void DMA1_Channel7_Send(u8 size);
 
 /*!
 *   \brief   串口2初始化

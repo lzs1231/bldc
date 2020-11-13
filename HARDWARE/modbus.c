@@ -4,7 +4,6 @@
 //#include "stdlib.h"
 #include "doublebuf.h"
 
-
 #define RegData  64
 
 MODBUS modbus;
@@ -48,6 +47,7 @@ u16 *const pCentSpeed 	 = &Slave_ReadReg[0x11];
 u16 *const pCurrentPara  = &Slave_ReadReg[0x12];
 u16 *const pAdjustData	 = &Slave_ReadReg[0x13];
 u16 *const pOtherPara	 = &Slave_ReadReg[0x14];
+
 
 
 u16 *const pHAdjustFlag  = &Slave_WriteReg[0];
@@ -153,7 +153,7 @@ void Modbus_Init()
 	*pHTCaliFlag=0;
 	*pHTCaliCancel=0;
 	
-	
+	*pHWorkMode = gWorkMode;
 	*pHSensorMode = gSensorMode;		//0=左，1=右，2=左+右，3=SPC
 	*pHAutoPolar = gAutoPolar;			//自动极性，0=负极，1=正极;
 	*pHManuPolar = gManuPolar;			//手动极性，0=负极，1=正极;
@@ -274,7 +274,7 @@ void Modbus_Func6()
 	
 	// 开始返回Modbus数据
 #ifdef USE_MAX_485
-	RS484_SendData(&modbus.sendbuf[0],i);	
+	RS485_SendData(&modbus.sendbuf[0],i);	
 #elif defined USE_MAX_232
 	RS232_SendData(&modbus.sendbuf[0],i);	
 #endif	

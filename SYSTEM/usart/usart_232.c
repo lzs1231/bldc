@@ -175,7 +175,7 @@ void DMA1_Channel2_IRQHandler(void)           //发送完成DMA中断，关闭DMA，将方向
 	OSIntExit();
 }
 
-void Receive3_DataPack(void)
+void Receive232_DataPack(void)
 {
 	u8 i;
 	
@@ -210,7 +210,7 @@ void USART3_IRQHandler(void)          //接收液晶显示屏返回参数
 	{
 		(void)USART3->SR;     //对USART_DR的读操作可以将接收中断标志位清零
 		(void)USART3->DR;   //先读SR再读DR寄存器
-		Receive3_DataPack();
+		Receive232_DataPack();
 	 	modbus.reflag = 1;		
 	}
 	

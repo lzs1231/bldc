@@ -1,12 +1,11 @@
 #include "handle.h"
 #include "main.h"
 #include "pid_control.h"
-#include "hmi_driver.h"
 #include "stmflash.h"
 #include "lcdtest.h"
 #include "longkey.h"
 
-#define Calib_Speed 400             	 	//校准速度100
+#define Calib_Speed 500             	 	//校准速度100
 #define SPC_Out_Max 3000
 #define HighVal 1516					    //电压高于28V
 #define LowVal 	1070           				//电压低于20V	
