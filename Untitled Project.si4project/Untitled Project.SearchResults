@@ -1,2 +1,11 @@
----- SensorTips Matches (2 in 0 files) ----
-on_variant_upate in script.c (G:\fourth(modbus)\新版 （海绿色 按下发送）\Project) : 		SensorTips	=	 FineTune.SensorTips     +Language*2;
+---- WorkMode Matches (10 in 0 files) ----
+on_systick in script.c (G:\fourth(modbus)\新版 （海绿色 按下发送）\Project) : 			if(OtherPara.WorkMode == 0)		sys.current_screen = 4;
+on_systick in script.c (G:\fourth(modbus)\新版 （海绿色 按下发送）\Project) : 			else	if(OtherPara.WorkMode == 1)		sys.current_screen = 2;
+on_systick in script.c (G:\fourth(modbus)\新版 （海绿色 按下发送）\Project) :  			else	if(OtherPara.WorkMode == 2)		sys.current_screen = 5;	
+on_control_notify in script.c (G:\fourth(modbus)\新版 （海绿色 按下发送）\Project) : 			if(OtherPara.WorkMode == 0)  sys.current_screen = 44;
+on_control_notify in script.c (G:\fourth(modbus)\新版 （海绿色 按下发送）\Project) :  			if(OtherPara.WorkMode == 0)  {sys.current_screen = 49;  set(HTCaliFlag,1);}	
+on_control_notify in script.c (G:\fourth(modbus)\新版 （海绿色 按下发送）\Project) : 			set(HWorkMode,0);	
+on_screen_change in script.c (G:\fourth(modbus)\新版 （海绿色 按下发送）\Project) : 		HWorkMode=1;
+on_screen_change in script.c (G:\fourth(modbus)\新版 （海绿色 按下发送）\Project) : 		HWorkMode=0;
+on_screen_change in script.c (G:\fourth(modbus)\新版 （海绿色 按下发送）\Project) : 		HWorkMode=2;
+on_screen_change in script.c (G:\fourth(modbus)\新版 （海绿色 按下发送）\Project) : 		set(HWorkMode,0);	 //是按钮按下，切换为手动，并记录校准步骤为第0步。

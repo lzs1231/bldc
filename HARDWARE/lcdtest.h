@@ -229,6 +229,9 @@ extern MatCalDef MatCal;
 extern TravelCalDef TravelCal;
 extern ConfirmDataDef ConfirmData;
 
+/**********警告标志计算***************/
+u8 WarmOut(void);
+
 /************4种传感器模式对应的显示程序***************/
 void SensorEPC1Dis(void);    //EPC1
 void SensorEPC2Dis(void);    //EPC2

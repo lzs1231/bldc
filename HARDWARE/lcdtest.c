@@ -70,10 +70,35 @@ ConfirmDataDef ConfirmData = {
 };
 
 
+		/**********警告标志计算***************/
+		
+u8 WarmOut()
+{
+	u8 icnt,HallData;
+	HallData  = (u8)((GPIOC->IDR&0x000001c0)>>6);        //读转子位置    合成GPIOC8|GPIOC7|GPIOC6 
+	
+	if(HallData>6||HallData<1)   	Warm[NotConFlag] = NotConFlag;
+	else 						   	Warm[NotConFlag] = NoErrFlag; 
+	
+	if(*pHWarmFlag == 1)     		Warm[LockFlag] = LockFlag;
+	else if(*pHWarmFlag == 3)  		Warm[ProhibitFlag] = ProhibitFlag;
+	else 					   	   {Warm[LockFlag] = NoErrFlag;     Warm[ProhibitFlag] = NoErrFlag;}
+	
+	/**************打开继电器**********************/
+	if(*pHAlarmSwitch == 0)    		PDout(2) = (Warm[LimitFlag]==LimitFlag?1:0);  
+	else if(*pHAlarmSwitch == 1)    PDout(2) = (Warm[BreakAlarmFlag]==BreakAlarmFlag?1:0);  
+	
+	for(icnt=WarmNum-1;icnt>0;icnt--)
+	{
+		if(Warm[icnt] != 0)   return Warm[icnt];           
+	}
+	return 0;  
+}	  
+
+
 /************4种传感器模式对应的显示程序***************/
 void SensorEPC1Dis()    //EPC1                
 {
-	*pSensorMode = EPC1;
 	if(OcclusionL_rate>=0)   //0~100
 	{
 		*pSensorRate = OcclusionL_rate&0x00ff;             //低8位显示正   
@@ -86,7 +111,6 @@ void SensorEPC1Dis()    //EPC1
 
 void SensorEPC2Dis()    //EPC2			
 {
-	*pSensorMode = EPC2;
 	if(OcclusionR_rate>=0)
 	{
 		*pSensorRate = OcclusionR_rate&0x00ff;             //低8位显示正  
@@ -101,7 +125,7 @@ void SensorCPCDis()   //CPC
 {
 	s16 DisRate;
 	DisRate = (OcclusionR_rate-OcclusionL_rate)>>1;
-	*pSensorMode = CPC;
+
 	if(OcclusionR_rate-OcclusionL_rate>=0)
 	{
 		*pSensorRate = DisRate&0x00ff;             //低8位显示正  
@@ -114,7 +138,7 @@ void SensorCPCDis()   //CPC
 
 void SensorSPCDis()   //SPC      
 {	
-	*pSensorMode = SPC;
+
 	if(gSPCMode == 0)    //0：内部编码器  1：外部传感器
 	{
 	

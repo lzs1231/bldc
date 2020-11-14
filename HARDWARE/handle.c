@@ -46,48 +46,49 @@ int SetZone(int dev)      				  //设置盲区
 
 
 //最高速度限制
-int Speed_limit(int OUT, int A_speed)
+int Speed_limit(int out, int ASpeed)
 {
-	if((OUT<-A_speed))    return(-A_speed);         //查询要输出的电压是否到了设定的最高输出值，如到了就限定在最高输出值
-	else if(OUT>A_speed)  return(A_speed);
-	else   				  return(OUT);  			//没到就不限制
+	if((out<-ASpeed))    return(-ASpeed);         //查询要输出的电压是否到了设定的最高输出值，如到了就限定在最高输出值
+	else if(out>ASpeed)  return(ASpeed);
+	else   				 return(out);  			//没到就不限制
 }
 
 //无料检测程序
-int No_Material_Detection(int P)
+int No_Material_Detection(int out)
 {  
-	static u8  Detect_Flag=0;                      //无料等待是否开启软开关
-	static u16 Detect_Num=0;
-	static u16 Wait_Num=0;
-	int out;
-	u16 Detect_Time = gNoDetectTime*20;
-	u16 Wait_Time   = gNoWaitTime*20;
+	static u8  DetectFlag=0;                      //无料等待是否开启软开关
+	static u16 DetectNum=0;
+	static u16 WaitNum=0;
+	u16 DetectTime = gNoDetectTime*20;           //检测时间，
+	u16 WaitTime   = gNoWaitTime*20;
 
-	if((P<-gNoDetectValve)||(P>gNoDetectValve))
+	if((out<-gNoDetectValve)||(out>gNoDetectValve))        //偏差超过阈值，等待
 	{
-		if(Detect_Flag==1)	
+		if(DetectFlag==1)	
 		{
-			out=P; 
+			Warm[BreakAlarmFlag] = BreakAlarmFlag;
+			return out;
 		}else{
-			if(Detect_Num<Detect_Time) 
+			if(DetectNum<DetectTime)        //检测时间小于设定时间
 			{
-				out=P;
-				Detect_Num++;
-			}else{
-				out=0;
-				if(Wait_Num < Wait_Time)
+				DetectNum++;
+				return out;
+			}else{                          //检测时间大于设定时间，就停止输出
+				if(WaitNum < WaitTime)      //等待一定时间
 				{
-					Wait_Num++;
+					WaitNum++;
 				}else{
-					Detect_Flag=1;  
+					DetectFlag=1;  
 				}
+				return 0;
 			} 
 		}
 	}else{
-		out=P;
-		Detect_Flag=0;   //清0内部软开关
-		Detect_Num=0;
-		Wait_Num=0;	 
+		Warm[BreakAlarmFlag] = NoErrFlag;
+		DetectFlag=0;   //清0内部软开关
+		DetectNum=0;
+		WaitNum=0;	 
+		return out;
 	}
 	return(out);
 }
@@ -144,7 +145,8 @@ int WorkModeOut()
 			
         default: out = 0;  break;
     }
-	switch(ClickButton|LongPortFun[PusherLeft])        
+	
+	switch(ClickButton|LongPortFun[PusherLeft])         //判断是否有手动按钮按下		
 	{
 		case 0:													break;							
 		case 1:		out = GetPolar(gManuSpeed, gManuPolar);		break;
@@ -471,79 +473,81 @@ int TravelCalibration(void)
 /*************电流保护*******************/
 int CurrentProtection(int S_Out,u16 IBus,u16 UBus)   
 {
-	static int Dir_I_stop=0,Ivalue;
+	static int Dir_I_stop=0;
 	static u8 bit_I=0;
 	static u16 num_I;
 	static u16 num_I_stop;
 	int I_Out=0;
-	int FunctionEK ;                 //正常运行时电流差值,测量电流与设定电流差值FunctionEK
-	int CalibrEK   ;                 //校准时电流差值 CalibrEK    实际电流I*0.01(电阻)*10(放大倍数)=BusI*3.3/4096
+	int FuncEK ;                 //正常运行时电流差值,测量电流与设定电流差值FunctionEK
+	int CaliEK   ;                //校准时电流差值 CalibrEK    实际电流I*0.01(电阻)*10(放大倍数)=BusI*3.3/4096
 	int Dir_Xinghao;                 //输入信号的方向	
 	
-	FunctionEK = IBus-(gFuncTorque*116);
-	CalibrEK   = IBus-(gCaliTorque*11.6);
-	Ivalue = IBus;
+	FuncEK = IBus-(gFuncTorque*116);
+	CaliEK = IBus-(gCaliTorque*11.6);
 	
 	Dir_Xinghao = GetDirection(S_Out);   //提取输入电压的方向
 
 /************电流保护，限制电流***********/	
 	if(TravelCal.CaliFlag==1)            //校准时的电流控制
 	{
-		if(CalibrEK>0)                   //电流有超限
+		if(CaliEK>0)                  	 //电流有超限
 		{
 			switch(Dir_Xinghao)                                                   //对输出进行限制
 			{														   
-				 case -1: I_Out=S_Out+(CalibrEK<<2);if(I_Out>0){I_Out=0;}  break;
-				 case  0: I_Out=0;                                 break;
-				 case  1: I_Out=S_Out-(CalibrEK<<2);if(I_Out<0){I_Out=0;}  break;
+				 case -1: I_Out=S_Out+(CaliEK<<2);if(I_Out>0){I_Out=0;}  break;
+				 case  0: I_Out=0;                                		 break;
+				 case  1: I_Out=S_Out-(CaliEK<<2);if(I_Out<0){I_Out=0;}  break;
 				 default:  break;
 			}
 		}else{
 		   I_Out=S_Out;
 		}
-	}else{                     //正常运行时的电流控制
-		if(bit_I==0)                                                                      //如果电流还没有关闭输出 
+	}
+	else
+	{                     				//正常运行时的电流控制
+		if(bit_I==0)                                                        //如果电流还没有关闭输出 
 		{
-		    if(S_Out==0)                                                                      //信号输入为0，就停止所有计数器，输出也为0
+		    if(S_Out==0)                                                    //信号输入为0，就停止所有计数器，输出也为0
 			{
 			    num_I=0;
 				num_I_stop=0;
 				I_Out=0;
 			}else{
-			    if(num_I<20000)                                                          //2秒计时
+			    if(num_I<20000)                                             //2秒计时
 				{
 				    num_I++;
-					if(FunctionEK>0)                                                     //电流有超限
+					if(FuncEK>0)                                            //电流有超限
 					{
 						Warm[OverrunFlag] = OverrunFlag;
-					    num_I_stop++;  
+					    num_I_stop++;                                       //2秒内电流超限次数
 
-						switch(Dir_Xinghao)                                              //电流对信号限制
+						switch(Dir_Xinghao)                                 //电流对信号限制
 						{														   
-						     case -1: I_Out=S_Out+(FunctionEK<<3);   if(I_Out>-5){I_Out=-5;}  break;
+						     case -1: I_Out=S_Out+(FuncEK<<3);   if(I_Out>-5){I_Out=-5;}  break;
 							 case  0: I_Out=0;                                   break;
-							 case  1: I_Out=S_Out-(FunctionEK<<3);   if(I_Out<5) {I_Out=5;}  break;    //电流有超限，慢慢减小输出
+							 case  1: I_Out=S_Out-(FuncEK<<3);   if(I_Out<5) {I_Out=5;}  break;    //电流有超限，慢慢减小输出
 		                     default:  break;
 						}
-					}else{
-						I_Out = S_Out;  Warm[OverrunFlag] = NoErrFlag;
-					}                                       //没有电流超限就正常输出
-				}else{                                                                   //2秒计时到了
-				    if(num_I_stop>=8000)                                                 //如电流超限次数达到1半以上就关闭输出
+					}else{                                                 //没有电流超限就正常输出
+						I_Out = S_Out;  
+						Warm[OverrunFlag] = NoErrFlag;
+					}                                      
+				}else{                                                      //2秒计时到了
+				    if(num_I_stop>=8000)                                    //如电流超限次数达到1半以上就关闭输出
 					{ 
 					     I_Out=0;
-		                 bit_I=1;                                                        //显示报警标志
+		                 bit_I=1;                                           //显示报警标志
 						 Warm[StallFlag] = StallFlag;
-						 Dir_I_stop=Dir_Xinghao;                                         //保存电流关闭时的信号方向		
+						 Dir_I_stop=Dir_Xinghao;                            //保存电流关闭时的信号方向		
 					}else{
 					     I_Out=S_Out;
 					}
-					num_I_stop=0;                                                        //清0计数器
+					num_I_stop=0;                                           //清0计数器
 					num_I=0;
 				}
 	        }
 		}else{
-		     if((Dir_Xinghao!=Dir_I_stop)&&(Dir_Xinghao!=0)&&(Dir_I_stop!=0))            //有反向信号输入才能重启输出
+		     if((Dir_Xinghao!=Dir_I_stop)&&(Dir_Xinghao!=0)&&(Dir_I_stop!=0))//有反向信号输入才能重启输出
 			 {
 				 Warm[StallFlag] = NoErrFlag;
 			     I_Out=S_Out;
@@ -560,14 +564,14 @@ int CurrentProtection(int S_Out,u16 IBus,u16 UBus)
 	   Warm[VolHighFlag] = NoErrFlag;
 	   Warm[VolLowFlag]  = NoErrFlag;
    }else{
-	   if(UBus>HighVal) Warm[VolHighFlag] = VolHighFlag;       //电压过高
-	   if(UBus<LowVal) Warm[VolLowFlag]  = VolLowFlag;        //电压过低 
+	   if(UBus>HighVal) Warm[VolHighFlag] = VolHighFlag; //电压过高
+	   if(UBus<LowVal) Warm[VolLowFlag]  = VolLowFlag;   //电压过低 
 	   
    	   I_Out = 0;
-	   if(UBus<=StopVal)                        //电压低于16V对应891    10V对应557
+	   if(UBus<=StopVal)                       			 //电压低于16V对应891    10V对应557
 	   {
-			__ASM volatile("cpsid i");   //关闭所有中断
-			SavePara();                  //开始掉电存储
+			__ASM volatile("cpsid i");  				 //关闭所有中断
+			SavePara();                 				 //开始掉电存储
 	   }
    }
    return(I_Out);

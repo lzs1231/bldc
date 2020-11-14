@@ -56,7 +56,7 @@ __noinit__ u16   gAFlexAcc;                //自动柔性加速
 __noinit__ u16   gAFlexDec;                //自动柔性减速
 __noinit__ u16   gMFlexAcc;                //手动柔性加速
 __noinit__ u16   gMFlexDec;                //手动柔性减速
-
+__noinit__ u16   gAlarmSwitch;
 
 __noinit__ u16   g_Mat0_Sensor1_H;      //左传感器的高信号值
 __noinit__ u16   g_Mat0_Sensor1_L;      //左传感器的低信号值 
@@ -261,6 +261,7 @@ void SetDataInit()                 //设置参数初始化
 	gAFlexDec=AFlexDec;          //自动柔性减速
 	gMFlexAcc=MFlexAcc;          //手动柔性加速
 	gMFlexDec=MFlexDec;          //手动柔性减速	
+	gAlarmSwitch = 0;
 }
 
 void ParameterInit()             //参数出厂设置
@@ -402,10 +403,10 @@ void modbus_task(void *pdata)
 void lcd_task(void *pdata)
 {
 	u16 *pd;
-	u8 HallData,SensorTips;
-	u8 WarmFlag = 0,i;
+	u8 HallData,SensorTips,WarmFlag;
 	static u16 TimeCnt,PowerOnFlag;
 	static u16 LastSwitch1EPC,LastSwitch2EPC;
+	
 	for(;;)
 	{
 //		OSSemPend(sem_v, 0, &err);
@@ -426,6 +427,9 @@ void lcd_task(void *pdata)
 			*pHSensorMode=LongPortFun[Switch2_EPC];
 			*pHAutoPolar=LongPortFun[Switch2_EPC];
 		}
+		LastSwitch1EPC = LongPortFun[Switch1_EPC];
+		LastSwitch2EPC = LongPortFun[Switch2_EPC];
+		
 		gWorkMode		 =*pHWorkMode;
 		gSensorMode		 =*pHSensorMode;
 		gAutoPolar		 =*pHAutoPolar;
@@ -468,26 +472,12 @@ void lcd_task(void *pdata)
 		}
 		/*****************************更新输入寄存器,读取输入寄存器器用于显示***********************************/
 		
+		/*****************备份还原********************/
 		BackupRestore();
 		
 		/**********警告标志计算***************/
-		HallData  = (u8)((GPIOC->IDR&0x000001c0)>>6);        //读转子位置    合成GPIOC8|GPIOC7|GPIOC6 
-		
-		if(HallData>6||HallData<1)   	Warm[NotConFlag] = NotConFlag;
-		else 						   	Warm[NotConFlag] = NoErrFlag; 
-		
-		if(*pHWarmFlag == 1)     		Warm[LockFlag] = LockFlag;
-		else if(*pHWarmFlag == 3)  		Warm[ProhibitFlag] = ProhibitFlag;
-		else 					   	   {Warm[LockFlag] = NoErrFlag;     Warm[ProhibitFlag] = NoErrFlag;}
-		
-		for(i=WarmNum-1;i>0;i--)
-		{
-			if(Warm[i] != 0)   {WarmFlag = Warm[i];  break;}
-			else               {WarmFlag = 0;              }	
-		}
-	
-		PDout(2) = (Warm[LimitFlag]==LimitFlag?1:0);        //限位则打开继电器
-		
+		WarmFlag = WarmOut();
+
 		/*********更新输入寄存器参数，以便主机读取**********/
 		if(TravelCal.CaliStep==3)  
 		{
@@ -504,8 +494,9 @@ void lcd_task(void *pdata)
 		SensorTips = MatCal.fun[*pHSCaliStep]();               //根据主机更新的校准步骤调用不同程序，显示传感器参数 
 		
 		*pGainDead 		= gGainData|(gDeadZone<<8);
-		*pFineTune  	= (gFineTune|(WarmFlag<<8))|(gPowerOnMode<<12)|SensorTips<<14;
-		*pDisPulseNum  	= HallRate|(gMotorType<<10)|gAutoPolar<<12|gManuPolar<<13;
+		*pFineTune  	= (gFineTune|(WarmFlag<<8))|SensorTips<<12;
+		*pDisPulseNum  	= HallRate|gAutoPolar<<14|gManuPolar<<15;
+		*pMode          = gWorkMode|gSensorMode<<2|gPowerOnMode<<4|gMotorType<<6;
 		*pMatDis       	= Mat0EPC12|Mat1EPC12<<2|Mat2EPC12<<4|Mat3EPC12<<6|Mat4EPC12<<8|Mat5EPC12<<10|Mat6EPC12<<12|Mat7EPC12<<14;
 		*pLimitFun1    	= gLimitMode|gBehindLimit<<8;
 		*pLimitFun2		= gCenterLimit|gFrontLimit<<8;
@@ -519,11 +510,10 @@ void lcd_task(void *pdata)
 		*pAutoSpeed		= gAutoSpeed;
 		*pManuSpeed		= gManuSpeed;
 		*pCentSpeed		= gCentSpeed;
-		*pOtherPara     = gBackupFlag|gWorkMode<<1|LongPortFun[PusherCenter]<<3|LongPortFun[ManuDef]<<6|LongPortFun[AutoDef]<<9;
+		*pOtherPara     = gBackupFlag|LongPortFun[PusherCenter]<<1|LongPortFun[ManuDef]<<4|LongPortFun[AutoDef]<<7;
 		
-		LastSwitch1EPC = LongPortFun[Switch1_EPC];
-		LastSwitch2EPC = LongPortFun[Switch2_EPC];
-		//		OSSemPost(sem_p);
+
+		//OSSemPost(sem_p);
 		delay_ms(50);
 	}
 }

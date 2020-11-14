@@ -5,38 +5,31 @@
 #include "sys.h"
 
 extern u16 *const pGainDead 	 ;
-extern u16 *const pFineTune	     ;
-extern u16 *const pDisPulseNum   ;
-extern u16 *const pSensorRate    ;
-extern u16 *const pSensorMode    ;
-extern u16 *const pSensorValue   ;
-extern u16 *const pMatDis        ;
-extern u16 *const pLimitFun1     ;
+extern u16 *const pFineTune	 	;
+extern u16 *const pDisPulseNum  ;
+extern u16 *const pSensorRate   ;
+extern u16 *const pSensorValue  ;
+extern u16 *const pMode   	     ;
+extern u16 *const pMatDis       ;
+extern u16 *const pLimitFun1    ;
 extern u16 *const pLimitFun2     ;
-
+extern u16 *const pSPCFun1		 ;
+extern u16 *const pSPCFun2		 ;
+extern u16 *const pNoMatFun1 	 ;
+extern u16 *const pNoMatFun2 	 ;
 extern u16 *const pAFlex 		 ;
 extern u16 *const pMFlex 		 ;
-
+extern u16 *const pLongIoMode    ;
+extern u16 *const pAutoSpeed 	 ;
+extern u16 *const pManuSpeed	 ;
+extern u16 *const pCentSpeed 	 ;
 extern u16 *const pCurrentPara   ;
 extern u16 *const pAdjustData	 ;
 extern u16 *const pOtherPara	 ;
 
-extern u16 *const pLongIoMode    ;
-
-extern u16 *const pAutoSpeed 	 ;
-extern u16 *const pManuSpeed	 ;
-extern u16 *const pCentSpeed 	 ;
-
-extern u16 *const pSPCFun1		 ;
-extern u16 *const pSPCFun2		 ;
-
-extern u16 *const pNoMatFun1 	 ;
-extern u16 *const pNoMatFun2 	 ;
-
-
-
 
 extern u16 *const pHAdjustFlag  ;
+extern u16 *const pHAlarmSwitch  ;
 extern u16 *const pHClickBut    ;
 extern u16 *const pHAddSub      ;
 
@@ -127,6 +120,7 @@ extern  u16   gAFlexDec;                  //自动柔性减速
 extern  u16   gMFlexAcc;                  //手动柔性加速
 extern  u16   gMFlexDec;                  //手动柔性减速     
 
+extern  u16   gAlarmSwitch;
 
 extern  u16   g_Mat0_Sensor1_H;      //左传感器的高信号值
 extern  u16   g_Mat0_Sensor1_L;      //左传感器的低信号值 
@@ -187,13 +181,14 @@ enum   WarmFlagType
 	LockFlag,        //锁定标志
 	RunReadyFlag,    //运行准备
 	ProhibitFlag,    //禁止切换到中心状态
+	BreakAlarmFlag,  //断料报警标志  
 	LimitFlag,       //限位报警
 	OverrunFlag,     //电流超限
 	StallFlag,       //电机堵转
-	NotConFlag,      //霍尔故障
+	NotConFlag,      //霍尔故障   8
 	ComErrFlag,      //通信错误
 	VolHighFlag,     //电压过高
-	VolLowFlag,      //电压过低
+	VolLowFlag,      //电压过低  11
 	WarmNum,
 };
 

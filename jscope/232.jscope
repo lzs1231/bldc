@@ -11,7 +11,7 @@
             <DataFile Name="" />
             <RawFile Name="" />
             <Scope>
-                <Options TimeResolutionUs="5000" />
+                <Options TimeResolutionUs="1000000" />
             </Scope>
         </Configuration>
         <Windows>
@@ -20,22 +20,22 @@
         </Windows>
         <SelectedSymbols>
             <Symbol>
-                <Options Name="PlaceOut" Address="0x20000034" Type="int" TypeID="12" Size="4" GraphColorRed="102" GraphColorGreen="102" GraphColorBlue="178" YMinSampled="-1800" YMaxSampled="0" YAvgSampled="-357" Offset="4" ShowInGraph="1" ACCoupling="0" YOffset="600" IsAutoConfig="1" YResolution="500000000" MaxValue="1000000000" File="stm32f10x_it.c" Scope="1" DrawStyle="0" />
+                <Options Name="PlaceOut" Address="0x20000034" Type="int" TypeID="12" Size="4" GraphColorRed="102" GraphColorGreen="102" GraphColorBlue="178" YMinSampled="-1800" YMaxSampled="1800" YAvgSampled="23" Offset="4" ShowInGraph="1" ACCoupling="0" YOffset="600" IsAutoConfig="0" YResolution="2000" MaxValue="1000000000" File="stm32f10x_it.c" Scope="1" DrawStyle="0" />
             </Symbol>
             <Symbol>
-                <Options Name="MeasuSpeed" Address="0x2000003C" Type="int" TypeID="12" Size="4" GraphColorRed="0" GraphColorGreen="255" GraphColorBlue="0" YMinSampled="-302" YMaxSampled="289" YAvgSampled="-9" Offset="8" ShowInGraph="1" ACCoupling="0" YOffset="300" IsAutoConfig="1" YResolution="2000" MaxValue="7840" File="stm32f10x_it.c" Scope="1" DrawStyle="0" />
+                <Options Name="MeasuSpeed" Address="0x2000003C" Type="int" TypeID="12" Size="4" GraphColorRed="0" GraphColorGreen="255" GraphColorBlue="0" YMinSampled="-1723" YMaxSampled="1737" YAvgSampled="25" Offset="8" ShowInGraph="1" ACCoupling="0" YOffset="300" IsAutoConfig="0" YResolution="2000" MaxValue="-2147483648" File="stm32f10x_it.c" Scope="1" DrawStyle="0" />
             </Symbol>
             <Symbol>
-                <Options Name="SpeedIn" Address="0x20000054" Type="int" TypeID="12" Size="4" GraphColorRed="160" GraphColorGreen="32" GraphColorBlue="240" YMinSampled="-1800" YMaxSampled="0" YAvgSampled="-334" Offset="12" ShowInGraph="1" ACCoupling="0" YOffset="400" IsAutoConfig="0" YResolution="2000" MaxValue="3440" File="stm32f10x_it.c" Scope="1" DrawStyle="0" />
+                <Options Name="SpeedIn" Address="0x20000054" Type="int" TypeID="12" Size="4" GraphColorRed="160" GraphColorGreen="32" GraphColorBlue="240" YMinSampled="-1800" YMaxSampled="1800" YAvgSampled="22" Offset="12" ShowInGraph="1" ACCoupling="0" YOffset="400" IsAutoConfig="0" YResolution="2000" MaxValue="3440" File="stm32f10x_it.c" Scope="1" DrawStyle="0" />
             </Symbol>
             <Symbol>
-                <Options Name="SpeedOut" Address="0x20000038" Type="int" TypeID="12" Size="4" GraphColorRed="255" GraphColorGreen="0" GraphColorBlue="0" YMinSampled="-1080" YMaxSampled="0" YAvgSampled="-199" Offset="16" ShowInGraph="1" ACCoupling="0" YOffset="200" IsAutoConfig="0" YResolution="2000" MaxValue="5440" File="stm32f10x_it.c" Scope="1" DrawStyle="0" />
+                <Options Name="SpeedOut" Address="0x20000038" Type="int" TypeID="12" Size="4" GraphColorRed="255" GraphColorGreen="0" GraphColorBlue="0" YMinSampled="-1080" YMaxSampled="1080" YAvgSampled="12" Offset="16" ShowInGraph="1" ACCoupling="0" YOffset="200" IsAutoConfig="0" YResolution="2000" MaxValue="5440" File="stm32f10x_it.c" Scope="1" DrawStyle="0" />
             </Symbol>
             <Symbol>
-                <Options Name="IOut" Address="0x2000009C" Type="int" TypeID="12" Size="4" GraphColorRed="255" GraphColorGreen="215" GraphColorBlue="0" YMinSampled="-1080" YMaxSampled="0" YAvgSampled="-149" Offset="20" ShowInGraph="1" ACCoupling="0" YOffset="100" IsAutoConfig="0" YResolution="2000" MaxValue="6440" File="..\HARDWARE\ctrl.c" Scope="1" DrawStyle="0" />
+                <Options Name="IOut" Address="0x2000009C" Type="int" TypeID="12" Size="4" GraphColorRed="255" GraphColorGreen="215" GraphColorBlue="0" YMinSampled="-1080" YMaxSampled="1080" YAvgSampled="12" Offset="20" ShowInGraph="1" ACCoupling="0" YOffset="100" IsAutoConfig="0" YResolution="2000" MaxValue="6440" File="..\HARDWARE\ctrl.c" Scope="1" DrawStyle="0" />
             </Symbol>
             <Symbol>
-                <Options Name="Ivalue" Address="0x200000C8" Type="int" TypeID="12" Size="4" GraphColorRed="255" GraphColorGreen="0" GraphColorBlue="0" YMinSampled="0" YMaxSampled="1073" YAvgSampled="54" Offset="24" ShowInGraph="1" ACCoupling="0" YOffset="0" IsAutoConfig="0" YResolution="200" MaxValue="100" File="..\HARDWARE\handle.c" Scope="1" DrawStyle="0" />
+                <Options Name="Ivalue" Address="0x200000C8" Type="int" TypeID="12" Size="4" GraphColorRed="255" GraphColorGreen="0" GraphColorBlue="0" YMinSampled="0" YMaxSampled="276" YAvgSampled="33" Offset="24" ShowInGraph="1" ACCoupling="0" YOffset="0" IsAutoConfig="0" YResolution="200" MaxValue="100" File="..\HARDWARE\handle.c" Scope="1" DrawStyle="0" />
             </Symbol>
         </SelectedSymbols>
     </Project>

@@ -187,6 +187,8 @@ void SavePara(void)
 	save_para[38]=gMFlexAcc;
 	save_para[39]=gMFlexDec;
 	
+	save_para[40]=gAlarmSwitch;
+	
 	OS_ENTER_CRITICAL();   //关闭中断
 	STMFLASH_Write(FLASH_SAVE_ADDR, (u16*)save_para, SIZE);        //WriteAddr:起始地址    pBuffer:数据指针    NumToWrite:半字(16位)数 
 	OS_EXIT_CRITICAL();    //打开中断  
@@ -250,6 +252,8 @@ void ReadPara(void)
 	gAFlexDec           =save_para[37];
 	gMFlexAcc           =save_para[38];
 	gMFlexDec           =save_para[39];
+	
+	gAlarmSwitch        =save_para[40];
 }
 
 void Clearing()   //清零备份
@@ -274,7 +278,7 @@ void Backup()   //系统备份
 	
 	rest_para[0]=gCheckFlag;
 	rest_para[1]=gIwdgFlag;	    
-//	rest_para[2]=BackupFlag;
+//	rest_para[2]=gBackupFlag;
 
 //	rest_para[3]=gWorkMode;
 	rest_para[4]=gSensorMode;
@@ -322,6 +326,8 @@ void Backup()   //系统备份
 	rest_para[37]=gAFlexDec;
 	rest_para[38]=gMFlexAcc;
 	rest_para[39]=gMFlexDec;
+	
+	rest_para[40]=gAlarmSwitch;
 	
 	OS_ENTER_CRITICAL();   //关闭中断
 	STMFLASH_Write(FLASH_REST_ADDR, (u16*)rest_para, SIZE);        //WriteAddr:起始地址    pBuffer:数据指针    NumToWrite:半字(16位)数 
@@ -387,6 +393,7 @@ void Restore()    //系统还原
 	gMFlexAcc           =rest_para[38];
 	gMFlexDec           =rest_para[39];
 	
+	gAlarmSwitch		=rest_para[40];
 	Modbus_Init();
 }
 
