@@ -298,11 +298,11 @@ void start_task(void *pdata)
 	{
 		RCC->CSR = 1<<24;    	/*Clear reset flag*/
 		gIwdgFlag++;          	//发生复位，__noinit__修饰的全局变量会保持复位之前的数据，不会清零
-		PBout(12)=1;	
+//		PBout(12)=1;	
 	}else{                      //上电复位
 		ReadPara();           	//读取flash中保存的参数
 		ReadSensor();
-		PBout(12)=0;
+//		PBout(12)=0;
 	}
 	
 	if(gCheckFlag!=0xee55)  			SetDataInit();  	 //如果参数读取错误，就重新初始化参数
@@ -481,7 +481,7 @@ void lcd_task(void *pdata)
 		/*********更新输入寄存器参数，以便主机读取**********/
 		if(TravelCal.CaliStep==3)  
 		{
-			if(TimeCnt==20)	{TravelCal.CaliStep = 0;TimeCnt=0;}   
+			if(TimeCnt==30)	{TravelCal.CaliStep = 0;TimeCnt=0;}   
 			TimeCnt++;
 		}
 		*pCurrentPara	= (u16)(g_ADC_Buf[0]*0.08)|gFuncTorque<<8|*pHTCaliTorque<<12|TravelCal.CaliStep<<14;
@@ -511,7 +511,6 @@ void lcd_task(void *pdata)
 		*pManuSpeed		= gManuSpeed;
 		*pCentSpeed		= gCentSpeed;
 		*pOtherPara     = gBackupFlag|LongPortFun[PusherCenter]<<1|LongPortFun[ManuDef]<<4|LongPortFun[AutoDef]<<7;
-		
 
 		//OSSemPost(sem_p);
 		delay_ms(50);

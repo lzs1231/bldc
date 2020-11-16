@@ -375,13 +375,15 @@ void PwmOut(int SpeedOut)     //100us调用一次，更新pwm
 {
 	static int IOut;		  //电流环输出
 	int SetPwmValue;
-	u16 IValue;
-	static u16 LastIValue;
+	static u16 IValue,UValue;
+	static u16 LastIValue,LastUValue;
 	
 	IValue = (LastIValue>>1)+(g_ADC_Buf[0]>>1);
+	UValue = (LastUValue>>1)+(g_ADC_Buf[3]>>1);
 	LastIValue = IValue;
+	LastUValue = UValue;
 	
-	IOut = CurrentProtection(SpeedOut,IValue,g_ADC_Buf[3]);   //电流保护,掉电检测
+	IOut = CurrentProtection(SpeedOut,IValue,UValue);   //电流保护,掉电检测
 
 	if(bldc_dev.order_state == STOP){   //指令停止
 		SetPwmValue=0;

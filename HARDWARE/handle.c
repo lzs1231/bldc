@@ -5,7 +5,7 @@
 #include "lcdtest.h"
 #include "longkey.h"
 
-#define Calib_Speed 500             	 	//校准速度100
+#define CalibSpeed 500             	 	//校准速度100
 #define SPC_Out_Max 3000
 #define HighVal 1516					    //电压高于28V
 #define LowVal 	1070           				//电压低于20V	
@@ -51,6 +51,20 @@ int Speed_limit(int out, int ASpeed)
 	if((out<-ASpeed))    return(-ASpeed);         //查询要输出的电压是否到了设定的最高输出值，如到了就限定在最高输出值
 	else if(out>ASpeed)  return(ASpeed);
 	else   				 return(out);  			//没到就不限制
+}
+
+int LimitOutput(int SOut, int DirOut, int TorqueEK, u16 SetTorque)
+{
+	int IOut;
+	
+	switch(DirOut)                                 //电流对信号限制
+	{														   
+		 case -1: IOut=SOut+(TorqueEK<<2);  if(IOut>-SetTorque) IOut = -SetTorque;  break;//I_Out = LimitOutput(I_Out,-1);  break;
+		 case  0: IOut=0;                                   break;
+		 case  1: IOut=SOut-(TorqueEK<<2);  if(IOut<SetTorque)  IOut = SetTorque;   break;//I_Out = LimitOutput(I_Out,1);  break;    //电流有超限，慢慢减小输出
+		 default:  break;
+	}
+	return IOut;
 }
 
 //无料检测程序
@@ -430,7 +444,7 @@ int TravelCalibration(void)
 				   gCurrentPulseNum=0;	               //清0霍尔
 				   TravelCal.CaliStep=1;               //转入下一步
 			   }else{
-			   	   out=-Calib_Speed;               		//如没到堵转就继续输出,缩进
+			   	   out=-CalibSpeed;               		//如没到堵转就继续输出,缩进
 			   }
 		break;
 		case 1:
@@ -440,7 +454,7 @@ int TravelCalibration(void)
 			   	  gMAXPulseNum=gCurrentPulseNum;
 				  TravelCal.CaliStep=2;
 			   }else{
-			   	  out=Calib_Speed;                 //如没到堵转就继续输出，伸出
+			   	  out=CalibSpeed;                 //如没到堵转就继续输出，伸出
 			   }
 		break;
 		case 2: 
@@ -478,12 +492,15 @@ int CurrentProtection(int S_Out,u16 IBus,u16 UBus)
 	static u16 num_I;
 	static u16 num_I_stop;
 	int I_Out=0;
-	int FuncEK ;                 //正常运行时电流差值,测量电流与设定电流差值FunctionEK
-	int CaliEK   ;                //校准时电流差值 CalibrEK    实际电流I*0.01(电阻)*10(放大倍数)=BusI*3.3/4096
+	static int FuncEK ;                 //正常运行时电流差值,测量电流与设定电流差值FunctionEK
+	static int CaliEK   ;                //校准时电流差值 CalibrEK    实际电流I*0.01(电阻)*10(放大倍数)=BusI*3.3/4096
 	int Dir_Xinghao;                 //输入信号的方向	
+
+	int CaliTorque = gCaliTorque*10;
+	int FuncTorque = gFuncTorque*100;
 	
-	FuncEK = IBus-(gFuncTorque*116);
 	CaliEK = IBus-(gCaliTorque*11.6);
+	FuncEK = IBus-(gFuncTorque*116);
 	
 	Dir_Xinghao = GetDirection(S_Out);   //提取输入电压的方向
 
@@ -492,15 +509,9 @@ int CurrentProtection(int S_Out,u16 IBus,u16 UBus)
 	{
 		if(CaliEK>0)                  	 //电流有超限
 		{
-			switch(Dir_Xinghao)                                                   //对输出进行限制
-			{														   
-				 case -1: I_Out=S_Out+(CaliEK<<2);if(I_Out>0){I_Out=0;}  break;
-				 case  0: I_Out=0;                                		 break;
-				 case  1: I_Out=S_Out-(CaliEK<<2);if(I_Out<0){I_Out=0;}  break;
-				 default:  break;
-			}
+			I_Out = LimitOutput(S_Out,Dir_Xinghao,CaliEK,CaliTorque);    //对输出进行限制
 		}else{
-		   I_Out=S_Out;
+			I_Out=S_Out;
 		}
 	}
 	else
@@ -521,13 +532,8 @@ int CurrentProtection(int S_Out,u16 IBus,u16 UBus)
 						Warm[OverrunFlag] = OverrunFlag;
 					    num_I_stop++;                                       //2秒内电流超限次数
 
-						switch(Dir_Xinghao)                                 //电流对信号限制
-						{														   
-						     case -1: I_Out=S_Out+(FuncEK<<3);   if(I_Out>-5){I_Out=-5;}  break;
-							 case  0: I_Out=0;                                   break;
-							 case  1: I_Out=S_Out-(FuncEK<<3);   if(I_Out<5) {I_Out=5;}  break;    //电流有超限，慢慢减小输出
-		                     default:  break;
-						}
+						I_Out = LimitOutput(S_Out,Dir_Xinghao,FuncEK,FuncTorque);      //电流对信号限制
+															      
 					}else{                                                 //没有电流超限就正常输出
 						I_Out = S_Out;  
 						Warm[OverrunFlag] = NoErrFlag;
@@ -563,10 +569,11 @@ int CurrentProtection(int S_Out,u16 IBus,u16 UBus)
    {
 	   Warm[VolHighFlag] = NoErrFlag;
 	   Warm[VolLowFlag]  = NoErrFlag;
+	   PBout(12) = 0;	
    }else{
 	   if(UBus>HighVal) Warm[VolHighFlag] = VolHighFlag; //电压过高
 	   if(UBus<LowVal) Warm[VolLowFlag]  = VolLowFlag;   //电压过低 
-	   
+	   PBout(12) = 1;	
    	   I_Out = 0;
 	   if(UBus<=StopVal)                       			 //电压低于16V对应891    10V对应557
 	   {

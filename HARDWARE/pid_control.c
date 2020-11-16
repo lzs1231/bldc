@@ -8,6 +8,8 @@
 #include "doublebuf.h"    //双缓冲区
 
 
+
+
 //增量式PID
 typedef struct IncrementPID
 {
@@ -200,7 +202,7 @@ SEGGER_RTT_printf(0,"%5d\t",t_PlaceOut);
 	if(t_PlaceOut!=0)
 	{	
 		Speed_Point->ek_0 = (float)(t_PlaceOut-MeasuSpeed);            //偏差
-		if(Speed_Point->ek_0<2 && Speed_Point->ek_0>-2)        //-2~2不进行pid
+		if(Speed_Point->ek_0<10 && Speed_Point->ek_0>-10)        //-2~2不进行pid
 		{
 			Speed_Point->ek_0=0;
 			Speed_Point->Uk = Speed_Point->Uk_1;
@@ -218,8 +220,8 @@ SEGGER_RTT_printf(0,"+%4d\t",(int)Speed_Point->Udk);
 			if(Speed_Point->Uk*t_PlaceOut < 0)     Speed_Point->Uk = t_PlaceOut>0?1:-1;    //输出与设定值反向了，说明补偿过大
 		}
 		
-		if(Speed_Point->Uk >= 1080)        Speed_Point->Uk = 1080;
-		else if(Speed_Point->Uk <= -1080)  Speed_Point->Uk = -1080;
+		if(Speed_Point->Uk >= LimitI)        Speed_Point->Uk = LimitI;
+		else if(Speed_Point->Uk <= -LimitI)  Speed_Point->Uk = -LimitI;
 		
 		//保存误差，用于下一次计算
 		Speed_Point->ek_2 = Speed_Point->ek_1;
