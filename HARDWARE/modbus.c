@@ -157,7 +157,7 @@ void Modbus_Init()
 	*pHTCaliFlag=0;
 	*pHTCaliCancel=0;
 	
-	*pHWorkMode = gWorkMode;
+	
 	*pHSensorMode = gSensorMode;		//0=左，1=右，2=左+右，3=SPC
 	*pHAutoPolar = gAutoPolar;			//自动极性，0=负极，1=正极;
 	*pHManuPolar = gManuPolar;			//手动极性，0=负极，1=正极;

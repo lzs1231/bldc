@@ -1,6 +1,6 @@
 Dependencies for Project 'user', Target 'Target 1': (DO NOT MODIFY !)
 CompilerVersion: 5060750::V5.06 update 6 (build 750)::ARMCC
-F (.\main.c)(0x5FB27E1A)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\main.o --omf_browse ..\main.crf --depend ..\main.d)
+F (.\main.c)(0x5FB36A89)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\main.o --omf_browse ..\main.crf --depend ..\main.d)
 I (..\HARDWARE\bsp.h)(0x5FAD2105)
 I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)
@@ -546,7 +546,7 @@ I (..\RTT\SEGGER_RTT.h)(0x5491B595)
 I (..\HARDWARE\macro_define.h)(0x5FB2796E)
 I (..\HARDWARE\STMFLASH\stmflash.h)(0x5F602B3F)
 I (..\HARDWARE\pwrchk.h)(0x5EC8FF65)
-F (..\HARDWARE\handle.c)(0x5FB27E1A)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\handle.o --omf_browse ..\handle.crf --depend ..\handle.d)
+F (..\HARDWARE\handle.c)(0x5FB36A89)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\STM32F10x_FWLib\src -I ..\STM32F10x_FWLib\inc -I ..\UCOSII\CONFIG -I ..\UCOSII\CORE -I ..\UCOSII\PORT -I ..\SYSTEM -I ..\HARDWARE -I ..\HARDWARE\LCD -I ..\HARDWARE\ADC -I ..\HARDWARE\STMFLASH -I ..\RTT -I ..\HARDWARE\PRINTF-I.\RTE\_Target_1-IF:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include-IF:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="529" -DSTM32F10X_MD -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o ..\handle.o --omf_browse ..\handle.crf --depend ..\handle.d)
 I (..\HARDWARE\handle.h)(0x5FAB4E61)
 I (..\SYSTEM\sys\sys.h)(0x5FAD17DB)
 I (..\USER\stm32f10x.h)(0x5EE19C93)

@@ -27,9 +27,10 @@ Project File Date:  11/13/2020
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'F:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Target 1'
-compiling fputc.c...
-compiling delay.c...
-compiling stm32f10x_it.c...
+compiling handle.c...
+..\HARDWARE\handle.c(107): warning:  #111-D: statement is unreachable
+  	return(out);
+..\HARDWARE\handle.c: 1 warning, 0 errors
 compiling main.c...
 main.c(405): warning:  #177-D: variable "pd"  was declared but never referenced
   	u16 *pd;
@@ -38,57 +39,11 @@ main.c(406): warning:  #177-D: variable "HallData"  was declared but never refer
 main.c(407): warning:  #177-D: variable "PowerOnFlag"  was declared but never referenced
   	static u16 TimeCnt,PowerOnFlag;
 main.c: 3 warnings, 0 errors
-compiling sys.c...
-compiling usart_485.c...
-compiling usart_232.c...
-compiling bsp.c...
-compiling ctrl.c...
-..\HARDWARE\ctrl.c(304): warning:  #68-D: integer conversion resulted in a change of sign
-  			case 1: if(LastHallData==5){gCurrentPulseNum++;motor_dir=CCW;}  if(LastHallData==3){gCurrentPulseNum--;motor_dir=CW;}break;
-..\HARDWARE\ctrl.c(305): warning:  #68-D: integer conversion resulted in a change of sign
-  			case 2: if(LastHallData==3){gCurrentPulseNum++;motor_dir=CCW;}  if(LastHallData==6){gCurrentPulseNum--;motor_dir=CW;}break;
-..\HARDWARE\ctrl.c(306): warning:  #68-D: integer conversion resulted in a change of sign
-  			case 3: if(LastHallData==1){gCurrentPulseNum++;motor_dir=CCW;}  if(LastHallData==2){gCurrentPulseNum--;motor_dir=CW;}break;
-..\HARDWARE\ctrl.c(307): warning:  #68-D: integer conversion resulted in a change of sign
-  			case 4: if(LastHallData==6){gCurrentPulseNum++;motor_dir=CCW;}  if(LastHallData==5){gCurrentPulseNum--;motor_dir=CW;}break;
-..\HARDWARE\ctrl.c(308): warning:  #68-D: integer conversion resulted in a change of sign
-  			case 5: if(LastHallData==4){gCurrentPulseNum++;motor_dir=CCW;}  if(LastHallData==1){gCurrentPulseNum--;motor_dir=CW;}break;
-..\HARDWARE\ctrl.c(309): warning:  #68-D: integer conversion resulted in a change of sign
-  			case 6: if(LastHallData==2){gCurrentPulseNum++;motor_dir=CCW;}  if(LastHallData==4){gCurrentPulseNum--;motor_dir=CW;}break;
-..\HARDWARE\ctrl.c(314): warning:  #188-D: enumerated type mixed with another type
-  	return motor_dir;
-..\HARDWARE\ctrl.c: 7 warnings, 0 errors
-compiling adc.c...
-compiling stmflash.c...
-compiling pwrchk.c...
-compiling pid_control.c...
-compiling wdg.c...
-..\HARDWARE\wdg.c(44): warning:  #550-D: variable "tr"  was set but never used
-     u8 tr,wr;
-..\HARDWARE\wdg.c(44): warning:  #550-D: variable "wr"  was set but never used
-     u8 tr,wr;
-..\HARDWARE\wdg.c: 2 warnings, 0 errors
-compiling handle.c...
-..\HARDWARE\handle.c(107): warning:  #111-D: statement is unreachable
-  	return(out);
-..\HARDWARE\handle.c: 1 warning, 0 errors
-compiling longkey.c...
-compiling lcdtest.c...
-..\HARDWARE\lcdtest.c(249): warning:  #940-D: missing return statement at end of non-void function "RealTimeDis" 
-  }
-..\HARDWARE\lcdtest.c: 1 warning, 0 errors
-compiling ringbuf.c...
-compiling doublebuf.c...
-compiling modbus.c...
-compiling usart1.c...
-..\HARDWARE\PRINTF\usart1.c(142): warning:  #29-D: expected an expression
-  #elif
-..\HARDWARE\PRINTF\usart1.c: 1 warning, 0 errors
 linking...
-Program Size: Code=36644 RO-data=1216 RW-data=940 ZI-data=8100  
+Program Size: Code=36668 RO-data=1216 RW-data=940 ZI-data=8100  
 FromELF: creating hex file...
 After Build - User command #1: fromelf.exe --bin -o "..\user.bin" "..\user.axf"
-"..\user.axf" - 0 Error(s), 15 Warning(s).
+"..\user.axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -102,7 +57,7 @@ Package Vendor: Keil
   F:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:06
+Build Time Elapsed:  00:00:09
 </pre>
 </body>
 </html>

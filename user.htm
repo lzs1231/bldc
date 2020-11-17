@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\user.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\user.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Nov 16 21:33:50 2020
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Tue Nov 17 14:15:46 2020
 <BR><P>
 <H3>Maximum Stack Usage =        180 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -726,7 +726,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[109]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WorkModeOut
 </UL>
 
-<P><STRONG><a name="[a8]"></a>CurrentProtection</STRONG> (Thumb, 434 bytes, Stack size 64 bytes, handle.o(i.CurrentProtection))
+<P><STRONG><a name="[a8]"></a>CurrentProtection</STRONG> (Thumb, 426 bytes, Stack size 64 bytes, handle.o(i.CurrentProtection))
 <BR><BR>[Stack]<UL><LI>Max Depth = 156 + Unknown Stack Size
 <LI>Call Chain = CurrentProtection &rArr; SavePara &rArr; STMFLASH_Write &rArr; STMFLASH_Write_NoCheck &rArr; FLASH_ProgramHalfWord &rArr; FLASH_WaitForLastOperation
 </UL>
@@ -1024,7 +1024,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[11e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadLongIO
 </UL>
 
-<P><STRONG><a name="[ae]"></a>LimitOutput</STRONG> (Thumb, 54 bytes, Stack size 12 bytes, handle.o(i.LimitOutput))
+<P><STRONG><a name="[ae]"></a>LimitOutput</STRONG> (Thumb, 58 bytes, Stack size 12 bytes, handle.o(i.LimitOutput))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = LimitOutput
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CurrentProtection
@@ -2239,7 +2239,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(i.start_task)
 </UL>
-<P><STRONG><a name="[50]"></a>led_task</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, main.o(i.led_task))
+<P><STRONG><a name="[50]"></a>led_task</STRONG> (Thumb, 38 bytes, Stack size 0 bytes, main.o(i.led_task))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72 + Unknown Stack Size
 <LI>Call Chain = led_task &rArr; delay_ms &rArr; delay_us &rArr; delay_osschedunlock &rArr; OSSchedUnlock &rArr; OS_Sched
 </UL>

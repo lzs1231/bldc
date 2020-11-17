@@ -59,9 +59,9 @@ int LimitOutput(int SOut, int DirOut, int TorqueEK, u16 SetTorque)
 	
 	switch(DirOut)                                 //电流对信号限制
 	{														   
-		 case -1: IOut=SOut+(TorqueEK<<2);  if(IOut>-SetTorque) IOut = -SetTorque;  break;//I_Out = LimitOutput(I_Out,-1);  break;
+		 case -1: IOut=SOut+(TorqueEK*5);  if(IOut>-SetTorque) IOut = -SetTorque;  break;//I_Out = LimitOutput(I_Out,-1);  break;
 		 case  0: IOut=0;                                   break;
-		 case  1: IOut=SOut-(TorqueEK<<2);  if(IOut<SetTorque)  IOut = SetTorque;   break;//I_Out = LimitOutput(I_Out,1);  break;    //电流有超限，慢慢减小输出
+		 case  1: IOut=SOut-(TorqueEK*5);  if(IOut<SetTorque)  IOut = SetTorque;   break;//I_Out = LimitOutput(I_Out,1);  break;    //电流有超限，慢慢减小输出
 		 default:  break;
 	}
 	return IOut;
@@ -532,14 +532,13 @@ int CurrentProtection(int S_Out,u16 IBus,u16 UBus)
 						Warm[OverrunFlag] = OverrunFlag;
 					    num_I_stop++;                                       //2秒内电流超限次数
 
-						I_Out = LimitOutput(S_Out,Dir_Xinghao,FuncEK,FuncTorque);      //电流对信号限制
-															      
+						I_Out = LimitOutput(S_Out,Dir_Xinghao,FuncEK,FuncTorque);      //电流对信号限制								      
 					}else{                                                 //没有电流超限就正常输出
 						I_Out = S_Out;  
 						Warm[OverrunFlag] = NoErrFlag;
 					}                                      
 				}else{                                                      //2秒计时到了
-				    if(num_I_stop>=8000)                                    //如电流超限次数达到1半以上就关闭输出
+				    if(num_I_stop>=10000)                                    //如电流超限次数达到1半以上就关闭输出
 					{ 
 					     I_Out=0;
 		                 bit_I=1;                                           //显示报警标志
@@ -569,11 +568,11 @@ int CurrentProtection(int S_Out,u16 IBus,u16 UBus)
    {
 	   Warm[VolHighFlag] = NoErrFlag;
 	   Warm[VolLowFlag]  = NoErrFlag;
-	   PBout(12) = 0;	
+//	   PBout(12) = 0;	
    }else{
 	   if(UBus>HighVal) Warm[VolHighFlag] = VolHighFlag; //电压过高
 	   if(UBus<LowVal) Warm[VolLowFlag]  = VolLowFlag;   //电压过低 
-	   PBout(12) = 1;	
+//	   PBout(12) = 1;	
    	   I_Out = 0;
 	   if(UBus<=StopVal)                       			 //电压低于16V对应891    10V对应557
 	   {

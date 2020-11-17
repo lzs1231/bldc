@@ -140,7 +140,7 @@ void SavePara(void)
 	save_para[1]=gIwdgFlag;
 	save_para[2]=gBackupFlag;
 	
-	save_para[3]=gWorkMode;
+//	save_para[3]=gWorkMode;
 	save_para[4]=gSensorMode;
 	save_para[5]=gAutoPolar;
 	save_para[6]=gManuPolar;
@@ -207,7 +207,7 @@ void ReadPara(void)
 	gIwdgFlag  			=save_para[1];
 	gBackupFlag			=save_para[2];
 	
-	gWorkMode			=save_para[3];
+//	gWorkMode			=save_para[3];
 	gSensorMode			=save_para[4];
 	gAutoPolar			=save_para[5];
 	gManuPolar			=save_para[6];

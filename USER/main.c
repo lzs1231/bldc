@@ -6,18 +6,18 @@
 #include "modbus.h"
 
 //以下是要存储的参数
-__noinit__ u16   gCheckFlag;		           //校验标志
-__noinit__ u16   gIwdgFlag;                 //看门狗复位标志
-__noinit__ u16   gBackupFlag;               //备份标志     0表示无备份，1表示有备份
+__noinit__ u16   gCheckFlag;		       //校验标志
+__noinit__ u16   gIwdgFlag;                //看门狗复位标志
+__noinit__ u16   gBackupFlag;              //备份标志     0表示无备份，1表示有备份
 
-__noinit__ u16   gWorkMode;                 //0=手动   1=自动  2=对中
-__noinit__ u16   gSensorMode;               //纠偏模式，0=左，1=右，2=左+右，3=SPC  ，EPC1超声波传感器1工作，EPC2超声波传感器2工作，CPC两个传感器一起工作，SPC
+__noinit__ u16   gWorkMode;                //0=手动   1=自动  2=对中
+__noinit__ u16   gSensorMode;              //纠偏模式，0=左，1=右，2=左+右，3=SPC  ，EPC1超声波传感器1工作，EPC2超声波传感器2工作，CPC两个传感器一起工作，SPC
 
-__noinit__ u16   gAutoPolar;                //自动极性，1=负极，0=正极;
-__noinit__ u16   gManuPolar;                //手动极性，1=负极，0=正极;
+__noinit__ u16   gAutoPolar;               //自动极性，1=负极，0=正极;
+__noinit__ u16   gManuPolar;               //手动极性，1=负极，0=正极;
 __noinit__ u16   gMotorType;               //电机类型   0无刷电机4    1无刷电机5  2有刷电机
 __noinit__ u16   gPowerOnMode;             //开机工作模式，,0=手动，1=自动，2=中心，3=上次
-__noinit__ u16   gCurMatNum;              //默认材料
+__noinit__ u16   gCurMatNum;               //默认材料
 
 __noinit__ u16   gGainData;                //系统调整灵敏度;
 __noinit__ u16   gDeadZone;                //盲区设置，传感器识别盲区，当材料边沿有缺口时，防止抖动
@@ -126,7 +126,7 @@ u8   LastHallData;
 OS_EVENT *iMbox;                    //接收邮箱 
 OS_EVENT *sem_p;
 OS_EVENT *sem_v;
-OS_EVENT *mutex;            		 //互斥信号量
+OS_EVENT *mutex;            		//互斥信号量
 
 //start任务
 #define	START_TASK_PRIO				22      //任务创建优先级
@@ -523,9 +523,9 @@ void led_task(void *pdata)
 	Interrupt_Config();
 	for(;;)
 	{
-//		PBout(12)=1;
-//		delay_ms(500);
-//		PBout(12)=0;
+		PBout(12)=1;
+		delay_ms(500);
+		PBout(12)=0;
 		delay_ms(500);
 	}
 }

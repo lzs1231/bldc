@@ -70,8 +70,7 @@ ConfirmDataDef ConfirmData = {
 };
 
 
-		/**********警告标志计算***************/
-		
+/**********警告标志计算***************/
 u8 WarmOut()
 {
 	u8 icnt,HallData;
@@ -251,7 +250,7 @@ u8 RealTimeDis()
 /*****************备份还原********************/
 void BackupRestore(void)        //每隔50ms调用一次
 {
-	if(*pHSysYes == 0||*pHSysYes == 1||*pHSysYes == 2)   		//系统备份
+	if(*pHSysYes == SBackup||*pHSysYes == SRestore||*pHSysYes == SFactorySet)   		//系统备份
 	{
 		gWorkMode = 0;
 		delay_ms(1000);
@@ -262,7 +261,7 @@ void BackupRestore(void)        //每隔50ms调用一次
 }
 
 /*****************参数调节********************/
-void Adjustment_interface(u16 control_id,u16 *data,u8 StepData,u8 state)
+void AdjustmentInterface(u16 control_id,u16 *data,u8 StepData,u8 state)
 {
 	static u8 Key_time_number=0;
 	static u8 key_sun_bit=0;
@@ -317,9 +316,9 @@ void AddSub()  //结构体指针指向传递过来的结构体数组成员
 	{
 		if((*pHAddSub==1&&(*PCData->AdjustData[*pHAdjustFlag].tData+PCData->AdjustData[*pHAdjustFlag].StepData <= PCData->AdjustData[*pHAdjustFlag].UpperLimit) )||state==0)
 		{
-			Adjustment_interface(*pHAddSub,PCData->AdjustData[*pHAdjustFlag].tData,PCData->AdjustData[*pHAdjustFlag].StepData,state);
+			AdjustmentInterface(*pHAddSub,PCData->AdjustData[*pHAdjustFlag].tData,PCData->AdjustData[*pHAdjustFlag].StepData,state);
 		}else if((*pHAddSub==2&&(*PCData->AdjustData[*pHAdjustFlag].tData-PCData->AdjustData[*pHAdjustFlag].StepData >= PCData->AdjustData[*pHAdjustFlag].LowerLimit) )||state==0){
-			Adjustment_interface(*pHAddSub,PCData->AdjustData[*pHAdjustFlag].tData,PCData->AdjustData[*pHAdjustFlag].StepData,state);
+			AdjustmentInterface(*pHAddSub,PCData->AdjustData[*pHAdjustFlag].tData,PCData->AdjustData[*pHAdjustFlag].StepData,state);
 		}
 		TimeCnt=0;
 	}	
