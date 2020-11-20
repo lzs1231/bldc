@@ -172,11 +172,10 @@ SEGGER_RTT_printf(0,"%5d\t",t_PlaceOut);
 SEGGER_RTT_printf(0,"+%4d\t",(int)Speed_Point->Udk);	
 //printf("+%4d\t  ",(int)Speed_Point->Udk);
 #endif
-	
 			Speed_Point->Uk = Speed_Point->Uk_1+Speed_Point->Udk;
 
-//			if(Speed_Point->Uk*t_PlaceOut < 0)     Speed_Point->Uk = 0;    //输出与设定值反向了，说明补偿过大
-			if(Speed_Point->Uk*t_PlaceOut < 0)     Speed_Point->Uk = t_PlaceOut>0?1:-1;    //输出与设定值反向了，说明补偿过大
+			if(Speed_Point->Uk*t_PlaceOut < 0)     Speed_Point->Uk = 0;    //输出与设定值反向了，说明补偿过大
+//			if(Speed_Point->Uk*t_PlaceOut < 0)     Speed_Point->Uk = t_PlaceOut>0?1:-1;    //输出与设定值反向了，说明补偿过大
 		}
 		
 		if(Speed_Point->Uk >= LimitI)        Speed_Point->Uk = LimitI;
