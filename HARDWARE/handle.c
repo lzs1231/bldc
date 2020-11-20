@@ -205,8 +205,8 @@ int SPC_Control(int V1,int V2)
 	static int SPC_bit=1;
 	static int Last_HallRate;
     unsigned int time=gSPCStopTime*25;
-	int spc_out_stop=gSPCBehindLimit*10; 
-	int spc_in_stop=gSPCFrontLimit*10;
+	int spc_out_stop=gSPCExtendLimit*10; 
+	int spc_in_stop=gSPCIndentLimit*10;
 	int DEC_S_Min= spc_in_stop+30;
 	int DEC_S_Max= spc_out_stop-30;
 	int hall_change=0;
@@ -277,7 +277,7 @@ int SPC_Control(int V1,int V2)
 	    switch(SPC_bit)
 	    {
 			case -1: 
-				if(V1>0)           //-1000~1000
+				if(V1>0)           //-100~100
 				{
 					num_spc_time++;
 					if(num_spc_time<time)
@@ -288,7 +288,7 @@ int SPC_Control(int V1,int V2)
 						SPC_bit=-SPC_bit;
 					}
 				}else{
-					out = SPC_bit*SPCPID(V1,SPC_Out_Max,SPC_bit);
+					out = SPCPID(V1,SPC_Out_Max,SPC_bit);
 				}
 				break;
 				case 1:
@@ -303,7 +303,7 @@ int SPC_Control(int V1,int V2)
 						SPC_bit=-SPC_bit;
 					}
 				}else{
-					out = SPC_bit*SPCPID(V2,SPC_Out_Max,SPC_bit);
+					out = SPCPID(V2,SPC_Out_Max,SPC_bit);
 				}
 			break;
 			default: out=0;  break;
@@ -316,8 +316,8 @@ int SPC_Control(int V1,int V2)
 int LimitProcessing(int P)
 {
 	int OUT;
-	u16 stop_Max = gBehindLimit*10;
-	u16 stop_Min = gFrontLimit*10;
+	u16 stop_Max = gExtendLimit*10;
+	u16 stop_Min = gIndentLimit*10;
 	u16 DEC_S_Min = stop_Min+30;      //脉冲比例距离限位点>20       70~920之间全速运行
 	u16 DEC_S_Max = stop_Max-30;
 	u8  LimitFlag1,LimitFlag2;
@@ -458,7 +458,7 @@ int TravelCalibration(void)
 			   }
 		break;
 		case 2: 
-			out = CalibPID(gCenterLimit*10-HallRate,gCentSpeed);
+			out = CenterPID(gCenterLimit*10-HallRate,gCentSpeed);
 		break;
 	}
 	

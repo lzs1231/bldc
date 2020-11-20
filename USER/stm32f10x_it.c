@@ -31,6 +31,8 @@
 #include "pid_control.h"
 #include "wdg.h"
 
+#define PosNeg(a,b) ((a^b)<0?1:0)     //符号相同返回0
+
 typedef enum {
 	state_1a=1,
 	state_1b,
@@ -197,7 +199,7 @@ void TIM3_IRQHandler(void)
 	}     		
 }
 
-void TIM4_IRQHandler(void)             //1ms中断1次
+void TIM4_IRQHandler(void)             //4ms中断1次
 {
 	static u8   iCnt;
 	static int  LastPlaceOut,SpeedIn;
@@ -230,7 +232,7 @@ void TIM4_IRQHandler(void)             //1ms中断1次
 					inputEvent = event_1;	    		 //事件1
 					
 					
-					if(stateMachine.state != state_1b)                 	 //减速状态
+					if(stateMachine.state != state_1b && PosNeg(LastPlaceOut,PlaceOut))                 	 //减速状态
 					{
 						stateMachine.state = state_1a;
 						SpeedIn = decspeed(LastPlaceOut,gMFlexDec);
@@ -240,6 +242,7 @@ void TIM4_IRQHandler(void)             //1ms中断1次
 							stateMachine.state = state_1b;
 						}
 					}else{
+						stateMachine.state = state_1b;    
 						SpeedIn = T_Mplan(reversal(PlaceOut,10), LastPlaceOut, gMFlexAcc, gMFlexDec);
 						LastPlaceOut = SpeedIn;
 					}
@@ -251,7 +254,7 @@ void TIM4_IRQHandler(void)             //1ms中断1次
 						inputEvent = event_2;			 //事件2
 						
 				
-						if(stateMachine.state != state_2b)                 	 //减速状态
+						if(stateMachine.state != state_2b && PosNeg(LastPlaceOut,PlaceOut))                 	 //减速状态
 						{
 							stateMachine.state = state_2a;
 							SpeedIn = decspeed(LastPlaceOut,gMFlexDec);
@@ -261,6 +264,7 @@ void TIM4_IRQHandler(void)             //1ms中断1次
 								stateMachine.state = state_2b;
 							}
 						}else{
+							stateMachine.state = state_2b; 
 							SpeedIn = T_Mplan(reversal(PlaceOut,10), LastPlaceOut, gMFlexAcc, gMFlexDec);
 							LastPlaceOut = SpeedIn;
 						}
@@ -269,7 +273,7 @@ void TIM4_IRQHandler(void)             //1ms中断1次
 						inputEvent = event_3;			 //事件3
 						
 						
-						if(stateMachine.state != state_3b)                 	 //减速状态
+						if(stateMachine.state != state_3b && PosNeg(LastPlaceOut,PlaceOut))                 	 //减速状态
 						{
 							stateMachine.state = state_3a;
 							SpeedIn = decspeed(LastPlaceOut,gMFlexDec);
@@ -279,7 +283,7 @@ void TIM4_IRQHandler(void)             //1ms中断1次
 								stateMachine.state = state_3b;
 							}
 						}else{
-							
+							stateMachine.state = state_3b; 
 							SpeedIn = T_Aplan(reversal(PlaceOut,5), LastPlaceOut, gAFlexAcc, gAFlexDec);
 							LastPlaceOut = SpeedIn;
 						}
@@ -292,7 +296,7 @@ void TIM4_IRQHandler(void)             //1ms中断1次
 						inputEvent = event_4;			 //事件4
 						
 						
-						if(stateMachine.state != state_4b)                 	 //减速状态
+						if(stateMachine.state != state_4b && PosNeg(LastPlaceOut,PlaceOut))                 	 //减速状态
 						{
 							stateMachine.state = state_4a;
 							SpeedIn = decspeed(LastPlaceOut,gMFlexDec<<1);
@@ -302,6 +306,7 @@ void TIM4_IRQHandler(void)             //1ms中断1次
 								stateMachine.state = state_4b;
 							}
 						}else{
+							stateMachine.state = state_4b; 
 							SpeedIn = T_Mplan(reversal(PlaceOut,10), LastPlaceOut, gMFlexAcc, gMFlexDec);
 							LastPlaceOut = SpeedIn;
 						}
@@ -310,7 +315,7 @@ void TIM4_IRQHandler(void)             //1ms中断1次
 						inputEvent = event_5;			//事件5
 						
 						
-						if(stateMachine.state != state_5b)                 	 //减速状态
+						if(stateMachine.state != state_5b && PosNeg(LastPlaceOut,PlaceOut))                 	 //减速状态
 						{
 							stateMachine.state = state_5a;
 							SpeedIn = decspeed(LastPlaceOut,gMFlexDec);
@@ -320,6 +325,7 @@ void TIM4_IRQHandler(void)             //1ms中断1次
 								stateMachine.state = state_5b;
 							}
 						}else{
+							stateMachine.state = state_5b; 
 							SpeedIn = T_Cplan(reversal(PlaceOut,10), LastPlaceOut, gMFlexAcc, gMFlexDec);
 							LastPlaceOut = SpeedIn;
 						}						
@@ -345,10 +351,10 @@ int decspeed(int LastPlaceOut,u16 FlexDec)
 	
 	if(LastPlaceOut > 0)	
 	{
-		SpeedIn = LastPlaceOut-FlexDec;
+		SpeedIn = LastPlaceOut-(FlexDec<<1);
 		if(SpeedIn < 0)	SpeedIn = 0;
 	}else if(LastPlaceOut < 0)	{
-		SpeedIn = LastPlaceOut+FlexDec;
+		SpeedIn = LastPlaceOut+(FlexDec<<1);
 		if(SpeedIn > 0)	SpeedIn = 0;
 	}
 	return SpeedIn;
@@ -441,10 +447,7 @@ int reversal(int P,u8 TimeCnt)
 	static u8 Number_Pwm;
 	
 	//提取输入电压的方向
-	if(P==0)		{Dir_Deviation=0;}
-	else if(P<0)	{Dir_Deviation=-1;}
-	else			{Dir_Deviation=1;}
-      
+    Dir_Deviation = GetDirection(P);
 	
 	if(Dir_Deviation!=Last_Dir_Deviation) 		 //反向信号
 	{

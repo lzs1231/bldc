@@ -53,13 +53,13 @@ ConfirmDataDef ConfirmData = {
 		
 		{2,10,&gFuncTorque,1},			 //运行电流
 		
-		{5,95,&gBehindLimit,1},          //后限位
+		{5,95,&gExtendLimit,1},          //伸出限位
 		{5,95,&gCenterLimit,1},          //中心限位
-		{5,95,&gFrontLimit,1},			 //前限位
+		{5,95,&gIndentLimit,1},			 //缩进限位
 		
 		{2,250,&gSPCStopTime,1},		 //SPC停止时间
-		{10,90,&gSPCBehindLimit,1},		 //SPC后限位
-		{10,90,&gSPCFrontLimit,1},		 //SPC前限位
+		{10,90,&gSPCExtendLimit,1},		 //SPC伸出限位
+		{10,90,&gSPCIndentLimit,1},		 //SPC缩进限位
 		
 		{5,95,&gNoDetectValve,1},		 //无料阈值
 		{1,100,&gNoDetectTime,1},		 //无料检测时间
@@ -71,7 +71,7 @@ ConfirmDataDef ConfirmData = {
 
 
 /**********警告标志计算***************/
-u8 WarmOut()
+u8 WarmOut(void)
 {
 	u8 icnt,HallData;
 	HallData  = (u8)((GPIOC->IDR&0x000001c0)>>6);        //读转子位置    合成GPIOC8|GPIOC7|GPIOC6 
@@ -96,7 +96,7 @@ u8 WarmOut()
 
 
 /************4种传感器模式对应的显示程序***************/
-void SensorEPC1Dis()    //EPC1                
+void SensorEPC1Dis(void)    //EPC1                
 {
 	if(OcclusionL_rate>=0)   //0~100
 	{
@@ -108,7 +108,7 @@ void SensorEPC1Dis()    //EPC1
 	}
 }
 
-void SensorEPC2Dis()    //EPC2			
+void SensorEPC2Dis(void)    //EPC2			
 {
 	if(OcclusionR_rate>=0)
 	{
@@ -120,7 +120,7 @@ void SensorEPC2Dis()    //EPC2
 	}
 }
 
-void SensorCPCDis()   //CPC      
+void SensorCPCDis(void)   //CPC      
 {
 	s16 DisRate;
 	DisRate = (OcclusionR_rate-OcclusionL_rate)>>1;
@@ -135,7 +135,7 @@ void SensorCPCDis()   //CPC
 	}
 }
 
-void SensorSPCDis()   //SPC      
+void SensorSPCDis(void)   //SPC      
 {	
 
 	if(gSPCMode == 0)    //0：内部编码器  1：外部传感器
@@ -147,7 +147,7 @@ void SensorSPCDis()   //SPC
 }
 
 /**************传感器校准界面显示程序*******************/
-u8 NoShelterDis()
+u8 NoShelterDis(void)
 {
 	switch(*pHSensorNum)
 	{
@@ -164,7 +164,7 @@ u8 NoShelterDis()
 	return 0 ;
 }
 
-u8 ShelterDis()
+u8 ShelterDis(void)
 {
 	switch(*pHSensorNum)
 	{
@@ -183,7 +183,7 @@ u8 ShelterDis()
 	return 0 ;
 }
 
-u8 RealTimeDis()
+u8 RealTimeDis(void)
 {
 	switch(*pHSensorNum)
 	{
@@ -297,7 +297,7 @@ void AdjustmentInterface(u16 control_id,u16 *data,u8 StepData,u8 state)
 	}
 }
 
-void AddSub()  //结构体指针指向传递过来的结构体数组成员
+void AddSub(void)  //结构体指针指向传递过来的结构体数组成员
 {
 	static u8 TimeCnt;
 	u8 state;
@@ -306,7 +306,7 @@ void AddSub()  //结构体指针指向传递过来的结构体数组成员
 	state = *pHAddSub==0?0:1;   //*pHAddSub==0表示加减按钮没有按下
 	PCData = &ConfirmData;
 	
-	if(PCData->ExitFlag == 1) //防止上电时暂存，将*pHAdjustFlag初始化为255
+	if(PCData->ExitFlag == 1)  //防止上电时暂存，将*pHAdjustFlag初始化为255
 	{
 		PCData->TempData = *PCData->AdjustData[*pHAdjustFlag].tData;    
 		PCData->ExitFlag=0;
@@ -314,10 +314,12 @@ void AddSub()  //结构体指针指向传递过来的结构体数组成员
 	
 	if(TimeCnt>10)
 	{
-		if((*pHAddSub==1&&(*PCData->AdjustData[*pHAdjustFlag].tData+PCData->AdjustData[*pHAdjustFlag].StepData <= PCData->AdjustData[*pHAdjustFlag].UpperLimit) )||state==0)
+		if((*pHAddSub==1 && (*PCData->AdjustData[*pHAdjustFlag].tData+PCData->AdjustData[*pHAdjustFlag].StepData <= PCData->AdjustData[*pHAdjustFlag].UpperLimit)) || state==0)
 		{
 			AdjustmentInterface(*pHAddSub,PCData->AdjustData[*pHAdjustFlag].tData,PCData->AdjustData[*pHAdjustFlag].StepData,state);
-		}else if((*pHAddSub==2&&(*PCData->AdjustData[*pHAdjustFlag].tData-PCData->AdjustData[*pHAdjustFlag].StepData >= PCData->AdjustData[*pHAdjustFlag].LowerLimit) )||state==0){
+		}
+		else if((*pHAddSub==2 && (*PCData->AdjustData[*pHAdjustFlag].tData-PCData->AdjustData[*pHAdjustFlag].StepData >= PCData->AdjustData[*pHAdjustFlag].LowerLimit)) || state==0)
+		{
 			AdjustmentInterface(*pHAddSub,PCData->AdjustData[*pHAdjustFlag].tData,PCData->AdjustData[*pHAdjustFlag].StepData,state);
 		}
 		TimeCnt=0;
@@ -326,9 +328,13 @@ void AddSub()  //结构体指针指向传递过来的结构体数组成员
 	if(*pHAdjustFlag==0||*pHAdjustFlag==24)
 	{
 		*pAdjustData = (*PCData->AdjustData[*pHAdjustFlag].tData)*10;
-	}else if(*pHAdjustFlag==18||*pHAdjustFlag==22||*pHAdjustFlag==23){
+	}
+	else if(*pHAdjustFlag==18||*pHAdjustFlag==22||*pHAdjustFlag==23)
+	{
 		*pAdjustData = *PCData->AdjustData[*pHAdjustFlag].tData+800;
-	}else{
+	}
+	else
+	{
 		*pAdjustData = (*PCData->AdjustData[*pHAdjustFlag].tData)*10+800;
 	}
 	

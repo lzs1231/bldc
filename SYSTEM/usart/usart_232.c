@@ -125,9 +125,11 @@ void  Send232Char(u8 t)        //发送数据，需要使能DMA发送通道，并且设置引脚为发
 //len：发送的字节数
 void RS232_SendData(u8 *buff,u8 len)
 {
-	memcpy(RS232_TX_BUFF,buff,len);
-
-	DMA1_Channel2_Send(len);
+	if(len < CMD_MAX_SIZE)
+	{
+		memcpy(RS232_TX_BUFF,buff,len);
+		DMA1_Channel2_Send(len);
+	}
 }
 
 /************串口3 DMA发送数据**************/
@@ -136,7 +138,7 @@ void DMA1_Channel2_Send(u8 size)
 	while(USART_GetFlagStatus(USART3,USART_FLAG_RXNE)!=RESET);   //说明串口接收到数据此时不要发送数据
 	
 	if(!size) return ;                                 // 判断长度是否有效
-//	delay_us(10);
+
     while (DMA_GetCurrDataCounter(DMA1_Channel2));     //检查DMA发送通道内是否还有数据,DMA 发送完成
 	
 	DMA_Cmd(DMA1_Channel2, DISABLE);
@@ -208,9 +210,10 @@ void USART3_IRQHandler(void)          //接收液晶显示屏返回参数
 
 	if (USART_GetITStatus(USART3, USART_IT_IDLE) != RESET)//进入一次中断，说明接收到一帧指令
 	{
-		(void)USART3->SR;     //对USART_DR的读操作可以将接收中断标志位清零
-		(void)USART3->DR;   //先读SR再读DR寄存器
+		(void)USART3->SR;     	//对USART_DR的读操作可以将接收中断标志位清零
+		(void)USART3->DR;       //先读SR再读DR寄存器
 		Receive232_DataPack();
+		modbus.methods = MAX232;
 	 	modbus.reflag = 1;		
 	}
 	

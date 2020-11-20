@@ -49,10 +49,6 @@ IncPID *Center_Point = &Center_PID;   //定义一个指针指向该空间
 PosPID Place_PID;     //定义一个变量，分布了具体的内存空间
 PosPID *Place_Point = &Place_PID;
 
-/***********行程校准PID************/
-IncPID Calib_PID;     //定义一个变量，分布了具体的内存空间
-IncPID *Calib_Point = &Calib_PID;
-
 /***********速度PID************/
 IncPID Speed_PID;     //定义一个变量，分布了具体的内存空间
 IncPID *Speed_Point = &Speed_PID;
@@ -69,7 +65,7 @@ void PIDInit()
 	Place_Point->Uk = 0;
 	Place_Point->Uk_1 = 0;
 	Place_Point->P = 0.5;
-	Place_Point->I = Place_Point->P/70.0;
+	Place_Point->I = Place_Point->P/80.0;
 	Place_Point->Flg = 1;
 	Place_Point->D = Place_Point->P*5.0;
 	Place_Point->ek_Sum = 0;
@@ -88,18 +84,6 @@ void PIDInit()
     Center_Point->ek_1         = 0;         //ek-1=0
     Center_Point->ek_2         = 0;          //ek-2=0
 	
-	Calib_Point->Target = 0;
-	Calib_Point->Uk = 0;
-	Calib_Point->Udk = 0;
-	Calib_Point->Uk_1 = 0;
-	Calib_Point->P = 40;
-	Calib_Point->I = 0.6;
-	Calib_Point->Flg = 1;
-	Calib_Point->D = 10;
-	Calib_Point->ek_0         = 0;         //ek=0
-    Calib_Point->ek_1         = 0;         //ek-1=0
-    Calib_Point->ek_2         = 0;          //ek-2=0
-	
 	Speed_Point->Target = 0;
 	Speed_Point->Uk = 0;
 	Speed_Point->Udk = 0;
@@ -116,42 +100,12 @@ void PIDInit()
 	SPC_Point->Uk = 0;
 	SPC_Point->Uk_1 = 0;
 	SPC_Point->ek_Sum = 0;
-	SPC_Point->P = 4;
+	SPC_Point->P = 1;
 	SPC_Point->I = 0.08;
 	SPC_Point->Flg = 1;
 	SPC_Point->D = 3;
 	SPC_Point->ek_0         = 0;         //ek=0
     SPC_Point->ek_1         = 0;         //ek-1=0
-}
-
-int CalibPID(int PlaceEk,int LimitSpeed)
-{
-	Calib_Point->ek_0 = (float)PlaceEk;
-	
-	if(Calib_Point->ek_0<=50 && Calib_Point->ek_0>=-50)       //-50	~50	的范围内才进行PID运算
-	{
-		if(Calib_Point->ek_0<=2 && Calib_Point->ek_0>=-2)     //留-2~2的余量，防止抖动
-		{
-			Calib_Point->Uk = 0; 
-			TravelCal.CaliStep=3;
-			TravelCal.CaliFlag=0;          //行程校准完毕，清零校准标志
-		}else{
-			Calib_Point->Udk = Calib_Point->P*(Calib_Point->ek_0-Calib_Point->ek_1)+Calib_Point->I*Calib_Point->ek_0+Calib_Point->D*(Calib_Point->ek_0+Calib_Point->ek_2-2*Calib_Point->ek_1);
-			Calib_Point->Uk  = Calib_Point->Uk_1+Calib_Point->Udk;
-			if(Calib_Point->Uk>LimitSpeed)        Calib_Point->Uk = LimitSpeed;
-			else if(Calib_Point->Uk<-LimitSpeed)  Calib_Point->Uk = -LimitSpeed;       //进行速度限制
-		}
-	}else{
-		if(Calib_Point->ek_0>50)        Calib_Point->Uk = LimitSpeed;
-		else if(Calib_Point->ek_0<-50)  Calib_Point->Uk = -LimitSpeed;
-	}
-	
-	//保存误差，用于下一次计算
-	Calib_Point->ek_2 = Calib_Point->ek_1;
-	Calib_Point->ek_1 = Calib_Point->ek_0;
-	Calib_Point->Uk_1 = Calib_Point->Uk;				  
-
-	return (int)Calib_Point->Uk;
 }
 
 int CenterPID(int PlaceEk,int LimitSpeed)
@@ -163,7 +117,12 @@ int CenterPID(int PlaceEk,int LimitSpeed)
 		if((Center_Point->ek_0<=2) && (Center_Point->ek_0>=-2))          //偏差-1~1，不进行pi运算,留有1的偏差余量，防止抖动
 		{
 			Center_Point->Uk = 0;
-		}else{                          // 偏差在-50~50之间进行位置环PID运算
+			if(TravelCal.CaliFlag == 1)			//行程校准完毕，清零校准标志
+			{		
+				TravelCal.CaliStep=3;		
+				TravelCal.CaliFlag=0;          
+			}
+		}else{                          		// 偏差在-50~50之间进行位置环PID运算
 			Center_Point->Udk = (Center_Point->P*(Center_Point->ek_0-Center_Point->ek_1)
 								 +Center_Point->I*Center_Point->ek_0)
 									+Center_Point->D*(Center_Point->ek_0+Center_Point->ek_2-2*Center_Point->ek_1);
@@ -299,9 +258,9 @@ int SPCPID(int SensorValue,int SPC_Out,int SPCBit)
 	{
 		SPC_Point->ek_Sum =0;
 	}
-	if((SPC_Point->ek_0<=500) && (SPC_Point->ek_0>=-500))
+	if((SPC_Point->ek_0<=50) && (SPC_Point->ek_0>=-50))
 	{	
-		SPC_Point->Flg = ((SPC_Point->ek_0<=100)&&(SPC_Point->ek_0>=-100))?1:0;
+		SPC_Point->Flg = ((SPC_Point->ek_0<=10)&&(SPC_Point->ek_0>=-10))?1:0;
 			
 		SPC_Point->ek_Sum += SPC_Point->ek_0;
 		SPC_Point->Uk = SPC_Point->P*SPC_Point->ek_0+SPC_Point->Flg*SPC_Point->I*SPC_Point->ek_Sum+SPC_Point->D*(SPC_Point->ek_0-SPC_Point->ek_1);
@@ -309,7 +268,7 @@ int SPCPID(int SensorValue,int SPC_Out,int SPCBit)
 		if(SPC_Point->Uk > SPC_Out)        SPC_Point->Uk = SPC_Out; 
 		if(SPC_Point->Uk < 0)  			   SPC_Point->Uk = 0; 
 	}else{             //偏差过大，不进行pi运算
-		if(SPC_Point->ek_0 > 100)       SPC_Point->Uk = SPC_Out;  
+		if(SPC_Point->ek_0 > 10)       SPC_Point->Uk = SPC_Out;  
 	}
 	
 	//保存误差，用于下一次计算
@@ -322,7 +281,7 @@ printf("E%4.4f\t",SPC_Point->ek_0);
 printf("P%4.4f\t  \n",SPC_Point->Uk);
 #endif
 	
-	return SPC_Point->Uk;
+	return (SPCBit == 1?SPC_Point->Uk:-SPC_Point->Uk);
 }
 
 //int SPCPID(int SensorValue,int SPC_Out)

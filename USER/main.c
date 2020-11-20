@@ -33,14 +33,14 @@ __noinit__ s16   gCurrentPulseNum;         //当前所在位置脉冲数
 __noinit__ s16   gMAXPulseNum;             //行程最大脉冲数
 
 __noinit__ u16   gLimitMode;               //限位方式   0为内部限位  1为外部限位开关限位
-__noinit__ u16   gBehindLimit;             //前限位点设置
+__noinit__ u16   gExtendLimit;             //前限位点设置
 __noinit__ u16   gCenterLimit;		       //中心限位点设置
-__noinit__ u16   gFrontLimit;			   //后限位点设置
+__noinit__ u16   gIndentLimit;			   //后限位点设置
 
 __noinit__ u16   gSPCMode;                 //蛇形纠偏模式  0：内部编码器  1：外部传感器
 __noinit__ u16   gSPCStopTime;             //spc停止时间=0.2秒
-__noinit__ u16   gSPCBehindLimit;          //spc伸出停止点
-__noinit__ u16   gSPCFrontLimit;           //spc缩进停止点
+__noinit__ u16   gSPCExtendLimit;          //spc伸出停止点
+__noinit__ u16   gSPCIndentLimit;           //spc缩进停止点
 
 __noinit__ u16   gNoWaitEN;                //无料等待功能  0=使能,1=禁止
 __noinit__ u16   gNoDetectValve;           //无料检测阀值  
@@ -238,9 +238,9 @@ void SetDataInit()                 //设置参数初始化
 	gMAXPulseNum=500;            //行程最大脉冲数
 
 	gLimitMode = 0;              //限位方式   0为内部限位  1为外部限位开关限位   2内部加外部
-	gBehindLimit=95;             //前限位点设置
+	gExtendLimit=95;             //伸出限位点设置
 	gCenterLimit=50;		     //中心限位点设置
-	gFrontLimit=5;			     //后限位点设置
+	gIndentLimit=5;			     //缩进限位点设置
 
 	gNoWaitEN=1;                 //无料等待功能，0=使能,1=禁止
 	gNoDetectValve=95;           //无料检测阀值  
@@ -249,8 +249,8 @@ void SetDataInit()                 //设置参数初始化
 
 	gSPCMode = 0;                //蛇形纠偏模式  0：内部编码器  1：外部传感器
 	gSPCStopTime=2;              //spc停止时间=0.2秒
-	gSPCBehindLimit=90;          //spc伸出停止点
-	gSPCFrontLimit=10;           //spc缩进停止点
+	gSPCExtendLimit=90;          //spc伸出停止点
+	gSPCIndentLimit=10;          //spc缩进停止点
 
 	gLongIo0Mode=0;              //远程输入口1状态 
 	gLongIo1Mode=0;              //远程输入口2状态
@@ -282,18 +282,12 @@ int main(void)
 void start_task(void *pdata) 
 {	
 	OS_CPU_SR cpu_sr=0;
-	u8 icnt;
+
 	pdata=pdata;
 	
     BSP_Init();     
-    for(icnt=0;icnt<FunNum;icnt++)
-	{
-		LongPortFun[icnt] = 0;
-	}
-	for(icnt=0;icnt<WarmNum;icnt++)
-	{
-		Warm[icnt] = 0;
-	}
+  
+	
 	if(RCC_GetFlagStatus(RCC_FLAG_IWDGRST)!= RESET)         //判断是否发生了独立看门狗复位
 	{
 		RCC->CSR = 1<<24;    	/*Clear reset flag*/
@@ -351,12 +345,27 @@ void start_task(void *pdata)
 /**-----------------readio_task任务---------------------**/
 void readio_task(void *pdata)
 {
+	static u16 LastSwitch1EPC,LastSwitch2EPC;
+	
 //  如果定义为全局变量，psi_pid_task()优先级高于si_pid_task()优先级,SetPwmValue可能被高优先级的任务更改，从而出错            
 //	Wwdg_Init(0x7f,0x7d,3);
 	IWDG_Init(7,312);   		  //7表示256分频，256/40K=6.4ms,6.4*312=2s表示喂狗间隔2s
 	for(;;)
 	{
 		ReadLong(LongPortFun);
+		
+		if(LongPortFun[Switch1_EPC] != LastSwitch1EPC)
+		{
+			*pHSensorMode=LongPortFun[Switch1_EPC];
+		}
+		if(LongPortFun[Switch2_EPC] != LastSwitch2EPC)
+		{
+			*pHSensorMode=LongPortFun[Switch2_EPC];
+			*pHAutoPolar=LongPortFun[Switch2_EPC];
+		}
+		LastSwitch1EPC = LongPortFun[Switch1_EPC];
+		LastSwitch2EPC = LongPortFun[Switch2_EPC];
+		
 		delay_ms(10);
 		IWDG_Feed();   		 	//2s之内没有喂狗则复位
 	}
@@ -375,16 +384,16 @@ void modbus_task(void *pdata)
 	{
 		Modbus_Event();
 		
-		/********需要快速处理的指令********/
-		ClickButton 	= *pHClickBut;
-		
 		/*********根据*pHAdjustFlag调用调节参数，完成后*pHAdjustFlag=255**********/
 		if(*pHAdjustFlag!=255)  AddSub();
 		
+		/********需要快速处理的指令********/
+		ClickButton 	= *pHClickBut;
+		
 		if(*pHTCaliFlag == 1)   //读取校准标志，查看是否启动校准
 		{
-			TravelCal.CaliFlag = 1;
 			*pHTCaliFlag = 0;
+			TravelCal.CaliFlag = 1;
 		}
 			 
 		if(*pHTCaliCancel == 1)              //取消校准按下
@@ -405,7 +414,7 @@ void lcd_task(void *pdata)
 	u16 *pd;
 	u8 HallData,SensorTips,WarmFlag;
 	static u16 TimeCnt,PowerOnFlag;
-	static u16 LastSwitch1EPC,LastSwitch2EPC;
+
 	
 	for(;;)
 	{
@@ -413,23 +422,6 @@ void lcd_task(void *pdata)
 		/*****************************串口屏下发指令，修改保持寄存器，然后更新全局变量***********************************/
 
 		/*********根据屏幕指令修改变量值**********/
-		if(*pHTCaliTorque == 0)			gCaliTorque	 =10;
-		else if(*pHTCaliTorque == 1)	gCaliTorque	 =15;
-		else if(*pHTCaliTorque == 2)	gCaliTorque	 =20;
-		else if(*pHTCaliTorque == 3)	gCaliTorque	 =30;
-		
-		if(LongPortFun[Switch1_EPC] != LastSwitch1EPC)
-		{
-			*pHSensorMode=LongPortFun[Switch1_EPC];
-		}
-		if(LongPortFun[Switch2_EPC] != LastSwitch2EPC)
-		{
-			*pHSensorMode=LongPortFun[Switch2_EPC];
-			*pHAutoPolar=LongPortFun[Switch2_EPC];
-		}
-		LastSwitch1EPC = LongPortFun[Switch1_EPC];
-		LastSwitch2EPC = LongPortFun[Switch2_EPC];
-		
 		gWorkMode		 =*pHWorkMode;
 		gSensorMode		 =*pHSensorMode;
 		gAutoPolar		 =*pHAutoPolar;
@@ -450,6 +442,11 @@ void lcd_task(void *pdata)
 		gPowerOnMode = *pHPowerOnMode;    //保存上电状态
 		gCurMatNum	 = *pHMatNum;         //保存当前材料标号
 		
+		if(*pHTCaliTorque == 0)			gCaliTorque	 =10;
+		else if(*pHTCaliTorque == 1)	gCaliTorque	 =15;
+		else if(*pHTCaliTorque == 2)	gCaliTorque	 =20;
+		else if(*pHTCaliTorque == 3)	gCaliTorque	 =30;
+		
 		gLimitMode	 = *pHLimitMode;
 		gSPCMode	 = *pHSPCMode;        //保存SPC模式
 		gNoWaitEN	 = *pHNoWaitEN;       //保存无料使能
@@ -459,49 +456,50 @@ void lcd_task(void *pdata)
 		gLongIo2Mode = *pHPort2Fun;
 		gLongIo3Mode = *pHPort3Fun;
 		
+		gAlarmSwitch = *pHAlarmSwitch;
+		
 //		OSMutexPend(mutex,0,&err);             //提高任务优先级
 //		OSMutexPost(mutex);                    //恢复任务优先级
 		
 		switch(*pHFlexSpeed)
 		{
-			case 1:		gAFlexAcc = AFlexAcc; *pHFlexSpeed = 0;	break;
+			case 1:		gAFlexAcc = AFlexAcc; *pHFlexSpeed = 0;	 break;
 			case 2:		gAFlexDec = AFlexDec; *pHFlexSpeed = 0;  break;
 			case 4:		gMFlexAcc = MFlexAcc; *pHFlexSpeed = 0;  break;
 			case 8:		gMFlexDec = MFlexDec; *pHFlexSpeed = 0;  break;
 			default:	break;
 		}
-		/*****************************更新输入寄存器,读取输入寄存器器用于显示***********************************/
-		
 		/*****************备份还原********************/
 		BackupRestore();
 		
-		/**********警告标志计算***************/
+		
+		
+		/******************更新输入寄存器,读取输入寄存器器用于显示***********************/
+		
+		/*****************警告标志计算***************/
 		WarmFlag = WarmOut();
 
-		/*********更新输入寄存器参数，以便主机读取**********/
+		/**************更新输入寄存器参数，以便主机读取**********/
 		if(TravelCal.CaliStep==3)  
 		{
 			if(TimeCnt==30)	{TravelCal.CaliStep = 0;TimeCnt=0;}   
 			TimeCnt++;
 		}
-		*pCurrentPara	= (u16)(g_ADC_Buf[0]*0.08)|gFuncTorque<<8|*pHTCaliTorque<<12|TravelCal.CaliStep<<14;
-		
 		/*********更新传感器显示******pSensorRate****/
 		SensorMode.fun[gSensorMode]();          //根据主机更新的传感器模式调用不同程序，显示传感器参数
 		
 		/*********更新校准传感器显示*****pSensorValue、pMatDis*****/
-		
-		SensorTips = MatCal.fun[*pHSCaliStep]();               //根据主机更新的校准步骤调用不同程序，显示传感器参数 
+		SensorTips = MatCal.fun[*pHSCaliStep]();    //根据主机更新的校准步骤调用不同程序，显示传感器参数 ，返回校准成功或者失败
 		
 		*pGainDead 		= gGainData|(gDeadZone<<8);
 		*pFineTune  	= (gFineTune|(WarmFlag<<8))|SensorTips<<12;
 		*pDisPulseNum  	= HallRate|gAutoPolar<<14|gManuPolar<<15;
 		*pMode          = gWorkMode|gSensorMode<<2|gPowerOnMode<<4|gMotorType<<6;
 		*pMatDis       	= Mat0EPC12|Mat1EPC12<<2|Mat2EPC12<<4|Mat3EPC12<<6|Mat4EPC12<<8|Mat5EPC12<<10|Mat6EPC12<<12|Mat7EPC12<<14;
-		*pLimitFun1    	= gLimitMode|gBehindLimit<<8;
-		*pLimitFun2		= gCenterLimit|gFrontLimit<<8;
+		*pLimitFun1    	= gLimitMode|gExtendLimit<<8;
+		*pLimitFun2		= gCenterLimit|gIndentLimit<<8;
 		*pSPCFun1		= gSPCMode|gSPCStopTime<<8;
-		*pSPCFun2		= gSPCBehindLimit|gSPCFrontLimit<<8;
+		*pSPCFun2		= gSPCExtendLimit|gSPCIndentLimit<<8;
 		*pNoMatFun1		= gNoWaitEN|gNoDetectValve<<8;
 		*pNoMatFun2		= gNoDetectTime|gNoWaitTime<<8;
 		*pAFlex			= gAFlexAcc|gAFlexDec<<8;
@@ -510,6 +508,7 @@ void lcd_task(void *pdata)
 		*pAutoSpeed		= gAutoSpeed;
 		*pManuSpeed		= gManuSpeed;
 		*pCentSpeed		= gCentSpeed;
+		*pCurrentPara	= (u16)(g_ADC_Buf[0]*0.08)|gFuncTorque<<8|*pHTCaliTorque<<12|TravelCal.CaliStep<<14;
 		*pOtherPara     = gBackupFlag|LongPortFun[PusherCenter]<<1|LongPortFun[ManuDef]<<4|LongPortFun[AutoDef]<<7;
 
 		//OSSemPost(sem_p);

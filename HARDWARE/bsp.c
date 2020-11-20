@@ -14,6 +14,8 @@ void Interrupt_Config(void);     //中断优先级配置
 
 void BSP_Init(void) 
 {
+	u8 icnt;
+	
 	RCC_Configuration(); 
 	delay_init();	             //延时函数初始化	
 	
@@ -28,13 +30,31 @@ void BSP_Init(void)
 //	create_double_buf(p_double_buf,100);
 	uart1_init(115200);
 #endif
-#ifdef  USE_MAX_485
+	
+	
 	uart2_init(115200);
-#elif  defined USE_MAX_232
 	uart3_init(115200);
-#endif
+	
+//#ifdef  USE_MAX_485
+//	uart2_init(115200);
+//#elif  defined USE_MAX_232
+//	uart3_init(115200);
+//#endif
+	
 	Adc_Init();  	
+	
+	
 	delay_ms(1000);       //延时等待串口屏初始化完毕,必须等待300ms 	
+	
+	for(icnt=0;icnt<FunNum;icnt++)
+	{
+		LongPortFun[icnt] = 0;
+	}
+	for(icnt=0;icnt<WarmNum;icnt++)
+	{
+		Warm[icnt] = 0;
+	}
+	
 }
 
 void RCC_Configuration(void)  
@@ -142,7 +162,7 @@ void Interrupt_Config(void)   //NVIC 中断优先级配置
 //	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 //	NVIC_Init(&NVIC_InitStructure);
 
-#ifdef USE_MAX_485 
+
 	//Usart2 中断向量配置
 	NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;       			//中断向量表
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3; 			//抢占优先级3
@@ -162,11 +182,11 @@ void Interrupt_Config(void)   //NVIC 中断优先级配置
 //	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
 //	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 //	NVIC_Init(&NVIC_InitStructure);
-#elif	defined USE_MAX_232
+
 	//Usart3 中断向量配置
 	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;       			//中断向量表
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3; 			//抢占优先级3
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;		  		//子优先级3
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;		  		//子优先级3
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;		    		//IRQ通道使能
 	NVIC_Init(&NVIC_InitStructure);	                        		//根据指定的参数初始化VIC寄存器
 	
@@ -182,7 +202,7 @@ void Interrupt_Config(void)   //NVIC 中断优先级配置
 //	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
 //	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 //	NVIC_Init(&NVIC_InitStructure);
-#endif
+
 }
 
 

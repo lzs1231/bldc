@@ -22,7 +22,7 @@
 
 
 /***********485”Î232«–ªª************/
-#define USE_MAX_485
+//#define USE_MAX_485
 //#define USE_MAX_232
 
 #endif

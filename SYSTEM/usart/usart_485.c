@@ -232,6 +232,7 @@ void USART2_IRQHandler(void)          //接收液晶显示屏返回参数
 		(void)USART2->SR;     //对USART_DR的读操作可以将接收中断标志位清零
 		(void)USART2->DR;     //先读SR再读DR寄存器
 		Receive_DataPack();
+		modbus.methods = MAX485;
 		modbus.reflag = 1;
 	}
 	

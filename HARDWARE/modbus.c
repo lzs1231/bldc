@@ -9,15 +9,6 @@
 MODBUS modbus;
 
 
-extern  u8 RS485_RX_BUFF[];	//接收缓冲区2048字节
-u16 RS485_RX_CNT=0;			//接收计数器
-u8 RS485_RxFlag=0;			//接收一帧结束标记
-
-extern  u8 RS485_TX_BUFF[];	//发送缓冲区
-u16 RS485_TX_CNT=0;			//发送计数器
-u8 RS485_TxFlag=0;			//发送一帧结束标记
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Slave寄存器和单片机寄存器的映射关系
 u16   Slave_InputIO[RegData];  //输入开关量寄存器(这里使用的是位带操作)   注意： 这里储存从机返回的数据。    开关量的数据只能是0，1 例如 Slave_InputIO[5]=0；Slave_InputIO[8]=1；
@@ -54,39 +45,38 @@ u16 *const pOtherPara	 = &Slave_ReadReg[0x15];
 
 /**************06功能码写入保持寄存器****************/
 u16 *const pHAdjustFlag  = &Slave_WriteReg[0];
-u16 *const pHAlarmSwitch = &Slave_WriteReg[1];
-u16 *const pHClickBut    = &Slave_WriteReg[5];
-u16 *const pHAddSub      = &Slave_WriteReg[6];
+u16 *const pHClickBut    = &Slave_WriteReg[1];
+u16 *const pHAddSub      = &Slave_WriteReg[2];
+u16 *const pHParaConfirm = &Slave_WriteReg[3];
+u16 *const pHSCaliStep   = &Slave_WriteReg[4]; 	 //传感器校准步骤
+u16 *const pHSensorNum   = &Slave_WriteReg[5];
+u16 *const pHTCaliFlag   = &Slave_WriteReg[6];    //是否启动行程校准
+u16 *const pHTCaliCancel = &Slave_WriteReg[7];    //是否取消行程校准
+u16 *const pHFlexSpeed	 = &Slave_WriteReg[8];    //柔性加减速值
+u16 *const pHSysYes		 = &Slave_WriteReg[9];    //确定执行
+u16 *const pHWarmFlag	 = &Slave_WriteReg[0x0a];    //警告标志
 
-u16 *const pHWorkMode    = &Slave_WriteReg[7];
-u16 *const pHSensorMode  = &Slave_WriteReg[8];
-u16 *const pHLimitMode   = &Slave_WriteReg[9];
-u16 *const pHSPCMode     = &Slave_WriteReg[0x0a];
-u16 *const pHNoWaitEN    = &Slave_WriteReg[0x0b];
-u16 *const pHAutoPolar   = &Slave_WriteReg[0x0c];
-u16 *const pHManuPolar   = &Slave_WriteReg[0x0d];
-u16 *const pHMotorType   = &Slave_WriteReg[0x0e];
-u16 *const pHPowerOnMode = &Slave_WriteReg[0x0f];
 
-u16 *const pHPort0Fun  	 = &Slave_WriteReg[0x10];
-u16 *const pHPort1Fun 	 = &Slave_WriteReg[0x11];
-u16 *const pHPort2Fun 	 = &Slave_WriteReg[0x12];
-u16 *const pHPort3Fun 	 = &Slave_WriteReg[0x13];
+u16 *const pHWorkMode    = &Slave_WriteReg[0x0b];
+u16 *const pHSensorMode  = &Slave_WriteReg[0x0c];
+u16 *const pHAutoPolar   = &Slave_WriteReg[0x0d];
+u16 *const pHManuPolar   = &Slave_WriteReg[0x0e];
+u16 *const pHMotorType   = &Slave_WriteReg[0x0f];
+u16 *const pHPowerOnMode = &Slave_WriteReg[0x10];
+u16 *const pHMatNum 	 = &Slave_WriteReg[0x11];  	  // 当前材料编号
 
-u16 *const pHParaConfirm = &Slave_WriteReg[0x14];
-u16 *const pHMatNum 	 = &Slave_WriteReg[0x15];  // 当前材料编号
-u16 *const pHSCaliStep   = &Slave_WriteReg[0x16];  //传感器校准步骤
-u16 *const pHSensorNum   = &Slave_WriteReg[0x17];
+u16 *const pHTCaliTorque = &Slave_WriteReg[0x12];     //行程校准电流设置
 
-u16 *const pHTCaliTorque = &Slave_WriteReg[0x18];    //行程校准电流设置
-u16 *const pHTCaliFlag   = &Slave_WriteReg[0x19];    //是否启动行程校准
-u16 *const pHTCaliCancel = &Slave_WriteReg[0x1a];    //是否取消行程校准
+u16 *const pHLimitMode   = &Slave_WriteReg[0x13];
+u16 *const pHSPCMode     = &Slave_WriteReg[0x14];
+u16 *const pHNoWaitEN    = &Slave_WriteReg[0x15];
 
-u16 *const pHFlexSpeed	 = &Slave_WriteReg[0x1b];    //柔性加减速值
+u16 *const pHPort0Fun  	 = &Slave_WriteReg[0x16];
+u16 *const pHPort1Fun 	 = &Slave_WriteReg[0x17];
+u16 *const pHPort2Fun 	 = &Slave_WriteReg[0x18];
+u16 *const pHPort3Fun 	 = &Slave_WriteReg[0x19];
 
-u16 *const pHSysYes		 = &Slave_WriteReg[0x1f];    //确定执行
-
-u16 *const pHWarmFlag	 = &Slave_WriteReg[0x20];    //警告标志
+u16 *const pHAlarmSwitch = &Slave_WriteReg[0x1a];
 
 //CRC校验 自己后面添加的
 const u8 auchCRCHi[] = { 
@@ -142,40 +132,41 @@ void Modbus_Init()
     modbus.timrun = 0;     //modbus定时器停止计算
 	
 //	modbus.rcbuf = (u8 *)malloc(128);   //分配空间字节数：6+寄存器
-//	Modbus_Time_Init();
+	modbus.methods = Error;
 	
 /*********初始化modbus保持寄存器***********/
 	*pHAdjustFlag=255;
 	*pHClickBut=0;
 	*pHAddSub=0;
-	
 	*pHParaConfirm=0;   //参数修改确认  1表示确认，2表示还原，0表示不执行
-	
-	*pHSCaliStep=0;     //传感器校准步骤
-	*pHSensorNum=0;     //传感器校准默认选中EPC1
-	*pHTCaliTorque=0;   //校准电流
-	*pHTCaliFlag=0;
+	*pHSCaliStep  =0;   //传感器校准步骤
+	*pHSensorNum  =0;   //传感器校准默认选中EPC1
+	*pHTCaliFlag  =0;
 	*pHTCaliCancel=0;
+	*pHFlexSpeed = 0;
+	*pHSysYes 	 = 255;
+	*pHWarmFlag  = 0;
 	
 	
-	*pHSensorMode = gSensorMode;		//0=左，1=右，2=左+右，3=SPC
+	*pHSensorMode= gSensorMode;		    //0=左，1=右，2=左+右，3=SPC
 	*pHAutoPolar = gAutoPolar;			//自动极性，0=负极，1=正极;
 	*pHManuPolar = gManuPolar;			//手动极性，0=负极，1=正极;
 	*pHMotorType = gMotorType;     		//电机类型   0无刷电机4   1无刷电机5   2有刷电机
 	*pHPowerOnMode = gPowerOnMode;   	//开机工作模式，,0=手动，1=自动，2=中心，3=上次 
-	*pHMatNum = gCurMatNum;        	// 当前材料编号
+	*pHMatNum 	 = gCurMatNum;        	// 当前材料编号
+	
+	*pHTCaliTorque=0;  					 //校准电流
 	
 	*pHLimitMode = gLimitMode;    		//限位方式   0为内部限位、1为外部限位开关限位、2内部加外部
 	*pHSPCMode   = gSPCMode;			//蛇形纠偏模式  0：内部编码器  1：外部传感器
 	*pHNoWaitEN  = gNoWaitEN;     		//无料等待功能，0=使能,1=禁止
 	
-	*pHPort0Fun = gLongIo0Mode;      	//四个端口默认功能
-	*pHPort1Fun = gLongIo1Mode;
-	*pHPort2Fun = gLongIo2Mode;
-	*pHPort3Fun = gLongIo3Mode;
-	*pHFlexSpeed = 0;
-	*pHSysYes = 255;
-	*pHWarmFlag  = 0;
+	*pHPort0Fun  = gLongIo0Mode;      	//四个端口默认功能
+	*pHPort1Fun  = gLongIo1Mode;
+	*pHPort2Fun  = gLongIo2Mode;
+	*pHPort3Fun  = gLongIo3Mode;
+	
+	*pHAlarmSwitch = gAlarmSwitch;
 }
 
 
@@ -207,11 +198,19 @@ void Modbus_Func3()
 	modbus.sendbuf[i++] = crc%256;
 	
 	// 开始返回Modbus数据
-#ifdef USE_MAX_485
-	RS485_SendData(&modbus.sendbuf[0],i);	
-#elif defined USE_MAX_232
-	RS232_SendData(&modbus.sendbuf[0],i);	
-#endif	
+	switch(modbus.methods)
+	{
+		case Error:   		break;
+		case MAX232:  RS232_SendData(&modbus.sendbuf[0],i);	  break;
+		case MAX485:  RS485_SendData(&modbus.sendbuf[0],i);	  break;
+		default:        	break;
+	}
+
+//#ifdef USE_MAX_485
+//	RS485_SendData(&modbus.sendbuf[0],i);	
+//#elif defined USE_MAX_232
+//	RS232_SendData(&modbus.sendbuf[0],i);	
+//#endif	
 //	free(modbus.sendbuf);
 }
 
@@ -243,11 +242,19 @@ void Modbus_Func4()
 	modbus.sendbuf[i++] = crc%256;
 	
 	// 开始返回Modbus数据
-#ifdef USE_MAX_485
-	RS485_SendData(&modbus.sendbuf[0],i);	
-#elif defined USE_MAX_232
-	RS232_SendData(&modbus.sendbuf[0],i);	
-#endif
+	switch(modbus.methods)
+	{
+		case Error:   		break;
+		case MAX232:  RS232_SendData(&modbus.sendbuf[0],i);	  break;
+		case MAX485:  RS485_SendData(&modbus.sendbuf[0],i);	  break;
+		default:        	break;
+	}
+	
+//#ifdef USE_MAX_485
+//	RS485_SendData(&modbus.sendbuf[0],i);	
+//#elif defined USE_MAX_232
+//	RS232_SendData(&modbus.sendbuf[0],i);	
+//#endif
 //	free(modbus.sendbuf);
 }
 
@@ -277,11 +284,19 @@ void Modbus_Func6()
 	modbus.sendbuf[i++] = crc%256;
 	
 	// 开始返回Modbus数据
-#ifdef USE_MAX_485
-	RS485_SendData(&modbus.sendbuf[0],i);	
-#elif defined USE_MAX_232
-	RS232_SendData(&modbus.sendbuf[0],i);	
-#endif	
+	switch(modbus.methods)
+	{
+		case Error:   		break;
+		case MAX232:  RS232_SendData(&modbus.sendbuf[0],i);	  break;
+		case MAX485:  RS485_SendData(&modbus.sendbuf[0],i);	  break;
+		default:        	break;
+	}
+	
+//#ifdef USE_MAX_485
+//	RS485_SendData(&modbus.sendbuf[0],i);	
+//#elif defined USE_MAX_232
+//	RS232_SendData(&modbus.sendbuf[0],i);	
+//#endif	
 //	free(modbus.sendbuf);
 }
 

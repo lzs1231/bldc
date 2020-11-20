@@ -73,7 +73,6 @@ extern  u16   gBackupFlag;
 
 extern  u16   gWorkMode;                 //工作模式：0手动，1自动,2中心
 extern  u16   gSensorMode;               //纠偏模式，1=左EPC1，2=右EPC2，3=左+右CPC，4=SPC
-
 extern  u16   gAutoPolar;                //自动极性，1=负极，0=正极;
 extern  u16   gManuPolar;                //手动极性，1=负极，0=正极;
 extern  u16   gMotorType;                //电机类型
@@ -88,27 +87,26 @@ extern  u16   gAutoSpeed;                //自动速度
 extern  u16   gManuSpeed;                //手动速度
 extern  u16   gCentSpeed;                //对中速度
 
-extern  u16   gCaliTorque;            //校准转矩
+extern  u16   gCaliTorque;            	//校准转矩
 extern  u16   gFuncTorque;              //正常支行时转矩限制，最大为10A
 
 extern  s16   gCurrentPulseNum;         //当前所在位置脉冲数	
 extern  s16   gMAXPulseNum;             //脉冲数0到最大值MAX_pulse_num
 
 extern  u16   gLimitMode;                //限位方式
-extern  u16   gBehindLimit;              //前限位点设置
+extern  u16   gExtendLimit;              //前限位点设置
 extern  u16   gCenterLimit;		    	 //中心限位点设置
-extern  u16   gFrontLimit;				 //后限位点设置
+extern  u16   gIndentLimit;				 //后限位点设置
 
 extern  u16   gSPCMode;                  //蛇形纠偏模式  0：内部编码器  1：外部传感器
 extern  u16   gSPCStopTime;              //sps停止时间=0.2秒
-extern  u16   gSPCBehindLimit;
-extern  u16   gSPCFrontLimit;
+extern  u16   gSPCExtendLimit;
+extern  u16   gSPCIndentLimit;
 
 extern  u16   gNoWaitEN;               //无料等待功能0=禁止，1=使能
 extern  u16   gNoDetectValve;          //无料检测阀值  
 extern  u16   gNoDetectTime;           //无料检测时间=0.1秒
 extern  u16   gNoWaitTime;             //无料等待时间=1.5秒  
-
 
 extern  u16   gLongIo0Mode;            //远程输入口1状态 
 extern  u16   gLongIo1Mode;            //远程输入口2状态

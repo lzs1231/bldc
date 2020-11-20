@@ -27,23 +27,12 @@ Project File Date:  11/13/2020
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'F:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Target 1'
-compiling handle.c...
-..\HARDWARE\handle.c(107): warning:  #111-D: statement is unreachable
-  	return(out);
-..\HARDWARE\handle.c: 1 warning, 0 errors
-compiling main.c...
-main.c(405): warning:  #177-D: variable "pd"  was declared but never referenced
-  	u16 *pd;
-main.c(406): warning:  #177-D: variable "HallData"  was declared but never referenced
-  	u8 HallData,SensorTips,WarmFlag;
-main.c(407): warning:  #177-D: variable "PowerOnFlag"  was declared but never referenced
-  	static u16 TimeCnt,PowerOnFlag;
-main.c: 3 warnings, 0 errors
+compiling pid_control.c...
 linking...
-Program Size: Code=36668 RO-data=1216 RW-data=940 ZI-data=8100  
+Program Size: Code=36904 RO-data=1216 RW-data=936 ZI-data=8056  
 FromELF: creating hex file...
 After Build - User command #1: fromelf.exe --bin -o "..\user.bin" "..\user.axf"
-"..\user.axf" - 0 Error(s), 4 Warning(s).
+"..\user.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -57,7 +46,7 @@ Package Vendor: Keil
   F:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\1.1.0\Device\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:09
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

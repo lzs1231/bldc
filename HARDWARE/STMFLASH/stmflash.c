@@ -162,14 +162,14 @@ void SavePara(void)
 	save_para[19]=gMAXPulseNum;
 	
 	save_para[20]=gLimitMode;
-	save_para[21]=gBehindLimit;
+	save_para[21]=gExtendLimit;
 	save_para[22]=gCenterLimit;
-	save_para[23]=gFrontLimit;
+	save_para[23]=gIndentLimit;
 	
 	save_para[24]=gSPCMode;
 	save_para[25]=gSPCStopTime;
-	save_para[26]=gSPCBehindLimit;
-	save_para[27]=gSPCFrontLimit;	
+	save_para[26]=gSPCExtendLimit;
+	save_para[27]=gSPCIndentLimit;	
 	
 	save_para[28]=gNoWaitEN;
 	save_para[29]=gNoDetectValve;
@@ -229,14 +229,14 @@ void ReadPara(void)
 	gMAXPulseNum		=save_para[19];
 	
 	gLimitMode			=save_para[20];
-	gBehindLimit	    =save_para[21];
+	gExtendLimit	    =save_para[21];
 	gCenterLimit		=save_para[22];
-	gFrontLimit			=save_para[23];
+	gIndentLimit			=save_para[23];
 	
 	gSPCMode			=save_para[24];
 	gSPCStopTime		=save_para[25];
-	gSPCBehindLimit	    =save_para[26];
-	gSPCFrontLimit	    =save_para[27];
+	gSPCExtendLimit	    =save_para[26];
+	gSPCIndentLimit	    =save_para[27];
 	
 	gNoWaitEN			=save_para[28];
 	gNoDetectValve    	=save_para[29];
@@ -303,14 +303,14 @@ void Backup()   //系统备份
 //	rest_para[19]=gMAXPulseNum;
 
 	rest_para[20]=gLimitMode;
-	rest_para[21]=gBehindLimit;
+	rest_para[21]=gExtendLimit;
 	rest_para[22]=gCenterLimit;
-	rest_para[23]=gFrontLimit;
+	rest_para[23]=gIndentLimit;
 	
 	rest_para[24]=gSPCMode;
 	rest_para[25]=gSPCStopTime;
-	rest_para[26]=gSPCBehindLimit;
-	rest_para[27]=gSPCFrontLimit;
+	rest_para[26]=gSPCExtendLimit;
+	rest_para[27]=gSPCIndentLimit;
 	
 	rest_para[28]=gNoWaitEN;
 	rest_para[29]=gNoDetectValve;
@@ -369,14 +369,14 @@ void Restore()    //系统还原
 //	gMAXPulseNum	    =rest_para[19];
 	
 	gLimitMode			=rest_para[20];
-	gBehindLimit		=rest_para[21];
+	gExtendLimit		=rest_para[21];
 	gCenterLimit		=rest_para[22];
-	gFrontLimit	     	=rest_para[23];
+	gIndentLimit	     	=rest_para[23];
 	
 	gSPCMode		 	=rest_para[24];
 	gSPCStopTime		=rest_para[25];
-	gSPCBehindLimit	    =rest_para[26];
-	gSPCFrontLimit	    =rest_para[27];
+	gSPCExtendLimit	    =rest_para[26];
+	gSPCIndentLimit	    =rest_para[27];
 	
 	gNoWaitEN			=rest_para[28];
 	gNoDetectValve    	=rest_para[29];
