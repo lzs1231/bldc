@@ -142,52 +142,53 @@ void SavePara(void)
 	
 //	save_para[3]=gWorkMode;
 	save_para[4]=gSensorMode;
-	save_para[5]=gAutoPolar;
-	save_para[6]=gManuPolar;
-	save_para[7]=gMotorType;
-	save_para[8]=gPowerOnMode;
-	save_para[9]=gCurMatNum;
+	save_para[5]=gSensorSignal;
+	save_para[6]=gAutoPolar;
+	save_para[7]=gManuPolar;
+	save_para[8]=gMotorType;
+	save_para[9]=gPowerOnMode;
+	save_para[10]=gCurMatNum;
 	
-	save_para[10]=gGainData;
-	save_para[11]=gDeadZone;
-	save_para[12]=gFineTune;
+	save_para[11]=gGainData;
+	save_para[12]=gDeadZone;
+	save_para[13]=gFineTune;
 	
-	save_para[13]=gAutoSpeed;	    
-	save_para[14]=gManuSpeed;
-	save_para[15]=gCentSpeed;
+	save_para[14]=gAutoSpeed;	    
+	save_para[15]=gManuSpeed;
+	save_para[16]=gCentSpeed;
 	
-	save_para[16]=gCaliTorque;
-	save_para[17]=gFuncTorque;
-	save_para[18]=gCurrentPulseNum;
-	save_para[19]=gMAXPulseNum;
+	save_para[17]=gCaliTorque;
+	save_para[18]=gFuncTorque;
+	save_para[19]=gCurrentPulseNum;
+	save_para[20]=gMAXPulseNum;
 	
-	save_para[20]=gLimitMode;
-	save_para[21]=gExtendLimit;
-	save_para[22]=gCenterLimit;
-	save_para[23]=gIndentLimit;
+	save_para[21]=gLimitMode;
+	save_para[22]=gExtendLimit;
+	save_para[23]=gCenterLimit;
+	save_para[24]=gIndentLimit;
+
+	save_para[25]=gSPCMode;
+	save_para[26]=gSPCStopTime;
+	save_para[27]=gSPCExtendLimit;
+	save_para[28]=gSPCIndentLimit;	
 	
-	save_para[24]=gSPCMode;
-	save_para[25]=gSPCStopTime;
-	save_para[26]=gSPCExtendLimit;
-	save_para[27]=gSPCIndentLimit;	
-	
-	save_para[28]=gNoWaitEN;
-	save_para[29]=gNoDetectValve;
-	save_para[30]=gNoDetectTime;
-	save_para[31]=gNoWaitTime;
+	save_para[29]=gNoWaitEN;
+	save_para[30]=gNoDetectValve;
+	save_para[31]=gNoDetectTime;
+	save_para[32]=gNoWaitTime;
 
 	
-	save_para[32]=gLongIo0Mode;
-	save_para[33]=gLongIo1Mode;
-	save_para[34]=gLongIo2Mode;
-	save_para[35]=gLongIo3Mode;
+	save_para[33]=gLongIo0Mode;
+	save_para[34]=gLongIo1Mode;
+	save_para[35]=gLongIo2Mode;
+	save_para[36]=gLongIo3Mode;
 
-	save_para[36]=gAFlexAcc;
-	save_para[37]=gAFlexDec;
-	save_para[38]=gMFlexAcc;
-	save_para[39]=gMFlexDec;
+	save_para[37]=gAFlexAcc;
+	save_para[38]=gAFlexDec;
+	save_para[39]=gMFlexAcc;
+	save_para[40]=gMFlexDec;
 	
-	save_para[40]=gAlarmSwitch;
+	save_para[41]=gAlarmSwitch;
 	
 	OS_ENTER_CRITICAL();   //关闭中断
 	STMFLASH_Write(FLASH_SAVE_ADDR, (u16*)save_para, SIZE);        //WriteAddr:起始地址    pBuffer:数据指针    NumToWrite:半字(16位)数 
@@ -209,51 +210,52 @@ void ReadPara(void)
 	
 //	gWorkMode			=save_para[3];
 	gSensorMode			=save_para[4];
-	gAutoPolar			=save_para[5];
-	gManuPolar			=save_para[6];
-	gMotorType			=save_para[7];
-	gPowerOnMode		=save_para[8];
-	gCurMatNum			=save_para[9];
+	gSensorSignal		=save_para[5];
+	gAutoPolar			=save_para[6];
+	gManuPolar			=save_para[7];
+	gMotorType			=save_para[8];
+	gPowerOnMode		=save_para[9];
+	gCurMatNum			=save_para[10];
 	
-	gGainData			=save_para[10];
-	gDeadZone			=save_para[11];
-	gFineTune		    =save_para[12];
+	gGainData			=save_para[11];
+	gDeadZone			=save_para[12];
+	gFineTune		    =save_para[13];
 	
-	gAutoSpeed  		=save_para[13];
-	gManuSpeed      	=save_para[14];
-	gCentSpeed			=save_para[15];
+	gAutoSpeed  		=save_para[14];
+	gManuSpeed      	=save_para[15];
+	gCentSpeed			=save_para[16];
 	
-	gCaliTorque	        =save_para[16];
-	gFuncTorque			=save_para[17];
-	gCurrentPulseNum	=save_para[18];
-	gMAXPulseNum		=save_para[19];
+	gCaliTorque	        =save_para[17];
+	gFuncTorque			=save_para[18];
+	gCurrentPulseNum	=save_para[19];
+	gMAXPulseNum		=save_para[20];
 	
-	gLimitMode			=save_para[20];
-	gExtendLimit	    =save_para[21];
-	gCenterLimit		=save_para[22];
-	gIndentLimit			=save_para[23];
+	gLimitMode			=save_para[21];
+	gExtendLimit	    =save_para[22];
+	gCenterLimit		=save_para[23];
+	gIndentLimit		=save_para[24];
 	
-	gSPCMode			=save_para[24];
-	gSPCStopTime		=save_para[25];
-	gSPCExtendLimit	    =save_para[26];
-	gSPCIndentLimit	    =save_para[27];
+	gSPCMode			=save_para[25];
+	gSPCStopTime		=save_para[26];
+	gSPCExtendLimit	    =save_para[27];
+	gSPCIndentLimit	    =save_para[28];
 	
-	gNoWaitEN			=save_para[28];
-	gNoDetectValve    	=save_para[29];
-	gNoDetectTime     	=save_para[30];
-	gNoWaitTime	        =save_para[31];
+	gNoWaitEN			=save_para[29];
+	gNoDetectValve    	=save_para[30];
+	gNoDetectTime     	=save_para[31];
+	gNoWaitTime	        =save_para[32];
 	
-	gLongIo0Mode		=save_para[32];
-	gLongIo1Mode		=save_para[33];
-	gLongIo2Mode		=save_para[34];
-	gLongIo3Mode		=save_para[35];
+	gLongIo0Mode		=save_para[33];
+	gLongIo1Mode		=save_para[34];
+	gLongIo2Mode		=save_para[35];
+	gLongIo3Mode		=save_para[36];
 
-	gAFlexAcc           =save_para[36];
-	gAFlexDec           =save_para[37];
-	gMFlexAcc           =save_para[38];
-	gMFlexDec           =save_para[39];
+	gAFlexAcc           =save_para[37];
+	gAFlexDec           =save_para[38];
+	gMFlexAcc           =save_para[39];
+	gMFlexDec           =save_para[40];
 	
-	gAlarmSwitch        =save_para[40];
+	gAlarmSwitch        =save_para[41];
 }
 
 void Clearing()   //清零备份
@@ -282,52 +284,52 @@ void Backup()   //系统备份
 
 //	rest_para[3]=gWorkMode;
 	rest_para[4]=gSensorMode;
-	rest_para[5]=gAutoPolar;
-	rest_para[6]=gManuPolar;
-	rest_para[7]=gMotorType;
-	rest_para[8]=gPowerOnMode;
-	rest_para[9]=gCurMatNum;
+	rest_para[5]=gSensorSignal;
+	rest_para[6]=gAutoPolar;
+	rest_para[7]=gManuPolar;
+	rest_para[8]=gMotorType;
+	rest_para[9]=gPowerOnMode;
+	rest_para[10]=gCurMatNum;
 	
-	rest_para[10]=gGainData;
-	rest_para[11]=gDeadZone;
-	rest_para[12]=gFineTune;
+	rest_para[11]=gGainData;
+	rest_para[12]=gDeadZone;
+	rest_para[13]=gFineTune;
 	
-	rest_para[13]=gAutoSpeed;
-	rest_para[14]=gManuSpeed;
-	rest_para[15]=gCentSpeed;
+	rest_para[14]=gAutoSpeed;
+	rest_para[15]=gManuSpeed;
+	rest_para[16]=gCentSpeed;
 	
-	
-	rest_para[16]=gCaliTorque;
-	rest_para[17]=gFuncTorque;
-//	rest_para[18]=gCurrentPulseNum;
-//	rest_para[19]=gMAXPulseNum;
+	rest_para[17]=gCaliTorque;
+	rest_para[18]=gFuncTorque;
+//	rest_para[19]=gCurrentPulseNum;
+//	rest_para[20]=gMAXPulseNum;
 
-	rest_para[20]=gLimitMode;
-	rest_para[21]=gExtendLimit;
-	rest_para[22]=gCenterLimit;
-	rest_para[23]=gIndentLimit;
-	
-	rest_para[24]=gSPCMode;
-	rest_para[25]=gSPCStopTime;
-	rest_para[26]=gSPCExtendLimit;
-	rest_para[27]=gSPCIndentLimit;
-	
-	rest_para[28]=gNoWaitEN;
-	rest_para[29]=gNoDetectValve;
-	rest_para[30]=gNoDetectTime;
-	rest_para[31]=gNoWaitTime;
-	
-	rest_para[32]=gLongIo0Mode;
-	rest_para[33]=gLongIo1Mode;
-	rest_para[34]=gLongIo2Mode;
-	rest_para[35]=gLongIo3Mode;
+	rest_para[21]=gLimitMode;
+	rest_para[22]=gExtendLimit;
+	rest_para[23]=gCenterLimit;
+	rest_para[24]=gIndentLimit;
 
-	rest_para[36]=gAFlexAcc;
-	rest_para[37]=gAFlexDec;
-	rest_para[38]=gMFlexAcc;
-	rest_para[39]=gMFlexDec;
+	rest_para[25]=gSPCMode;
+	rest_para[26]=gSPCStopTime;
+	rest_para[27]=gSPCExtendLimit;
+	rest_para[28]=gSPCIndentLimit;
 	
-	rest_para[40]=gAlarmSwitch;
+	rest_para[29]=gNoWaitEN;
+	rest_para[30]=gNoDetectValve;
+	rest_para[31]=gNoDetectTime;
+	rest_para[32]=gNoWaitTime;
+	
+	rest_para[33]=gLongIo0Mode;
+	rest_para[34]=gLongIo1Mode;
+	rest_para[35]=gLongIo2Mode;
+	rest_para[36]=gLongIo3Mode;
+
+	rest_para[37]=gAFlexAcc;
+	rest_para[38]=gAFlexDec;
+	rest_para[39]=gMFlexAcc;
+	rest_para[40]=gMFlexDec;
+	
+	rest_para[41]=gAlarmSwitch;
 	
 	OS_ENTER_CRITICAL();   //关闭中断
 	STMFLASH_Write(FLASH_REST_ADDR, (u16*)rest_para, SIZE);        //WriteAddr:起始地址    pBuffer:数据指针    NumToWrite:半字(16位)数 
@@ -349,51 +351,52 @@ void Restore()    //系统还原
 	
 //	gWorkMode			=rest_para[3];
 	gSensorMode			=rest_para[4];
-	gAutoPolar			=rest_para[5];
-	gManuPolar			=rest_para[6];
-	gMotorType			=rest_para[7];
-	gPowerOnMode		=rest_para[8];
-	gCurMatNum			=rest_para[9];
+	gSensorSignal		=rest_para[5];
+	gAutoPolar			=rest_para[6];
+	gManuPolar			=rest_para[7];
+	gMotorType			=rest_para[8];
+	gPowerOnMode		=rest_para[9];
+	gCurMatNum			=rest_para[10];
 	
-	gGainData			=rest_para[10];
-	gDeadZone			=rest_para[11];
-	gFineTune		    =rest_para[12];
+	gGainData			=rest_para[11];
+	gDeadZone			=rest_para[12];
+	gFineTune		    =rest_para[13];
 	
-	gAutoSpeed			=rest_para[13];
-	gManuSpeed          =rest_para[14];
-	gCentSpeed          =rest_para[15];
+	gAutoSpeed			=rest_para[14];
+	gManuSpeed          =rest_para[15];
+	gCentSpeed          =rest_para[16];
 	
-	gCaliTorque	    	=rest_para[16];
-	gFuncTorque		    =rest_para[17];
-//	gCurrentPulseNum    =rest_para[18];
-//	gMAXPulseNum	    =rest_para[19];
+	gCaliTorque	    	=rest_para[17];
+	gFuncTorque		    =rest_para[18];
+//	gCurrentPulseNum    =rest_para[19];
+//	gMAXPulseNum	    =rest_para[20];
 	
-	gLimitMode			=rest_para[20];
-	gExtendLimit		=rest_para[21];
-	gCenterLimit		=rest_para[22];
-	gIndentLimit	     	=rest_para[23];
+	gLimitMode			=rest_para[21];
+	gExtendLimit		=rest_para[22];
+	gCenterLimit		=rest_para[23];
+	gIndentLimit	    =rest_para[24];
 	
-	gSPCMode		 	=rest_para[24];
-	gSPCStopTime		=rest_para[25];
-	gSPCExtendLimit	    =rest_para[26];
-	gSPCIndentLimit	    =rest_para[27];
+	gSPCMode		 	=rest_para[25];
+	gSPCStopTime		=rest_para[26];
+	gSPCExtendLimit	    =rest_para[27];
+	gSPCIndentLimit	    =rest_para[28];
 	
-	gNoWaitEN			=rest_para[28];
-	gNoDetectValve    	=rest_para[29];
-	gNoDetectTime     	=rest_para[30];
-	gNoWaitTime	        =rest_para[31];
+	gNoWaitEN			=rest_para[29];
+	gNoDetectValve    	=rest_para[30];
+	gNoDetectTime     	=rest_para[31];
+	gNoWaitTime	        =rest_para[32];
 	
-	gLongIo0Mode		=rest_para[32];
-	gLongIo1Mode		=rest_para[33];
-	gLongIo2Mode		=rest_para[34];
-	gLongIo3Mode		=rest_para[35];
+	gLongIo0Mode		=rest_para[33];
+	gLongIo1Mode		=rest_para[34];
+	gLongIo2Mode		=rest_para[35];
+	gLongIo3Mode		=rest_para[36];
 
-	gAFlexAcc           =rest_para[36];
-	gAFlexDec           =rest_para[37];
-	gMFlexAcc           =rest_para[38];
-	gMFlexDec           =rest_para[39];
+	gAFlexAcc           =rest_para[37];
+	gAFlexDec           =rest_para[38];
+	gMFlexAcc           =rest_para[39];
+	gMFlexDec           =rest_para[40];
 	
-	gAlarmSwitch		=rest_para[40];
+	gAlarmSwitch		=rest_para[41];
 	Modbus_Init();
 }
 

@@ -218,6 +218,8 @@ void TIM4_IRQHandler(void)             //4ms中断1次
 		{
 			g_ADC_OK = FALSE;   
 			
+			
+			
 //根据传感器计算位置环输出PlaceOut    位置环输出PlaceOut作为速度环输入，加减速控制
 			PlaceOut = PlaceOutHandle(SensorL_value,SensorR_value);                           //反向信号，延时
 			

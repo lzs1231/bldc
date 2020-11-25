@@ -77,6 +77,7 @@ u16 *const pHPort2Fun 	 = &Slave_WriteReg[0x18];
 u16 *const pHPort3Fun 	 = &Slave_WriteReg[0x19];
 
 u16 *const pHAlarmSwitch = &Slave_WriteReg[0x1a];
+u16 *const pHSignal 	 = &Slave_WriteReg[0x1c];
 
 //CRC校验 自己后面添加的
 const u8 auchCRCHi[] = { 
@@ -167,6 +168,7 @@ void Modbus_Init()
 	*pHPort3Fun  = gLongIo3Mode;
 	
 	*pHAlarmSwitch = gAlarmSwitch;
+	*pHSignal     = gSensorSignal;
 }
 
 

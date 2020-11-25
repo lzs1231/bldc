@@ -29,42 +29,38 @@ extern u16 *const pOtherPara	 ;
 
 
 extern u16 *const pHAdjustFlag  ;
-extern u16 *const pHAlarmSwitch  ;
 extern u16 *const pHClickBut    ;
 extern u16 *const pHAddSub      ;
+extern u16 *const pHParaConfirm ;
+extern u16 *const pHSCaliStep   ;
+extern u16 *const pHSensorNum   ;
+extern u16 *const pHTCaliFlag   ;
+extern u16 *const pHTCaliCancel ;
+extern u16 *const pHFlexSpeed	;    //柔性加减速值
+extern u16 *const pHSysYes		;    //确定执行
+extern u16 *const pHWarmFlag	;   //警告标志
 
 extern u16 *const pHWorkMode    ;
 extern u16 *const pHSensorMode  ;
-extern u16 *const pHLimitMode   ;
-extern u16 *const pHSPCMode     ;
-extern u16 *const pHNoWaitEN    ;
 extern u16 *const pHAutoPolar   ;
 extern u16 *const pHManuPolar   ;
 extern u16 *const pHMotorType   ;
 extern u16 *const pHPowerOnMode ;
+extern u16 *const pHMatNum 	    ;  // 当前材料编号
 
+extern u16 *const pHTCaliTorque ;
+
+extern u16 *const pHLimitMode   ;
+extern u16 *const pHSPCMode     ;
+extern u16 *const pHNoWaitEN    ;
 
 extern u16 *const pHPort0Fun 	;
 extern u16 *const pHPort1Fun 	;
 extern u16 *const pHPort2Fun 	;
 extern u16 *const pHPort3Fun 	;
 
-
-extern u16 *const pHParaConfirm ;
-extern u16 *const pHMatNum 	    ;  // 当前材料编号
-
-extern u16 *const pHSCaliStep   ;
-extern u16 *const pHSensorNum   ;
-
-extern u16 *const pHTCaliTorque ;
-extern u16 *const pHTCaliFlag   ;
-extern u16 *const pHTCaliCancel ;
-
-extern u16 *const pHFlexSpeed	;    //柔性加减速值
-
-
-extern u16 *const pHSysYes		;    //确定执行
-extern u16 *const pHWarmFlag	;   //警告标志
+extern u16 *const pHAlarmSwitch  ;
+extern u16 *const pHSignal 	;
 
 //以下是要存储的参数
 extern  u16   gCheckFlag;		         //校验标志
@@ -73,6 +69,8 @@ extern  u16   gBackupFlag;
 
 extern  u16   gWorkMode;                 //工作模式：0手动，1自动,2中心
 extern  u16   gSensorMode;               //纠偏模式，1=左EPC1，2=右EPC2，3=左+右CPC，4=SPC
+extern  u16   gSensorSignal;
+
 extern  u16   gAutoPolar;                //自动极性，1=负极，0=正极;
 extern  u16   gManuPolar;                //手动极性，1=负极，0=正极;
 extern  u16   gMotorType;                //电机类型

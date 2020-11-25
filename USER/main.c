@@ -12,6 +12,7 @@ __noinit__ u16   gBackupFlag;              //备份标志     0表示无备份，1表示有备
 
 __noinit__ u16   gWorkMode;                //0=手动   1=自动  2=对中
 __noinit__ u16   gSensorMode;              //纠偏模式，0=左，1=右，2=左+右，3=SPC  ，EPC1超声波传感器1工作，EPC2超声波传感器2工作，CPC两个传感器一起工作，SPC
+__noinit__ u16   gSensorSignal;
 
 __noinit__ u16   gAutoPolar;               //自动极性，1=负极，0=正极;
 __noinit__ u16   gManuPolar;               //手动极性，1=负极，0=正极;
@@ -217,7 +218,8 @@ void SetDataInit()                 //设置参数初始化
 	
 	gWorkMode=0;                 //0=手动   1=自动  2=对中
 	gSensorMode=0;               //纠偏模式，0=左，1=右，2=左+右，3=SPC  ，EPC1超声波传感器1工作，EPC2超声波传感器2工作，CPC两个传感器一起工作，SPC
-
+	gSensorSignal = 0;
+	
 	gAutoPolar=0;                //自动极性，0=负极，1=正极;
 	gManuPolar=0;                //手动极性，0=负极，1=正极;
 	gMotorType = 1;              //电机类型   0无刷电机4   1无刷电机5   2有刷电机
@@ -412,8 +414,8 @@ void modbus_task(void *pdata)
 void lcd_task(void *pdata)
 {
 	u16 *pd;
-	u8 HallData,SensorTips,WarmFlag;
-	static u16 TimeCnt,PowerOnFlag;
+	u8 SensorTips,WarmFlag;
+	static u16 TimeCnt;
 
 	
 	for(;;)
@@ -424,6 +426,7 @@ void lcd_task(void *pdata)
 		/*********根据屏幕指令修改变量值**********/
 		gWorkMode		 =*pHWorkMode;
 		gSensorMode		 =*pHSensorMode;
+		gSensorSignal    =*pHSignal;
 		gAutoPolar		 =*pHAutoPolar;
 		gManuPolar		 =*pHManuPolar;	
 		gMotorType		 =*pHMotorType;
@@ -472,8 +475,6 @@ void lcd_task(void *pdata)
 		/*****************备份还原********************/
 		BackupRestore();
 		
-		
-		
 		/******************更新输入寄存器,读取输入寄存器器用于显示***********************/
 		
 		/*****************警告标志计算***************/
@@ -494,7 +495,7 @@ void lcd_task(void *pdata)
 		*pGainDead 		= gGainData|(gDeadZone<<8);
 		*pFineTune  	= (gFineTune|(WarmFlag<<8))|SensorTips<<12;
 		*pDisPulseNum  	= HallRate|gAutoPolar<<14|gManuPolar<<15;
-		*pMode          = gWorkMode|gSensorMode<<2|gPowerOnMode<<4|gMotorType<<6;
+		*pMode          = gWorkMode|gSensorMode<<2|gPowerOnMode<<4|gMotorType<<6|gSensorSignal<<8;
 		*pMatDis       	= Mat0EPC12|Mat1EPC12<<2|Mat2EPC12<<4|Mat3EPC12<<6|Mat4EPC12<<8|Mat5EPC12<<10|Mat6EPC12<<12|Mat7EPC12<<14;
 		*pLimitFun1    	= gLimitMode|gExtendLimit<<8;
 		*pLimitFun2		= gCenterLimit|gIndentLimit<<8;

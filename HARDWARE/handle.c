@@ -104,7 +104,6 @@ int No_Material_Detection(int out)
 		WaitNum=0;	 
 		return out;
 	}
-	return(out);
 }
 
 int WorkModeOut()
@@ -172,22 +171,37 @@ int WorkModeOut()
 	return out;
 }
 
+s16 getKeepOutRate(u16 SensorValue,u16 SensorH,u16 SensorL)
+{
+	float f; 
+	//调用保存的当前材料的对应传感器的最大值、最小值。
+	f=200.0*(SensorH-SensorValue)/(SensorH-SensorL);    		//传感器最大（无遮挡）-最小值（全部遮挡）
+	if(f<0)       {f=0;}
+	if(f>200.0)   {f=200.0;}  
+	return ((s16)f-100);//范围-100~100
+}
+
 /**********************输出处理***************************/
 int PlaceOutHandle(u16 sensorL,u16 sensorR)
 {
-	int out;
-	float f;         
+	int out;      
 	
-	//调用保存的当前材料的对应传感器的最大值、最小值。
-	f=200.0*(*MatCal.MatValue[*MatCal.CurMatNum].PSensor1_H-sensorL)/(*MatCal.MatValue[*MatCal.CurMatNum].PSensor1_H-*MatCal.MatValue[*MatCal.CurMatNum].PSensor1_L);    		//传感器最大（无遮挡）-最小值（全部遮挡）
-	if(f<0)       {f=0;}
-	if(f>200.0)   {f=200.0;}  
-	OcclusionL_rate = (s16)f-100;//范围-100~100
-		
-	f=200.0*(*MatCal.MatValue[*MatCal.CurMatNum].PSensor2_H-sensorR)/(*MatCal.MatValue[*MatCal.CurMatNum].PSensor2_H-*MatCal.MatValue[*MatCal.CurMatNum].PSensor2_L); 
-	if(f<0)      {f=0;}
-	if(f>200.0)  {f=200.0;}
-	OcclusionR_rate = (s16)f-100;
+	switch(*pHSignal)
+	{
+		case 0:		
+			OcclusionL_rate = getKeepOutRate(sensorL,*MatCal.MatValue[*MatCal.CurMatNum].PSensor1_H,*MatCal.MatValue[*MatCal.CurMatNum].PSensor1_L);	
+			OcclusionR_rate = getKeepOutRate(sensorR,*MatCal.MatValue[*MatCal.CurMatNum].PSensor2_H,*MatCal.MatValue[*MatCal.CurMatNum].PSensor2_L);
+		break;
+		case 1:		
+			OcclusionL_rate = getKeepOutRate(sensorL,2979,125);
+			OcclusionR_rate = getKeepOutRate(sensorR,2979,125);
+		break;
+		case 2:		
+			OcclusionL_rate = getKeepOutRate(sensorL,3103,0);
+			OcclusionR_rate = getKeepOutRate(sensorR,3103,0);
+		break;
+		default:	break;
+	}
 	
 	if(Warm[NotConFlag] == NotConFlag)	return 0;
 	
