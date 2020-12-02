@@ -100,8 +100,8 @@ void PIDInit()
 	SPC_Point->Uk = 0;
 	SPC_Point->Uk_1 = 0;
 	SPC_Point->ek_Sum = 0;
-	SPC_Point->P = 1;
-	SPC_Point->I = 0.08;
+	SPC_Point->P = 20;
+	SPC_Point->I = 0.5;
 	SPC_Point->Flg = 1;
 	SPC_Point->D = 3;
 	SPC_Point->ek_0         = 0;         //ek=0
@@ -257,17 +257,24 @@ int SPCPID(int SensorValue,int SPC_Out,int SPCBit)
 	{
 		SPC_Point->ek_Sum =0;
 	}
+	
+	if((SPC_Point->ek_0<=10)&&(SPC_Point->ek_0>=-10))                         //误差小于积分分离点就运算I
+	{
+		SPC_Point->Flg = 1;
+		SPC_Point->ek_Sum += SPC_Point->ek_0; 
+	}else{
+		SPC_Point->Flg=0;
+		SPC_Point->ek_Sum=0;   //积分和清零
+	}
+	
 	if((SPC_Point->ek_0<=50) && (SPC_Point->ek_0>=-50))
 	{	
-		SPC_Point->Flg = ((SPC_Point->ek_0<=10)&&(SPC_Point->ek_0>=-10))?1:0;
-			
-		SPC_Point->ek_Sum += SPC_Point->ek_0;
 		SPC_Point->Uk = SPC_Point->P*SPC_Point->ek_0+SPC_Point->Flg*SPC_Point->I*SPC_Point->ek_Sum+SPC_Point->D*(SPC_Point->ek_0-SPC_Point->ek_1);
 
 		if(SPC_Point->Uk > SPC_Out)        SPC_Point->Uk = SPC_Out; 
 		if(SPC_Point->Uk < 0)  			   SPC_Point->Uk = 0; 
 	}else{             //偏差过大，不进行pi运算
-		if(SPC_Point->ek_0 > 10)       SPC_Point->Uk = SPC_Out;  
+		SPC_Point->Uk = SPC_Out;  
 	}
 	
 	//保存误差，用于下一次计算
@@ -275,6 +282,9 @@ int SPCPID(int SensorValue,int SPC_Out,int SPCBit)
 	LastSPCBit = SPCBit;
 	
 #ifdef  _TEST_SPC
+//SEGGER_RTT_printf(0,"E%5d\t",SPCBit);
+//SEGGER_RTT_printf(0,"E%5d\t",SPC_Point->ek_0);
+//SEGGER_RTT_printf(0,"P%5d\n",SPC_Point->Uk);
 printf("E%4d\t",SPCBit);
 printf("E%4.4f\t",SPC_Point->ek_0);
 printf("P%4.4f\t  \n",SPC_Point->Uk);

@@ -24,60 +24,59 @@ u16 *const pFineTune	 = &Slave_ReadReg[1];
 u16 *const pDisPulseNum  = &Slave_ReadReg[2];
 u16 *const pSensorRate   = &Slave_ReadReg[3];
 u16 *const pSensorValue  = &Slave_ReadReg[4];
-u16 *const pMode   	     = &Slave_ReadReg[5];
-u16 *const pMatDis       = &Slave_ReadReg[6];
-u16 *const pLimitFun1    = &Slave_ReadReg[7];
-u16 *const pLimitFun2    = &Slave_ReadReg[8];
-u16 *const pSPCFun1		 = &Slave_ReadReg[9];
-u16 *const pSPCFun2		 = &Slave_ReadReg[0x0a];
-u16 *const pNoMatFun1 	 = &Slave_ReadReg[0x0b];
-u16 *const pNoMatFun2 	 = &Slave_ReadReg[0x0c];
-u16 *const pAFlex 		 = &Slave_ReadReg[0x0d];
-u16 *const pMFlex 		 = &Slave_ReadReg[0x0e];
-u16 *const pLongIoMode   = &Slave_ReadReg[0x0f];
+u16 *const pMatDis       = &Slave_ReadReg[5];
+u16 *const pLimitFun1    = &Slave_ReadReg[6];
+u16 *const pLimitFun2    = &Slave_ReadReg[7];
+u16 *const pSPCFun1		 = &Slave_ReadReg[8];
+u16 *const pSPCFun2		 = &Slave_ReadReg[9];
+u16 *const pNoMatFun1 	 = &Slave_ReadReg[0x0a];
+u16 *const pNoMatFun2 	 = &Slave_ReadReg[0x0b];
+u16 *const pAFlex 		 = &Slave_ReadReg[0x0c];
+u16 *const pMFlex 		 = &Slave_ReadReg[0x0d];
 
-u16 *const pAutoSpeed 	 = &Slave_ReadReg[0x10];
-u16 *const pManuSpeed	 = &Slave_ReadReg[0x11];
-u16 *const pCentSpeed 	 = &Slave_ReadReg[0x12];
-u16 *const pCurrentPara  = &Slave_ReadReg[0x13];
-u16 *const pAdjustData	 = &Slave_ReadReg[0x14];
-u16 *const pOtherPara	 = &Slave_ReadReg[0x15];
+u16 *const pAutoSpeed 	 = &Slave_ReadReg[0x0e];
+u16 *const pManuSpeed	 = &Slave_ReadReg[0x0f];
+u16 *const pCentSpeed 	 = &Slave_ReadReg[0x10];
+u16 *const pCurrentPara  = &Slave_ReadReg[0x11];
+u16 *const pAdjustData	 = &Slave_ReadReg[0x12];
+u16 *const pPortFun	 	 = &Slave_ReadReg[0x13];
+u16 *const pFunc	 	 = &Slave_ReadReg[0x14];
 
 /**************06功能码写入保持寄存器****************/
 u16 *const pHAdjustFlag  = &Slave_WriteReg[0];
 u16 *const pHClickBut    = &Slave_WriteReg[1];
 u16 *const pHAddSub      = &Slave_WriteReg[2];
 u16 *const pHParaConfirm = &Slave_WriteReg[3];
-u16 *const pHSCaliStep   = &Slave_WriteReg[4]; 	 //传感器校准步骤
+u16 *const pHSCaliStep   = &Slave_WriteReg[4]; 	   //传感器校准步骤
 u16 *const pHSensorNum   = &Slave_WriteReg[5];
-u16 *const pHTCaliFlag   = &Slave_WriteReg[6];    //是否启动行程校准
-u16 *const pHTCaliCancel = &Slave_WriteReg[7];    //是否取消行程校准
-u16 *const pHFlexSpeed	 = &Slave_WriteReg[8];    //柔性加减速值
-u16 *const pHSysYes		 = &Slave_WriteReg[9];    //确定执行
-u16 *const pHWarmFlag	 = &Slave_WriteReg[0x0a];    //警告标志
-
+u16 *const pHTCaliFlag   = &Slave_WriteReg[6];     //是否启动行程校准
+u16 *const pHTCaliCancel = &Slave_WriteReg[7];     //是否取消行程校准
+u16 *const pHFlexSpeed	 = &Slave_WriteReg[8];     //柔性加减速值
+u16 *const pHSysYes		 = &Slave_WriteReg[9];     //确定执行
+u16 *const pHWarmFlag	 = &Slave_WriteReg[0x0a];  //警告标志
 
 u16 *const pHWorkMode    = &Slave_WriteReg[0x0b];
-u16 *const pHSensorMode  = &Slave_WriteReg[0x0c];
-u16 *const pHAutoPolar   = &Slave_WriteReg[0x0d];
-u16 *const pHManuPolar   = &Slave_WriteReg[0x0e];
-u16 *const pHMotorType   = &Slave_WriteReg[0x0f];
-u16 *const pHPowerOnMode = &Slave_WriteReg[0x10];
-u16 *const pHMatNum 	 = &Slave_WriteReg[0x11];  	  // 当前材料编号
+u16 *const pHMatNum 	 = &Slave_WriteReg[0x0c];  	  // 当前材料编号
 
-u16 *const pHTCaliTorque = &Slave_WriteReg[0x12];     //行程校准电流设置
+u16 *const pHTCaliTorque = &Slave_WriteReg[0x0d];     //行程校准电流设置
 
-u16 *const pHLimitMode   = &Slave_WriteReg[0x13];
-u16 *const pHSPCMode     = &Slave_WriteReg[0x14];
-u16 *const pHNoWaitEN    = &Slave_WriteReg[0x15];
+u16 *const pHLimitMode   = &Slave_WriteReg[0x0e];
+u16 *const pHSPCMode     = &Slave_WriteReg[0x0f];
+u16 *const pHNoWaitEN    = &Slave_WriteReg[0x10];
+u16 *const pHAutoPolar   = &Slave_WriteReg[0x11];
+u16 *const pHManuPolar   = &Slave_WriteReg[0x12];
 
-u16 *const pHPort0Fun  	 = &Slave_WriteReg[0x16];
-u16 *const pHPort1Fun 	 = &Slave_WriteReg[0x17];
-u16 *const pHPort2Fun 	 = &Slave_WriteReg[0x18];
-u16 *const pHPort3Fun 	 = &Slave_WriteReg[0x19];
-
-u16 *const pHAlarmSwitch = &Slave_WriteReg[0x1a];
-u16 *const pHSignal 	 = &Slave_WriteReg[0x1c];
+u16 *const pHSensorMode  = &Slave_WriteReg[0x13];
+u16 *const pHMotorType   = &Slave_WriteReg[0x14];
+u16 *const pHPowerOnMode = &Slave_WriteReg[0x15];
+u16 *const pHAlarmSwitch = &Slave_WriteReg[0x16];
+u16 *const pHSignal		 = &Slave_WriteReg[0x17];
+u16 *const pHRelay 		 = &Slave_WriteReg[0x18];
+u16 *const pHKeepWait 	 = &Slave_WriteReg[0x19];
+u16 *const pHPortFun0  	 = &Slave_WriteReg[0x1a];
+u16 *const pHPortFun1  	 = &Slave_WriteReg[0x1b];
+u16 *const pHPortFun2  	 = &Slave_WriteReg[0x1c];
+u16 *const pHPortFun3  	 = &Slave_WriteReg[0x1d];
 
 //CRC校验 自己后面添加的
 const u8 auchCRCHi[] = { 
@@ -162,13 +161,15 @@ void Modbus_Init()
 	*pHSPCMode   = gSPCMode;			//蛇形纠偏模式  0：内部编码器  1：外部传感器
 	*pHNoWaitEN  = gNoWaitEN;     		//无料等待功能，0=使能,1=禁止
 	
-	*pHPort0Fun  = gLongIo0Mode;      	//四个端口默认功能
-	*pHPort1Fun  = gLongIo1Mode;
-	*pHPort2Fun  = gLongIo2Mode;
-	*pHPort3Fun  = gLongIo3Mode;
-	
 	*pHAlarmSwitch = gAlarmSwitch;
-	*pHSignal     = gSensorSignal;
+	*pHSignal      = gSensorSignal;
+	*pHRelay       = gRelay;
+	*pHKeepWait	   = gKeepWait;
+	
+	*pHPortFun0    = gLongIo0Mode;      	//四个端口默认功能
+	*pHPortFun1	   = gLongIo1Mode;
+	*pHPortFun2	   = gLongIo2Mode;
+	*pHPortFun3	   = gLongIo3Mode;
 }
 
 
@@ -192,8 +193,8 @@ void Modbus_Func3()
     modbus.sendbuf[i++] = ((Reglen*2)%256);  //返回字节个数
 	for(j=0;j<Reglen;j++)                    //返回数据
 	{
-		modbus.sendbuf[i++] = Slave_ReadReg[Regadd+j]/256;    //高8位
-		modbus.sendbuf[i++] = Slave_ReadReg[Regadd+j]%256;    //低8位
+		modbus.sendbuf[i++] = Slave_WriteReg[Regadd+j]/256;    //高8位
+		modbus.sendbuf[i++] = Slave_WriteReg[Regadd+j]%256;    //低8位
 	}
 	crc = CRC_Compute(modbus.sendbuf,i);    //计算要返回数据的CRC
 	modbus.sendbuf[i++] = crc/256;

@@ -5,6 +5,9 @@
 #include "wdg.h"
 #include "modbus.h"
 
+
+#define get4bit(a,b)  ((a>>(b*4))&0x000f)
+
 //以下是要存储的参数
 __noinit__ u16   gCheckFlag;		       //校验标志
 __noinit__ u16   gIwdgFlag;                //看门狗复位标志
@@ -58,62 +61,64 @@ __noinit__ u16   gAFlexDec;                //自动柔性减速
 __noinit__ u16   gMFlexAcc;                //手动柔性加速
 __noinit__ u16   gMFlexDec;                //手动柔性减速
 __noinit__ u16   gAlarmSwitch;
+__noinit__ u16   gRelay;
+__noinit__ u16   gKeepWait;
 
-__noinit__ u16   g_Mat0_Sensor1_H;      //左传感器的高信号值
-__noinit__ u16   g_Mat0_Sensor1_L;      //左传感器的低信号值 
-__noinit__ u16   g_Mat0_Sensor2_H;      //右传感器的高信号值
-__noinit__ u16   g_Mat0_Sensor2_L;      //右传感器的低信号值 
+__noinit__ u16   g_Mat0_SensorL_H;      //左传感器的高信号值
+__noinit__ u16   g_Mat0_SensorL_L;      //左传感器的低信号值 
+__noinit__ u16   g_Mat0_SensorR_H;      //右传感器的高信号值
+__noinit__ u16   g_Mat0_SensorR_L;      //右传感器的低信号值 
 __noinit__ u16    Mat0EPC12;
 
-__noinit__ u16   g_Mat1_Sensor1_H;      //左传感器的高信号值
-__noinit__ u16   g_Mat1_Sensor1_L;      //左传感器的低信号值 
-__noinit__ u16   g_Mat1_Sensor2_H;      //右传感器的高信号值
-__noinit__ u16   g_Mat1_Sensor2_L;      //右传感器的低信号值 
+__noinit__ u16   g_Mat1_SensorL_H;      //左传感器的高信号值
+__noinit__ u16   g_Mat1_SensorL_L;      //左传感器的低信号值 
+__noinit__ u16   g_Mat1_SensorR_H;      //右传感器的高信号值
+__noinit__ u16   g_Mat1_SensorR_L;      //右传感器的低信号值 
 __noinit__ u16    Mat1EPC12;
 
-__noinit__ u16   g_Mat2_Sensor1_H;      //左传感器的高信号值
-__noinit__ u16   g_Mat2_Sensor1_L;      //左传感器的低信号值 
-__noinit__ u16   g_Mat2_Sensor2_H;      //右传感器的高信号值
-__noinit__ u16   g_Mat2_Sensor2_L;      //右传感器的低信号值 
+__noinit__ u16   g_Mat2_SensorL_H;      //左传感器的高信号值
+__noinit__ u16   g_Mat2_SensorL_L;      //左传感器的低信号值 
+__noinit__ u16   g_Mat2_SensorR_H;      //右传感器的高信号值
+__noinit__ u16   g_Mat2_SensorR_L;      //右传感器的低信号值 
 __noinit__ u16    Mat2EPC12;
 
-__noinit__ u16   g_Mat3_Sensor1_H;      //左传感器的高信号值
-__noinit__ u16   g_Mat3_Sensor1_L;      //左传感器的低信号值 
-__noinit__ u16   g_Mat3_Sensor2_H;      //右传感器的高信号值
-__noinit__ u16   g_Mat3_Sensor2_L;      //右传感器的低信号值 
+__noinit__ u16   g_Mat3_SensorL_H;      //左传感器的高信号值
+__noinit__ u16   g_Mat3_SensorL_L;      //左传感器的低信号值 
+__noinit__ u16   g_Mat3_SensorR_H;      //右传感器的高信号值
+__noinit__ u16   g_Mat3_SensorR_L;      //右传感器的低信号值 
 __noinit__ u16    Mat3EPC12;
 
-__noinit__ u16   g_Mat4_Sensor1_H;      //左传感器的高信号值
-__noinit__ u16   g_Mat4_Sensor1_L;      //左传感器的低信号值 
-__noinit__ u16   g_Mat4_Sensor2_H;      //右传感器的高信号值
-__noinit__ u16   g_Mat4_Sensor2_L;      //右传感器的低信号值 
+__noinit__ u16   g_Mat4_SensorL_H;      //左传感器的高信号值
+__noinit__ u16   g_Mat4_SensorL_L;      //左传感器的低信号值 
+__noinit__ u16   g_Mat4_SensorR_H;      //右传感器的高信号值
+__noinit__ u16   g_Mat4_SensorR_L;      //右传感器的低信号值 
 __noinit__ u16    Mat4EPC12;
 
-__noinit__ u16   g_Mat5_Sensor1_H;      //左传感器的高信号值
-__noinit__ u16   g_Mat5_Sensor1_L;      //左传感器的低信号值 
-__noinit__ u16   g_Mat5_Sensor2_H;      //右传感器的高信号值
-__noinit__ u16   g_Mat5_Sensor2_L;      //右传感器的低信号值 
+__noinit__ u16   g_Mat5_SensorL_H;      //左传感器的高信号值
+__noinit__ u16   g_Mat5_SensorL_L;      //左传感器的低信号值 
+__noinit__ u16   g_Mat5_SensorR_H;      //右传感器的高信号值
+__noinit__ u16   g_Mat5_SensorR_L;      //右传感器的低信号值 
 __noinit__ u16    Mat5EPC12;
 
-__noinit__ u16   g_Mat6_Sensor1_H;      //左传感器的高信号值
-__noinit__ u16   g_Mat6_Sensor1_L;      //左传感器的低信号值 
-__noinit__ u16   g_Mat6_Sensor2_H;      //右传感器的高信号值
-__noinit__ u16   g_Mat6_Sensor2_L;      //右传感器的低信号值 
+__noinit__ u16   g_Mat6_SensorL_H;      //左传感器的高信号值
+__noinit__ u16   g_Mat6_SensorL_L;      //左传感器的低信号值 
+__noinit__ u16   g_Mat6_SensorR_H;      //右传感器的高信号值
+__noinit__ u16   g_Mat6_SensorR_L;      //右传感器的低信号值 
 __noinit__ u16    Mat6EPC12;
 
-__noinit__ u16   g_Mat7_Sensor1_H;      //左传感器的高信号值
-__noinit__ u16   g_Mat7_Sensor1_L;      //左传感器的低信号值 
-__noinit__ u16   g_Mat7_Sensor2_H;      //右传感器的高信号值
-__noinit__ u16   g_Mat7_Sensor2_L;      //右传感器的低信号值 
+__noinit__ u16   g_Mat7_SensorL_H;      //左传感器的高信号值
+__noinit__ u16   g_Mat7_SensorL_L;      //左传感器的低信号值 
+__noinit__ u16   g_Mat7_SensorR_H;      //右传感器的高信号值
+__noinit__ u16   g_Mat7_SensorR_L;      //右传感器的低信号值 
 __noinit__ u16    Mat7EPC12;
 
 
-u8 	 Warm[WarmNum];               	 /*******报警标志******/
-u16  ClickButton;                    //点动按键属性
 u16  LongPortFun[FunNum];      	  	 /*******远程IO控制******/
+u16  ClickButton;                    //点动按键属性
+u8 	 Warm[WarmNum];               	 /*******报警标志******/
 
 volatile u16    g_ADC_Buf[4];        //DMA目标地址
-volatile bool   g_ADC_OK = FALSE;    //ADC采集成功标志
+
 
 u16  SensorL_value;                  //传感器1的值
 u16  SensorR_value;                  //传感器2的值                      
@@ -161,52 +166,52 @@ void    led_task(void *pdata);
 
 void SensorInit(void)
 {
-	g_Mat0_Sensor1_H=3930;      //左传感器的高信号值
-	g_Mat0_Sensor1_L=165;      //左传感器的低信号值 
-	g_Mat0_Sensor2_H=3930;      //右传感器的高信号值
-	g_Mat0_Sensor2_L=165;      //右传感器的低信号值 
+	g_Mat0_SensorL_H=3930;      //左传感器的高信号值
+	g_Mat0_SensorL_L=165;      //左传感器的低信号值 
+	g_Mat0_SensorR_H=3930;      //右传感器的高信号值
+	g_Mat0_SensorR_L=165;      //右传感器的低信号值 
 	Mat0EPC12=3;
 
-	g_Mat1_Sensor1_H=3930;      //左传感器的高信号值
-	g_Mat1_Sensor1_L=165;      //左传感器的低信号值 
-	g_Mat1_Sensor2_H=3930;      //右传感器的高信号值
-	g_Mat1_Sensor2_L=165;      //右传感器的低信号值 
+	g_Mat1_SensorL_H=3930;      //左传感器的高信号值
+	g_Mat1_SensorL_L=165;      //左传感器的低信号值 
+	g_Mat1_SensorR_H=3930;      //右传感器的高信号值
+	g_Mat1_SensorR_L=165;      //右传感器的低信号值 
 	Mat1EPC12=0;
 
-	g_Mat2_Sensor1_H=3930;      //左传感器的高信号值
-	g_Mat2_Sensor1_L=165;      //左传感器的低信号值 
-	g_Mat2_Sensor2_H=3930;      //右传感器的高信号值
-	g_Mat2_Sensor2_L=165;      //右传感器的低信号值 
+	g_Mat2_SensorL_H=3930;      //左传感器的高信号值
+	g_Mat2_SensorL_L=165;      //左传感器的低信号值 
+	g_Mat2_SensorR_H=3930;      //右传感器的高信号值
+	g_Mat2_SensorR_L=165;      //右传感器的低信号值 
 	Mat2EPC12=0;
 
-	g_Mat3_Sensor1_H=3930;      //左传感器的高信号值
-	g_Mat3_Sensor1_L=165;      //左传感器的低信号值 
-	g_Mat3_Sensor2_H=3930;      //右传感器的高信号值
-	g_Mat3_Sensor2_L=165;      //右传感器的低信号值 
+	g_Mat3_SensorL_H=3930;      //左传感器的高信号值
+	g_Mat3_SensorL_L=165;      //左传感器的低信号值 
+	g_Mat3_SensorR_H=3930;      //右传感器的高信号值
+	g_Mat3_SensorR_L=165;      //右传感器的低信号值 
 	Mat3EPC12=0;
 
-	g_Mat4_Sensor1_H=3930;      //左传感器的高信号值
-	g_Mat4_Sensor1_L=165;      //左传感器的低信号值 
-	g_Mat4_Sensor2_H=3930;      //右传感器的高信号值
-	g_Mat4_Sensor2_L=165;      //右传感器的低信号值 
+	g_Mat4_SensorL_H=3930;      //左传感器的高信号值
+	g_Mat4_SensorL_L=165;      //左传感器的低信号值 
+	g_Mat4_SensorR_H=3930;      //右传感器的高信号值
+	g_Mat4_SensorR_L=165;      //右传感器的低信号值 
 	Mat4EPC12=0;
 	
-	g_Mat5_Sensor1_H=3930;      //左传感器的高信号值
-	g_Mat5_Sensor1_L=165;      //左传感器的低信号值 
-	g_Mat5_Sensor2_H=3930;      //右传感器的高信号值
-	g_Mat5_Sensor2_L=165;      //右传感器的低信号值 
+	g_Mat5_SensorL_H=3930;      //左传感器的高信号值
+	g_Mat5_SensorL_L=165;      //左传感器的低信号值 
+	g_Mat5_SensorR_H=3930;      //右传感器的高信号值
+	g_Mat5_SensorR_L=165;      //右传感器的低信号值 
 	Mat5EPC12=0;
 
-	g_Mat6_Sensor1_H=3930;      //左传感器的高信号值
-	g_Mat6_Sensor1_L=165;      //左传感器的低信号值 
-	g_Mat6_Sensor2_H=3930;      //右传感器的高信号值
-	g_Mat6_Sensor2_L=165;      //右传感器的低信号值 
+	g_Mat6_SensorL_H=3930;      //左传感器的高信号值
+	g_Mat6_SensorL_L=165;      //左传感器的低信号值 
+	g_Mat6_SensorR_H=3930;      //右传感器的高信号值
+	g_Mat6_SensorR_L=165;      //右传感器的低信号值 
 	Mat6EPC12=0;
 
-	g_Mat7_Sensor1_H=3930;      //左传感器的高信号值
-	g_Mat7_Sensor1_L=165;      //左传感器的低信号值 
-	g_Mat7_Sensor2_H=3930;      //右传感器的高信号值
-	g_Mat7_Sensor2_L=165;      //右传感器的低信号值 
+	g_Mat7_SensorL_H=3930;      //左传感器的高信号值
+	g_Mat7_SensorL_L=165;      //左传感器的低信号值 
+	g_Mat7_SensorR_H=3930;      //右传感器的高信号值
+	g_Mat7_SensorR_L=165;      //右传感器的低信号值 
 	Mat7EPC12=0;
 }
 
@@ -218,7 +223,7 @@ void SetDataInit()                 //设置参数初始化
 	
 	gWorkMode=0;                 //0=手动   1=自动  2=对中
 	gSensorMode=0;               //纠偏模式，0=左，1=右，2=左+右，3=SPC  ，EPC1超声波传感器1工作，EPC2超声波传感器2工作，CPC两个传感器一起工作，SPC
-	gSensorSignal = 0;
+	gSensorSignal = 1;
 	
 	gAutoPolar=0;                //自动极性，0=负极，1=正极;
 	gManuPolar=0;                //手动极性，0=负极，1=正极;
@@ -244,7 +249,7 @@ void SetDataInit()                 //设置参数初始化
 	gCenterLimit=50;		     //中心限位点设置
 	gIndentLimit=5;			     //缩进限位点设置
 
-	gNoWaitEN=1;                 //无料等待功能，0=使能,1=禁止
+	gNoWaitEN=2;                 //无料等待功能，0回到中心;1电机停止;2无操作;
 	gNoDetectValve=95;           //无料检测阀值  
 	gNoDetectTime=1;             //无料检测时间=0.1秒
 	gNoWaitTime=15;              //无料等待时间=1.5秒  
@@ -263,7 +268,10 @@ void SetDataInit()                 //设置参数初始化
 	gAFlexDec=AFlexDec;          //自动柔性减速
 	gMFlexAcc=MFlexAcc;          //手动柔性加速
 	gMFlexDec=MFlexDec;          //手动柔性减速	
-	gAlarmSwitch = 0;
+	gAlarmSwitch  = 0;
+	gSensorSignal = 1;
+	gRelay		  = 0;
+	gKeepWait	  = 0;
 }
 
 void ParameterInit()             //参数出厂设置
@@ -302,7 +310,7 @@ void start_task(void *pdata)
 	}
 	
 	if(gCheckFlag!=0xee55)  			SetDataInit();  	 //如果参数读取错误，就重新初始化参数
-	if(g_Mat0_Sensor1_H == 0xffff)  	SensorInit();		 //如果参数读取错误，就重新初始化传感器参数
+	if(g_Mat0_SensorL_H == 0xffff)  	SensorInit();		 //如果参数读取错误，就重新初始化传感器参数
 	
 	switch(gPowerOnMode)                    		 //查询开机时的工作状态
 	{
@@ -392,9 +400,12 @@ void modbus_task(void *pdata)
 		/********需要快速处理的指令********/
 		ClickButton 	= *pHClickBut;
 		
+		
 		if(*pHTCaliFlag == 1)   //读取校准标志，查看是否启动校准
 		{
 			*pHTCaliFlag = 0;
+			TravelCal.CaliStep = 0;
+			TravelCal.StallDir = 0;
 			TravelCal.CaliFlag = 1;
 		}
 			 
@@ -454,12 +465,14 @@ void lcd_task(void *pdata)
 		gSPCMode	 = *pHSPCMode;        //保存SPC模式
 		gNoWaitEN	 = *pHNoWaitEN;       //保存无料使能
 
-		gLongIo0Mode = *pHPort0Fun;
-		gLongIo1Mode = *pHPort1Fun;
-		gLongIo2Mode = *pHPort2Fun;
-		gLongIo3Mode = *pHPort3Fun;
+		gLongIo0Mode = *pHPortFun0;
+		gLongIo1Mode = *pHPortFun1;
+		gLongIo2Mode = *pHPortFun2;
+		gLongIo3Mode = *pHPortFun3;
 		
 		gAlarmSwitch = *pHAlarmSwitch;
+		gRelay		 = *pHRelay;
+		gKeepWait    = *pHKeepWait;
 		
 //		OSMutexPend(mutex,0,&err);             //提高任务优先级
 //		OSMutexPost(mutex);                    //恢复任务优先级
@@ -481,37 +494,35 @@ void lcd_task(void *pdata)
 		WarmFlag = WarmOut();
 
 		/**************更新输入寄存器参数，以便主机读取**********/
-		if(TravelCal.CaliStep==3)  
-		{
-			if(TimeCnt==30)	{TravelCal.CaliStep = 0;TimeCnt=0;}   
-			TimeCnt++;
-		}
+//		if(TravelCal.CaliStep==3)  
+//		{
+//			if(TimeCnt==30)	{TravelCal.CaliStep = 0; TimeCnt=0;}   
+//			TimeCnt++;
+//		}
 		/*********更新传感器显示******pSensorRate****/
-		SensorMode.fun[gSensorMode]();          //根据主机更新的传感器模式调用不同程序，显示传感器参数
+		SensorDis();          //根据主机更新的传感器模式调用不同程序，显示传感器参数
 		
 		/*********更新校准传感器显示*****pSensorValue、pMatDis*****/
 		SensorTips = MatCal.fun[*pHSCaliStep]();    //根据主机更新的校准步骤调用不同程序，显示传感器参数 ，返回校准成功或者失败
 		
 		*pGainDead 		= gGainData|(gDeadZone<<8);
-		*pFineTune  	= (gFineTune|(WarmFlag<<8))|SensorTips<<12;
+		*pFineTune  	= (gFineTune|(WarmFlag<<8))|SensorTips<<12|gBackupFlag<<13|gWorkMode<<14;
 		*pDisPulseNum  	= HallRate|gAutoPolar<<14|gManuPolar<<15;
-		*pMode          = gWorkMode|gSensorMode<<2|gPowerOnMode<<4|gMotorType<<6|gSensorSignal<<8;
 		*pMatDis       	= Mat0EPC12|Mat1EPC12<<2|Mat2EPC12<<4|Mat3EPC12<<6|Mat4EPC12<<8|Mat5EPC12<<10|Mat6EPC12<<12|Mat7EPC12<<14;
 		*pLimitFun1    	= gLimitMode|gExtendLimit<<8;
 		*pLimitFun2		= gCenterLimit|gIndentLimit<<8;
 		*pSPCFun1		= gSPCMode|gSPCStopTime<<8;
 		*pSPCFun2		= gSPCExtendLimit|gSPCIndentLimit<<8;
-		*pNoMatFun1		= gNoWaitEN|gNoDetectValve<<8;
+		*pNoMatFun1		= gNoWaitEN|gKeepWait<<4|gNoDetectValve<<8;
 		*pNoMatFun2		= gNoDetectTime|gNoWaitTime<<8;
 		*pAFlex			= gAFlexAcc|gAFlexDec<<8;
 		*pMFlex			= gMFlexAcc|gMFlexDec<<8;
-		*pLongIoMode	= gLongIo0Mode|gLongIo1Mode<<4|gLongIo2Mode<<8|gLongIo3Mode<<12;
-		*pAutoSpeed		= gAutoSpeed;
-		*pManuSpeed		= gManuSpeed;
-		*pCentSpeed		= gCentSpeed;
+		*pAutoSpeed		= gAutoSpeed|LongPortFun[AutoDef]<<13;
+		*pManuSpeed		= gManuSpeed|LongPortFun[ManuDef]<<13;
+		*pCentSpeed		= gCentSpeed|LongPortFun[PusherCenter]<<13;
 		*pCurrentPara	= (u16)(g_ADC_Buf[0]*0.08)|gFuncTorque<<8|*pHTCaliTorque<<12|TravelCal.CaliStep<<14;
-		*pOtherPara     = gBackupFlag|LongPortFun[PusherCenter]<<1|LongPortFun[ManuDef]<<4|LongPortFun[AutoDef]<<7;
-
+		*pPortFun		= gLongIo0Mode|gLongIo1Mode<<4|gLongIo2Mode<<8|gLongIo3Mode<<12;
+		*pFunc			= gSensorMode|gMotorType<<2|gPowerOnMode<<4|gAlarmSwitch<<6|gSensorSignal<<8|gRelay<<11;
 		//OSSemPost(sem_p);
 		delay_ms(50);
 	}

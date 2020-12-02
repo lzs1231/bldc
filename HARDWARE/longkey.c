@@ -2,6 +2,7 @@
 #include "longkey.h"
 
 
+
 PortFunDef PortFun[4] = {
 	{&gLongIo0Mode,GPIOC,GPIO_Pin_11,0,0,0},
 	{&gLongIo1Mode,GPIOC,GPIO_Pin_12,0,0,0},

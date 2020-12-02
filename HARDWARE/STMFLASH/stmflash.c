@@ -10,7 +10,7 @@
  
 u16  rest_para[53]={0};           //备份参数
 u16  save_para[53]={0};           //保存掉电存储参数
-u16  SensorValue[41]={0};
+u16  SensorValue[40]={0};
 
 #define SIZE sizeof(save_para)	 	//数组长度
 //设置FLASH 保存地址(必须为偶数，且其值要大于本代码所占用FLASH的大小+0X08000000) 
@@ -140,7 +140,7 @@ void SavePara(void)
 	save_para[1]=gIwdgFlag;
 	save_para[2]=gBackupFlag;
 	
-//	save_para[3]=gWorkMode;
+	save_para[3]=gWorkMode;
 	save_para[4]=gSensorMode;
 	save_para[5]=gSensorSignal;
 	save_para[6]=gAutoPolar;
@@ -189,6 +189,8 @@ void SavePara(void)
 	save_para[40]=gMFlexDec;
 	
 	save_para[41]=gAlarmSwitch;
+	save_para[42]=gRelay;
+	save_para[43]=gKeepWait;
 	
 	OS_ENTER_CRITICAL();   //关闭中断
 	STMFLASH_Write(FLASH_SAVE_ADDR, (u16*)save_para, SIZE);        //WriteAddr:起始地址    pBuffer:数据指针    NumToWrite:半字(16位)数 
@@ -208,7 +210,7 @@ void ReadPara(void)
 	gIwdgFlag  			=save_para[1];
 	gBackupFlag			=save_para[2];
 	
-//	gWorkMode			=save_para[3];
+	gWorkMode			=save_para[3];
 	gSensorMode			=save_para[4];
 	gSensorSignal		=save_para[5];
 	gAutoPolar			=save_para[6];
@@ -256,6 +258,8 @@ void ReadPara(void)
 	gMFlexDec           =save_para[40];
 	
 	gAlarmSwitch        =save_para[41];
+	gRelay        		=save_para[42];
+	gKeepWait       	=save_para[43];
 }
 
 void Clearing()   //清零备份
@@ -330,6 +334,8 @@ void Backup()   //系统备份
 	rest_para[40]=gMFlexDec;
 	
 	rest_para[41]=gAlarmSwitch;
+	rest_para[42]=gRelay;
+	rest_para[43]=gKeepWait ;
 	
 	OS_ENTER_CRITICAL();   //关闭中断
 	STMFLASH_Write(FLASH_REST_ADDR, (u16*)rest_para, SIZE);        //WriteAddr:起始地址    pBuffer:数据指针    NumToWrite:半字(16位)数 
@@ -397,6 +403,8 @@ void Restore()    //系统还原
 	gMFlexDec           =rest_para[40];
 	
 	gAlarmSwitch		=rest_para[41];
+	gRelay        		=rest_para[42];
+	gKeepWait       	=rest_para[43];
 	Modbus_Init();
 }
 
@@ -404,52 +412,52 @@ void WriteSensor()   //传感器值保存
 {
 	OS_CPU_SR  cpu_sr;
 	
-	SensorValue[0]=g_Mat0_Sensor1_H;
-	SensorValue[1]=g_Mat0_Sensor1_L;
-	SensorValue[2]=g_Mat0_Sensor2_H;
-	SensorValue[3]=g_Mat0_Sensor2_L;
+	SensorValue[0]=g_Mat0_SensorL_H;
+	SensorValue[1]=g_Mat0_SensorL_L;
+	SensorValue[2]=g_Mat0_SensorR_H;
+	SensorValue[3]=g_Mat0_SensorR_L;
 	SensorValue[4]=Mat0EPC12;
 	
-	SensorValue[5]=g_Mat1_Sensor1_H;
-	SensorValue[6]=g_Mat1_Sensor1_L;
-	SensorValue[7]=g_Mat1_Sensor2_H;
-	SensorValue[8]=g_Mat1_Sensor2_L;
+	SensorValue[5]=g_Mat1_SensorL_H;
+	SensorValue[6]=g_Mat1_SensorL_L;
+	SensorValue[7]=g_Mat1_SensorR_H;
+	SensorValue[8]=g_Mat1_SensorR_L;
 	SensorValue[9]=Mat1EPC12;
 	
-	SensorValue[10]=g_Mat2_Sensor1_H;
-	SensorValue[11]=g_Mat2_Sensor1_L;
-	SensorValue[12]=g_Mat2_Sensor2_H;	    
-	SensorValue[13]=g_Mat2_Sensor2_L;
+	SensorValue[10]=g_Mat2_SensorL_H;
+	SensorValue[11]=g_Mat2_SensorL_L;
+	SensorValue[12]=g_Mat2_SensorR_H;	    
+	SensorValue[13]=g_Mat2_SensorR_L;
 	SensorValue[14]=Mat2EPC12;
 	
-	SensorValue[15]=g_Mat3_Sensor1_H;
-	SensorValue[16]=g_Mat3_Sensor1_L;
-	SensorValue[17]=g_Mat3_Sensor2_H;
-	SensorValue[18]=g_Mat3_Sensor2_L;
+	SensorValue[15]=g_Mat3_SensorL_H;
+	SensorValue[16]=g_Mat3_SensorL_L;
+	SensorValue[17]=g_Mat3_SensorR_H;
+	SensorValue[18]=g_Mat3_SensorR_L;
 	SensorValue[19]=Mat3EPC12;
 	
-	SensorValue[20]=g_Mat4_Sensor1_H;
-	SensorValue[21]=g_Mat4_Sensor1_L;
-	SensorValue[22]=g_Mat4_Sensor2_H;
-	SensorValue[23]=g_Mat4_Sensor2_L;
+	SensorValue[20]=g_Mat4_SensorL_H;
+	SensorValue[21]=g_Mat4_SensorL_L;
+	SensorValue[22]=g_Mat4_SensorR_H;
+	SensorValue[23]=g_Mat4_SensorR_L;
 	SensorValue[24]=Mat4EPC12;
 	
-	SensorValue[25]=g_Mat5_Sensor1_H;
-	SensorValue[26]=g_Mat5_Sensor1_L;
-	SensorValue[27]=g_Mat5_Sensor2_H;
-	SensorValue[28]=g_Mat5_Sensor2_L;
+	SensorValue[25]=g_Mat5_SensorL_H;
+	SensorValue[26]=g_Mat5_SensorL_L;
+	SensorValue[27]=g_Mat5_SensorR_H;
+	SensorValue[28]=g_Mat5_SensorR_L;
 	SensorValue[29]=Mat5EPC12;
 	
-	SensorValue[30]=g_Mat6_Sensor1_H;
-	SensorValue[31]=g_Mat6_Sensor1_L;
-	SensorValue[32]=g_Mat6_Sensor2_H;
-	SensorValue[33]=g_Mat6_Sensor2_L;
+	SensorValue[30]=g_Mat6_SensorL_H;
+	SensorValue[31]=g_Mat6_SensorL_L;
+	SensorValue[32]=g_Mat6_SensorR_H;
+	SensorValue[33]=g_Mat6_SensorR_L;
 	SensorValue[34]=Mat6EPC12;
 	
-	SensorValue[35]=g_Mat7_Sensor1_H;
-	SensorValue[36]=g_Mat7_Sensor1_L;
-	SensorValue[37]=g_Mat7_Sensor2_H;
-	SensorValue[38]=g_Mat7_Sensor2_L;
+	SensorValue[35]=g_Mat7_SensorL_H;
+	SensorValue[36]=g_Mat7_SensorL_L;
+	SensorValue[37]=g_Mat7_SensorR_H;
+	SensorValue[38]=g_Mat7_SensorR_L;
 	SensorValue[39]=Mat7EPC12;
 	
 	OS_ENTER_CRITICAL();   //关闭中断
@@ -466,52 +474,52 @@ void ReadSensor()    //传感器值读取
 	STMFLASH_Read(FLASH_SV_ADDR, (u16*)SensorValue, SIZE);  
 	OS_EXIT_CRITICAL();    //打开中断
 	
-	g_Mat0_Sensor1_H      	=SensorValue[0];
-	g_Mat0_Sensor1_L  		=SensorValue[1];
-	g_Mat0_Sensor2_H		=SensorValue[2];
-	g_Mat0_Sensor2_L		=SensorValue[3];
+	g_Mat0_SensorL_H      	=SensorValue[0];
+	g_Mat0_SensorL_L  		=SensorValue[1];
+	g_Mat0_SensorR_H		=SensorValue[2];
+	g_Mat0_SensorR_L		=SensorValue[3];
 	Mat0EPC12			    =SensorValue[4];
 	
-	g_Mat1_Sensor1_H		=SensorValue[5];
-	g_Mat1_Sensor1_L		=SensorValue[6];
-	g_Mat1_Sensor2_H		=SensorValue[7];
-	g_Mat1_Sensor2_L		=SensorValue[8];
+	g_Mat1_SensorL_H		=SensorValue[5];
+	g_Mat1_SensorL_L		=SensorValue[6];
+	g_Mat1_SensorR_H		=SensorValue[7];
+	g_Mat1_SensorR_L		=SensorValue[8];
 	Mat1EPC12				=SensorValue[9];
 	
-	g_Mat2_Sensor1_H		=SensorValue[10];
-	g_Mat2_Sensor1_L	 	=SensorValue[11];
-	g_Mat2_Sensor2_H  		=SensorValue[12];
-	g_Mat2_Sensor2_L 		=SensorValue[13];
+	g_Mat2_SensorL_H		=SensorValue[10];
+	g_Mat2_SensorL_L	 	=SensorValue[11];
+	g_Mat2_SensorR_H  		=SensorValue[12];
+	g_Mat2_SensorR_L 		=SensorValue[13];
 	Mat2EPC12 				=SensorValue[14];
 	
-	g_Mat3_Sensor1_H  		=SensorValue[15];
-	g_Mat3_Sensor1_L	    =SensorValue[16];
-	g_Mat3_Sensor2_H	    =SensorValue[17];
-	g_Mat3_Sensor2_L		=SensorValue[18];
+	g_Mat3_SensorL_H  		=SensorValue[15];
+	g_Mat3_SensorL_L	    =SensorValue[16];
+	g_Mat3_SensorR_H	    =SensorValue[17];
+	g_Mat3_SensorR_L		=SensorValue[18];
 	Mat3EPC12		        =SensorValue[19];
 	
-	g_Mat4_Sensor1_H	    =SensorValue[20];
-	g_Mat4_Sensor1_L		=SensorValue[21];
-	g_Mat4_Sensor2_H		=SensorValue[22];
-	g_Mat4_Sensor2_L		=SensorValue[23];
+	g_Mat4_SensorL_H	    =SensorValue[20];
+	g_Mat4_SensorL_L		=SensorValue[21];
+	g_Mat4_SensorR_H		=SensorValue[22];
+	g_Mat4_SensorR_L		=SensorValue[23];
 	Mat4EPC12    	        =SensorValue[24];
 	
-	g_Mat5_Sensor1_H     	=SensorValue[25];
-	g_Mat5_Sensor1_L	    =SensorValue[26];
-	g_Mat5_Sensor2_H	    =SensorValue[27];
-	g_Mat5_Sensor2_L		=SensorValue[28];
+	g_Mat5_SensorL_H     	=SensorValue[25];
+	g_Mat5_SensorL_L	    =SensorValue[26];
+	g_Mat5_SensorR_H	    =SensorValue[27];
+	g_Mat5_SensorR_L		=SensorValue[28];
 	Mat5EPC12	            =SensorValue[29];
 	
-	g_Mat6_Sensor1_H	    =SensorValue[30];
-	g_Mat6_Sensor1_L		=SensorValue[31];
-	g_Mat6_Sensor2_H		=SensorValue[32];
-	g_Mat6_Sensor2_L     	=SensorValue[33];
+	g_Mat6_SensorL_H	    =SensorValue[30];
+	g_Mat6_SensorL_L		=SensorValue[31];
+	g_Mat6_SensorR_H		=SensorValue[32];
+	g_Mat6_SensorR_L     	=SensorValue[33];
 	Mat6EPC12		        =SensorValue[34];
 	
-	g_Mat7_Sensor1_H		=SensorValue[35];
-	g_Mat7_Sensor1_L		=SensorValue[36];
-	g_Mat7_Sensor2_H		=SensorValue[37];
-	g_Mat7_Sensor2_L	    =SensorValue[38];
+	g_Mat7_SensorL_H		=SensorValue[35];
+	g_Mat7_SensorL_L		=SensorValue[36];
+	g_Mat7_SensorR_H		=SensorValue[37];
+	g_Mat7_SensorR_L	    =SensorValue[38];
 	Mat7EPC12               =SensorValue[39];
 }
 

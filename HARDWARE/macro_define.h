@@ -16,7 +16,7 @@
 //#define _TEST_Place        //打开速度PID测试参数显示
 //#define _TEST_Speed        //打开速度PID测试参数显示
 //#define _TEST_Cent         //打开对中PID测试参数显示
-//#define _TEST_SPC          //打开SPCPID测试参数显示
+#define _TEST_SPC          //打开SPCPID测试参数显示
 
 //#define SPEED_PPRINTF
 

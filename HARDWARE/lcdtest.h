@@ -177,8 +177,8 @@ typedef struct MyAdjustData{
 }AdjustDataDef;
 
 typedef struct MyConfirmData{
-	u8   ExitFlag;                         //取消标志，表明需要还原数据
-	u16  TempData;                         //用于暂存的变量
+	u8   ExitFlag;                   //取消标志，表明需要还原数据
+	u16  TempData;                   //用于暂存的变量
 	AdjustDataDef AdjustData[25];    //参数的属性：上限、下限、保存地址
 }ConfirmDataDef;
 
@@ -191,28 +191,23 @@ enum SensorModeType
 	SPC,
 };
 
-typedef  struct  MySensorMode{
-	u16 *PSensorMode;
-	void (*fun[4])(void);
-}SensorModeDef;
-
 /********传感器校准选择*******/
 typedef  struct  MyMaterial{
-	u16 *PSensor1_H;  //每个材料对应的传感器值
-	u16 *PSensor1_L;
-	u16 *PSensor2_H;  
-	u16 *PSensor2_L;
-	u16  *PEPC12;                 //显示传感器校准图标
+	u16 *PSensorL_H;  				//每个材料对应的传感器值
+	u16 *PSensorL_L;
+	u16 *PSensorR_H;  
+	u16 *PSensorR_L;
+	u16  *PEPC12;                	//显示传感器校准图标
 }MaterialDef;
 
 typedef  struct  MyMaterialGroup{               
-	MaterialDef MatValue[8];  //8个材料
-	u16 *CurMatNum;              //材料编号	
-	u8  CaliFlag;              //校准完成标志
-	u16 t_Sensor1_valueL;     //暂存左传感器小值
-	u16 t_Sensor1_valueH;     //暂存左传感器大值
-	u16 t_Sensor2_valueL;
-	u16 t_Sensor2_valueH;
+	MaterialDef MatValue[8];  		//8个材料
+	u16 *CurMatNum;              	//材料编号	
+	u8  CaliFlag;              		//校准完成标志
+	u16 t_SensorL_valueL;     		//暂存左传感器小值
+	u16 t_SensorL_valueH;    		//暂存左传感器大值
+	u16 t_SensorR_valueL;
+	u16 t_SensorR_valueH;
 	u8 (*fun[3])(void);
 }MatCalDef;
 
@@ -224,7 +219,6 @@ typedef struct MyTravelCal{
 }TravelCalDef;
 
 
-extern SensorModeDef SensorMode;
 extern MatCalDef MatCal;
 extern TravelCalDef TravelCal;
 extern ConfirmDataDef ConfirmData;
@@ -232,11 +226,9 @@ extern ConfirmDataDef ConfirmData;
 /**********警告标志计算***************/
 u8 WarmOut(void);
 
-/************4种传感器模式对应的显示程序***************/
-void SensorEPC1Dis(void);    //EPC1
-void SensorEPC2Dis(void);    //EPC2
-void SensorCPCDis(void);   //CPC
-void SensorSPCDis(void);   //SPC
+/************传感器模式对应的显示程序***************/
+void SensorDis(void);    
+
 
 /**************传感器校准界面显示程序*******************/
 u8 NoShelterDis(void);

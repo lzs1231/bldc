@@ -9,7 +9,6 @@ extern u16 *const pFineTune	 	;
 extern u16 *const pDisPulseNum  ;
 extern u16 *const pSensorRate   ;
 extern u16 *const pSensorValue  ;
-extern u16 *const pMode   	     ;
 extern u16 *const pMatDis       ;
 extern u16 *const pLimitFun1    ;
 extern u16 *const pLimitFun2     ;
@@ -19,14 +18,13 @@ extern u16 *const pNoMatFun1 	 ;
 extern u16 *const pNoMatFun2 	 ;
 extern u16 *const pAFlex 		 ;
 extern u16 *const pMFlex 		 ;
-extern u16 *const pLongIoMode    ;
 extern u16 *const pAutoSpeed 	 ;
 extern u16 *const pManuSpeed	 ;
 extern u16 *const pCentSpeed 	 ;
 extern u16 *const pCurrentPara   ;
 extern u16 *const pAdjustData	 ;
-extern u16 *const pOtherPara	 ;
-
+extern u16 *const pPortFun	 	;
+extern u16 *const pFunc	 	;
 
 extern u16 *const pHAdjustFlag  ;
 extern u16 *const pHClickBut    ;
@@ -41,30 +39,31 @@ extern u16 *const pHSysYes		;    //确定执行
 extern u16 *const pHWarmFlag	;   //警告标志
 
 extern u16 *const pHWorkMode    ;
-extern u16 *const pHSensorMode  ;
-extern u16 *const pHAutoPolar   ;
-extern u16 *const pHManuPolar   ;
-extern u16 *const pHMotorType   ;
-extern u16 *const pHPowerOnMode ;
 extern u16 *const pHMatNum 	    ;  // 当前材料编号
-
 extern u16 *const pHTCaliTorque ;
 
 extern u16 *const pHLimitMode   ;
 extern u16 *const pHSPCMode     ;
 extern u16 *const pHNoWaitEN    ;
+extern u16 *const pHAutoPolar   ;
+extern u16 *const pHManuPolar   ;
 
-extern u16 *const pHPort0Fun 	;
-extern u16 *const pHPort1Fun 	;
-extern u16 *const pHPort2Fun 	;
-extern u16 *const pHPort3Fun 	;
 
+extern u16 *const pHSensorMode  ;
+extern u16 *const pHMotorType   ;
+extern u16 *const pHPowerOnMode ;
 extern u16 *const pHAlarmSwitch  ;
+extern u16 *const pHRelay;	
 extern u16 *const pHSignal 	;
+extern u16 *const pHKeepWait ;
+extern u16 *const pHPortFun0 	;
+extern u16 *const pHPortFun1 	;
+extern u16 *const pHPortFun2 	;
+extern u16 *const pHPortFun3 	;
 
 //以下是要存储的参数
 extern  u16   gCheckFlag;		         //校验标志
-extern  u16   gIwdgFlag;                  //看门狗复位标志
+extern  u16   gIwdgFlag;                 //看门狗复位标志
 extern  u16   gBackupFlag;    		
 
 extern  u16   gWorkMode;                 //工作模式：0手动，1自动,2中心
@@ -117,53 +116,55 @@ extern  u16   gMFlexAcc;                  //手动柔性加速
 extern  u16   gMFlexDec;                  //手动柔性减速     
 
 extern  u16   gAlarmSwitch;
+extern  u16   gRelay;
+extern  u16   gKeepWait;
 
-extern  u16   g_Mat0_Sensor1_H;      //左传感器的高信号值
-extern  u16   g_Mat0_Sensor1_L;      //左传感器的低信号值 
-extern  u16   g_Mat0_Sensor2_H;      //右传感器的高信号值
-extern  u16   g_Mat0_Sensor2_L;      //右传感器的低信号值 
+extern  u16   g_Mat0_SensorL_H;      //左传感器的高信号值
+extern  u16   g_Mat0_SensorL_L;      //左传感器的低信号值 
+extern  u16   g_Mat0_SensorR_H;      //右传感器的高信号值
+extern  u16   g_Mat0_SensorR_L;      //右传感器的低信号值 
 extern  u16    Mat0EPC12;
 
-extern  u16   g_Mat1_Sensor1_H;      //左传感器的高信号值
-extern  u16   g_Mat1_Sensor1_L;      //左传感器的低信号值 
-extern  u16   g_Mat1_Sensor2_H;      //右传感器的高信号值
-extern  u16   g_Mat1_Sensor2_L;      //右传感器的低信号值 
+extern  u16   g_Mat1_SensorL_H;      //左传感器的高信号值
+extern  u16   g_Mat1_SensorL_L;      //左传感器的低信号值 
+extern  u16   g_Mat1_SensorR_H;      //右传感器的高信号值
+extern  u16   g_Mat1_SensorR_L;      //右传感器的低信号值 
 extern  u16    Mat1EPC12;
 
-extern  u16   g_Mat2_Sensor1_H;      //左传感器的高信号值
-extern  u16   g_Mat2_Sensor1_L;      //左传感器的低信号值 
-extern  u16   g_Mat2_Sensor2_H;      //右传感器的高信号值
-extern  u16   g_Mat2_Sensor2_L;      //右传感器的低信号值 
+extern  u16   g_Mat2_SensorL_H;      //左传感器的高信号值
+extern  u16   g_Mat2_SensorL_L;      //左传感器的低信号值 
+extern  u16   g_Mat2_SensorR_H;      //右传感器的高信号值
+extern  u16   g_Mat2_SensorR_L;      //右传感器的低信号值 
 extern  u16    Mat2EPC12;
 
-extern  u16   g_Mat3_Sensor1_H;      //左传感器的高信号值
-extern  u16   g_Mat3_Sensor1_L;      //左传感器的低信号值 
-extern  u16   g_Mat3_Sensor2_H;      //右传感器的高信号值
-extern  u16   g_Mat3_Sensor2_L;      //右传感器的低信号值 
+extern  u16   g_Mat3_SensorL_H;      //左传感器的高信号值
+extern  u16   g_Mat3_SensorL_L;      //左传感器的低信号值 
+extern  u16   g_Mat3_SensorR_H;      //右传感器的高信号值
+extern  u16   g_Mat3_SensorR_L;      //右传感器的低信号值 
 extern  u16    Mat3EPC12;
 
-extern  u16   g_Mat4_Sensor1_H;      //左传感器的高信号值
-extern  u16   g_Mat4_Sensor1_L;      //左传感器的低信号值 
-extern  u16   g_Mat4_Sensor2_H;      //右传感器的高信号值
-extern  u16   g_Mat4_Sensor2_L;      //右传感器的低信号值 
+extern  u16   g_Mat4_SensorL_H;      //左传感器的高信号值
+extern  u16   g_Mat4_SensorL_L;      //左传感器的低信号值 
+extern  u16   g_Mat4_SensorR_H;      //右传感器的高信号值
+extern  u16   g_Mat4_SensorR_L;      //右传感器的低信号值 
 extern  u16    Mat4EPC12;
 
-extern  u16   g_Mat5_Sensor1_H;      //左传感器的高信号值
-extern  u16   g_Mat5_Sensor1_L;      //左传感器的低信号值 
-extern  u16   g_Mat5_Sensor2_H;      //右传感器的高信号值
-extern  u16   g_Mat5_Sensor2_L;      //右传感器的低信号值 
+extern  u16   g_Mat5_SensorL_H;      //左传感器的高信号值
+extern  u16   g_Mat5_SensorL_L;      //左传感器的低信号值 
+extern  u16   g_Mat5_SensorR_H;      //右传感器的高信号值
+extern  u16   g_Mat5_SensorR_L;      //右传感器的低信号值 
 extern  u16    Mat5EPC12;
 
-extern  u16   g_Mat6_Sensor1_H;      //左传感器的高信号值
-extern  u16   g_Mat6_Sensor1_L;      //左传感器的低信号值 
-extern  u16   g_Mat6_Sensor2_H;      //右传感器的高信号值
-extern  u16   g_Mat6_Sensor2_L;      //右传感器的低信号值 
+extern  u16   g_Mat6_SensorL_H;      //左传感器的高信号值
+extern  u16   g_Mat6_SensorL_L;      //左传感器的低信号值 
+extern  u16   g_Mat6_SensorR_H;      //右传感器的高信号值
+extern  u16   g_Mat6_SensorR_L;      //右传感器的低信号值 
 extern  u16    Mat6EPC12;
 
-extern  u16   g_Mat7_Sensor1_H;      //左传感器的高信号值
-extern  u16   g_Mat7_Sensor1_L;      //左传感器的低信号值 
-extern  u16   g_Mat7_Sensor2_H;      //右传感器的高信号值
-extern  u16   g_Mat7_Sensor2_L;      //右传感器的低信号值 
+extern  u16   g_Mat7_SensorL_H;      //左传感器的高信号值
+extern  u16   g_Mat7_SensorL_L;      //左传感器的低信号值 
+extern  u16   g_Mat7_SensorR_H;      //右传感器的高信号值
+extern  u16   g_Mat7_SensorR_L;      //右传感器的低信号值 
 extern  u16    Mat7EPC12;
 
 
@@ -191,7 +192,6 @@ extern  u16  LongPortFun[FunNum];
 extern  u16  ClickButton;           //点动按键属性
 
 extern  volatile u16  g_ADC_Buf[4];
-extern  volatile bool g_ADC_OK;
 
 extern  u32  time0,time1,time2;
 extern  u16  SensorL_value;                  //传感器1的值

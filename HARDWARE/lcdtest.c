@@ -9,24 +9,26 @@
 #include "includes.h"					//ucos 使用	  
 #endif
 
-extern  s16 OcclusionL_rate,OcclusionR_rate;             //传感器遮挡率
+#define getstate(a,b)	(a==b?1:0)
+
+extern  u8 OcclusionL_rate,OcclusionR_rate;             //传感器遮挡率
 
 
 ParaStorageDef ParaStorage={SRestore,{Backup,Restore,ParameterInit}};
-SensorModeDef SensorMode = {&gSensorMode,SensorEPC1Dis,SensorEPC2Dis,SensorCPCDis,SensorSPCDis};
+
 TravelCalDef TravelCal = {0,0,0};						
 
 
 MatCalDef MatCal = {            //材料校准 
 	{
-		{&g_Mat0_Sensor1_H,&g_Mat0_Sensor1_L,&g_Mat0_Sensor2_H,&g_Mat0_Sensor2_L,&Mat0EPC12},
-		{&g_Mat1_Sensor1_H,&g_Mat1_Sensor1_L,&g_Mat1_Sensor2_H,&g_Mat1_Sensor2_L,&Mat1EPC12},
-		{&g_Mat2_Sensor1_H,&g_Mat2_Sensor1_L,&g_Mat2_Sensor2_H,&g_Mat2_Sensor2_L,&Mat2EPC12},
-		{&g_Mat3_Sensor1_H,&g_Mat3_Sensor1_L,&g_Mat3_Sensor2_H,&g_Mat3_Sensor2_L,&Mat3EPC12},
-		{&g_Mat4_Sensor1_H,&g_Mat4_Sensor1_L,&g_Mat4_Sensor2_H,&g_Mat4_Sensor2_L,&Mat4EPC12},
-		{&g_Mat5_Sensor1_H,&g_Mat5_Sensor1_L,&g_Mat5_Sensor2_H,&g_Mat5_Sensor2_L,&Mat5EPC12},
-		{&g_Mat6_Sensor1_H,&g_Mat6_Sensor1_L,&g_Mat6_Sensor2_H,&g_Mat6_Sensor2_L,&Mat6EPC12},
-		{&g_Mat7_Sensor1_H,&g_Mat7_Sensor1_L,&g_Mat7_Sensor2_H,&g_Mat7_Sensor2_L,&Mat7EPC12},
+		{&g_Mat0_SensorL_H,&g_Mat0_SensorL_L,&g_Mat0_SensorR_H,&g_Mat0_SensorR_L,&Mat0EPC12},
+		{&g_Mat1_SensorL_H,&g_Mat1_SensorL_L,&g_Mat1_SensorR_H,&g_Mat1_SensorR_L,&Mat1EPC12},
+		{&g_Mat2_SensorL_H,&g_Mat2_SensorL_L,&g_Mat2_SensorR_H,&g_Mat2_SensorR_L,&Mat2EPC12},
+		{&g_Mat3_SensorL_H,&g_Mat3_SensorL_L,&g_Mat3_SensorR_H,&g_Mat3_SensorR_L,&Mat3EPC12},
+		{&g_Mat4_SensorL_H,&g_Mat4_SensorL_L,&g_Mat4_SensorR_H,&g_Mat4_SensorR_L,&Mat4EPC12},
+		{&g_Mat5_SensorL_H,&g_Mat5_SensorL_L,&g_Mat5_SensorR_H,&g_Mat5_SensorR_L,&Mat5EPC12},
+		{&g_Mat6_SensorL_H,&g_Mat6_SensorL_L,&g_Mat6_SensorR_H,&g_Mat6_SensorR_L,&Mat6EPC12},
+		{&g_Mat7_SensorL_H,&g_Mat7_SensorL_L,&g_Mat7_SensorR_H,&g_Mat7_SensorR_L,&Mat7EPC12},
 	},
 	&gCurMatNum,       //材料编号默认0
 	0,0,0,0,0,NoShelterDis,ShelterDis,RealTimeDis
@@ -84,8 +86,13 @@ u8 WarmOut(void)
 	else 					   	   {Warm[LockFlag] = NoErrFlag;     Warm[ProhibitFlag] = NoErrFlag;}
 	
 	/**************打开继电器**********************/
-	if(*pHAlarmSwitch == 0)    		PDout(2) = (Warm[LimitFlag]==LimitFlag?1:0);  
-	else if(*pHAlarmSwitch == 1)    PDout(2) = (Warm[BreakAlarmFlag]==BreakAlarmFlag?1:0);  
+	switch(*pHAlarmSwitch)
+	{								
+		case 0:		PDout(2) = gRelay==0?getstate(Warm[LimitFlag],LimitFlag):~getstate(Warm[LimitFlag],LimitFlag); 	break;
+		case 1:		PDout(2) = gRelay==0?getstate(Warm[BreakAlarmFlag],BreakAlarmFlag):~getstate(Warm[BreakAlarmFlag],BreakAlarmFlag);	break;
+		case 2:		PDout(2) = gRelay==0?(getstate(Warm[LimitFlag],LimitFlag)|getstate(Warm[BreakAlarmFlag],BreakAlarmFlag)):~(getstate(Warm[LimitFlag],LimitFlag)|getstate(Warm[BreakAlarmFlag],BreakAlarmFlag)); break;
+		default:	break;
+	}
 	
 	for(icnt=WarmNum-1;icnt>0;icnt--)
 	{
@@ -95,55 +102,10 @@ u8 WarmOut(void)
 }	  
 
 
-/************4种传感器模式对应的显示程序***************/
-void SensorEPC1Dis(void)    //EPC1                
+/***********传感器模式对应的显示程序***************/
+void SensorDis(void)               
 {
-	if(OcclusionL_rate>=0)   //0~100
-	{
-		*pSensorRate = OcclusionL_rate&0x00ff;             //低8位显示正   
-	}
-	else                    //-100~0
-	{
-		*pSensorRate = ((-OcclusionL_rate)<<8)&0xff00;       //高8位显示负，十进制移位也是乘2  
-	}
-}
-
-void SensorEPC2Dis(void)    //EPC2			
-{
-	if(OcclusionR_rate>=0)
-	{
-		*pSensorRate = OcclusionR_rate&0x00ff;             //低8位显示正  
-	}
-	else
-	{
-		*pSensorRate = ((-OcclusionR_rate)<<8)&0xff00;       //高8位显示负，十进制移位也是乘2    
-	}
-}
-
-void SensorCPCDis(void)   //CPC      
-{
-	s16 DisRate;
-	DisRate = (OcclusionR_rate-OcclusionL_rate)>>1;
-
-	if(OcclusionR_rate-OcclusionL_rate>=0)
-	{
-		*pSensorRate = DisRate&0x00ff;             //低8位显示正  
-	}
-	else
-	{
-		*pSensorRate = ((-DisRate)<<8)&0xff00;       //高8位显示负，十进制移位也是乘2 
-	}
-}
-
-void SensorSPCDis(void)   //SPC      
-{	
-
-	if(gSPCMode == 0)    //0：内部编码器  1：外部传感器
-	{
-	
-	}
-	
-	*pSensorRate = (((OcclusionL_rate>>1)+50)<<8)|((OcclusionR_rate>>1)+50);             //高8位显示负 左传感器 低8位显示正 右传感器 
+	*pSensorRate = (OcclusionL_rate<<8&0xff00)|(OcclusionR_rate&0x00ff);          //高8位显示左  低8位显示右 
 }
 
 /**************传感器校准界面显示程序*******************/
@@ -152,11 +114,11 @@ u8 NoShelterDis(void)
 	switch(*pHSensorNum)
 	{
 		case EPC1:    
-			MatCal.t_Sensor1_valueH = SensorL_value;
+			MatCal.t_SensorL_valueH = SensorL_value;
 			*pSensorValue	=	(SensorL_value|(*pHMatNum<<12))&0x7fff;  //最高位为0，表示EPC1
 		break;          
 		case EPC2:    
-			MatCal.t_Sensor2_valueH = SensorR_value;
+			MatCal.t_SensorR_valueH = SensorR_value;
 			*pSensorValue	=	(SensorR_value|(*pHMatNum<<12))|0x8000;  //最高位为1，表示EPC2
 		break;          
 		default :                                break;
@@ -169,12 +131,12 @@ u8 ShelterDis(void)
 	switch(*pHSensorNum)
 	{
 		case EPC1:
-			MatCal.t_Sensor1_valueL = SensorL_value;
+			MatCal.t_SensorL_valueL = SensorL_value;
 			*pSensorValue	=	(SensorL_value|(*pHMatNum<<12))&0x7fff;  //最高位为0，表示EPC1
 			MatCal.CaliFlag = 1;  
 		break;          
 		case EPC2:    
-			MatCal.t_Sensor2_valueL = SensorR_value;
+			MatCal.t_SensorR_valueL = SensorR_value;
 			*pSensorValue	=	(SensorR_value|(*pHMatNum<<12))|0x8000;  //最高位为1，表示EPC2
 			MatCal.CaliFlag = 1;     //表示校准完成
 		break;          
@@ -189,51 +151,49 @@ u8 RealTimeDis(void)
 	{
 		case EPC1: 
 			*pSensorValue	=	(SensorL_value|(*pHMatNum<<12))&0x7fff;  //最高位为0，表示EPC1
-			SensorEPC1Dis();
-			if((MatCal.t_Sensor1_valueH-MatCal.t_Sensor1_valueL > 125))   
+			if((MatCal.t_SensorL_valueH-MatCal.t_SensorL_valueL > 125))   
 			{
 				if(MatCal.CaliFlag == 1)   
 				{
-					*MatCal.MatValue[*pHMatNum].PSensor1_H = MatCal.t_Sensor1_valueH;
-					*MatCal.MatValue[*pHMatNum].PSensor1_L = MatCal.t_Sensor1_valueL;
+					*MatCal.MatValue[*pHMatNum].PSensorL_H = MatCal.t_SensorL_valueH;
+					*MatCal.MatValue[*pHMatNum].PSensorL_L = MatCal.t_SensorL_valueL;
 					*MatCal.MatValue[*pHMatNum].PEPC12 = *MatCal.MatValue[*pHMatNum].PEPC12|(1<<1);
 					WriteSensor();   
-					MatCal.CaliFlag = 0;        //校准完成标志
+					MatCal.CaliFlag = 0;         //校准完成标志
 					return 0 ;
 				}
-			}else if((MatCal.t_Sensor1_valueH-MatCal.t_Sensor1_valueL < -125)){ 
+			}else if((MatCal.t_SensorL_valueH-MatCal.t_SensorL_valueL < -125)){ 
 				if(MatCal.CaliFlag == 1)   
 				{
-					*MatCal.MatValue[*pHMatNum].PSensor1_H = MatCal.t_Sensor1_valueL;
-					*MatCal.MatValue[*pHMatNum].PSensor1_L = MatCal.t_Sensor1_valueH;	
+					*MatCal.MatValue[*pHMatNum].PSensorL_H = MatCal.t_SensorL_valueL;
+					*MatCal.MatValue[*pHMatNum].PSensorL_L = MatCal.t_SensorL_valueH;	
 					*MatCal.MatValue[*pHMatNum].PEPC12 = *MatCal.MatValue[*pHMatNum].PEPC12|(1<<1);
 					WriteSensor(); 	
 					MatCal.CaliFlag = 0;        //校准完成标志
-					return 0 ;     		//用于显示校准成功
+					return 0 ;     				//用于显示校准成功
 				}
 			}else{
-				return 1;         			//用于显示校准失败
+				return 1;         				//用于显示校准失败
 			}
-		break;          //保存传感器1（左边）最小值
+		break;          						//保存传感器1（左边）最小值
 		case EPC2: 
 			*pSensorValue	=	(SensorR_value|(*pHMatNum<<12))|0x8000;  //最高位为1，表示EPC2
-			SensorEPC2Dis();
-			if((MatCal.t_Sensor2_valueH-MatCal.t_Sensor2_valueL>125))   
+			if((MatCal.t_SensorR_valueH-MatCal.t_SensorR_valueL>125))   
 			{
 				if(MatCal.CaliFlag == 1)   
 				{
-					*MatCal.MatValue[*pHMatNum].PSensor2_H = MatCal.t_Sensor2_valueH;
-					*MatCal.MatValue[*pHMatNum].PSensor2_L = MatCal.t_Sensor2_valueL;
+					*MatCal.MatValue[*pHMatNum].PSensorR_H = MatCal.t_SensorR_valueH;
+					*MatCal.MatValue[*pHMatNum].PSensorR_L = MatCal.t_SensorR_valueL;
 					*MatCal.MatValue[*pHMatNum].PEPC12 = *MatCal.MatValue[*pHMatNum].PEPC12|1;
 					WriteSensor(); 
 					MatCal.CaliFlag = 0;        //校准完成标志
 					return 0 ;
 				}
-			}else if((MatCal.t_Sensor2_valueH-MatCal.t_Sensor2_valueL<-125)) {
+			}else if((MatCal.t_SensorR_valueH-MatCal.t_SensorR_valueL<-125)) {
 				if(MatCal.CaliFlag == 1)   
 				{
-					*MatCal.MatValue[*pHMatNum].PSensor2_H = MatCal.t_Sensor2_valueL;
-					*MatCal.MatValue[*pHMatNum].PSensor2_L = MatCal.t_Sensor2_valueH;
+					*MatCal.MatValue[*pHMatNum].PSensorR_H = MatCal.t_SensorR_valueL;
+					*MatCal.MatValue[*pHMatNum].PSensorR_L = MatCal.t_SensorR_valueH;
 					*MatCal.MatValue[*pHMatNum].PEPC12 = *MatCal.MatValue[*pHMatNum].PEPC12|1;
 					WriteSensor(); 	
 					MatCal.CaliFlag = 0;        //校准完成标志

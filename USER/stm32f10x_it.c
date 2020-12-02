@@ -75,7 +75,7 @@ StateMachine	stateMachine;
 
 static  int  PlaceOut,SpeedOut,MeasuSpeed;        //速度环输出到电流环    静态全局变量
 u32 time0 = 500000,time1 = 500000,time2 = 500000;
-
+volatile bool   g_ADC_OK = FALSE;   			  //ADC采集成功标志
 
 int decspeed(int SpeedIn,u16 FlexDec);
 int T_Mplan(int PlaceOut,int LastPlaceOut,u16 acc,u16 dec);

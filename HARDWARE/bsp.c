@@ -44,7 +44,7 @@ void BSP_Init(void)
 	Adc_Init();  	
 	
 	
-	delay_ms(1000);       //延时等待串口屏初始化完毕,必须等待300ms 	
+	delay_ms(2000);       //延时等待串口屏初始化完毕,必须等待300ms 	
 	
 	for(icnt=0;icnt<FunNum;icnt++)
 	{

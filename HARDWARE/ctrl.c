@@ -7,6 +7,8 @@
 #define IR2LIN  PAout(9) 		  //IR2103_2的低端输入,高端为PWM输入
 #define IR3LIN  PAout(10)         //IR2103_3的低端输入,高端为PWM输入
 
+
+
 MotorDev bldc_dev={1000,STOP,STOP,CW,CW,0,0};
 
 u8 HallA_data = 0,HallB_data = 0,HallC_data = 0; 

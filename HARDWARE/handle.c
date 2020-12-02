@@ -14,7 +14,7 @@
 
 u16  HallRate;                 		 //当前脉冲点总行程中的比例  
 
-s16 OcclusionL_rate,OcclusionR_rate;       //传感器遮挡率
+u8 OcclusionL_rate,OcclusionR_rate;       //传感器遮挡率
      
 int GetDirection(int out)
 {
@@ -22,6 +22,7 @@ int GetDirection(int out)
 	else if(out<0)	return -1;   
 	else			return 1; 
 }
+
 int GetPolar(int out, u16 palor)
 {
 	switch(palor)
@@ -32,15 +33,19 @@ int GetPolar(int out, u16 palor)
 	}
 }
 
-int SetZone(int dev)      				  //设置盲区
+int SetZone(int dev)      			//设置盲区
 {
-	if((dev<=gDeadZone)&&(dev>=-gDeadZone))      //盲区之内不输出
+	if((dev<=gDeadZone)&&(dev>=-gDeadZone)) //盲区之内不输出
 	{
 		return 0;
-	}else if(dev>gDeadZone){     //偏差为正，盲区5，盲区没有遮挡
-		return (dev-gDeadZone);       //输出out为正，电机伸出
-	}else{                    	 //偏差为负，盲区完全遮挡
-		return (dev+gDeadZone);       //输出out为负，电机缩进
+	}
+	else if(dev>gDeadZone)			//偏差为正，盲区5，盲区没有遮挡
+	{     
+		return (dev-gDeadZone);     //输出out为正，电机伸出
+	}
+	else 							//偏差为负，盲区完全遮挡
+	{                    	
+		return (dev+gDeadZone);     //输出out为负，电机缩进
 	}
 }
 
@@ -67,46 +72,96 @@ int LimitOutput(int SOut, int DirOut, int TorqueEK, u16 SetTorque)
 	return IOut;
 }
 
+
 //无料检测程序
-int No_Material_Detection(int out)
+int No_Material_Detection(int out)                  //gNoWaitEN 0回到中心;1电机停止;2无操作;
 {  
-	static u8  DetectFlag=0;                      //无料等待是否开启软开关
+	static u8  DetectFlag=0;                        //无料等待是否开启软开关
 	static u16 DetectNum=0;
 	static u16 WaitNum=0;
-	u16 DetectTime = gNoDetectTime*20;           //检测时间，
+	u16 DetectTime = gNoDetectTime*20;              //检测时间，
 	u16 WaitTime   = gNoWaitTime*20;
-
-	if((out<-gNoDetectValve)||(out>gNoDetectValve))        //偏差超过阈值，等待
+	
+	switch(gNoWaitEN)
 	{
-		if(DetectFlag==1)	
-		{
-			Warm[BreakAlarmFlag] = BreakAlarmFlag;
-			return out;
-		}else{
-			if(DetectNum<DetectTime)        //检测时间小于设定时间
+		case 0:			
+			if((out<-gNoDetectValve)||(out>gNoDetectValve)) //偏差超过阈值，等待
 			{
-				DetectNum++;
-				return out;
-			}else{                          //检测时间大于设定时间，就停止输出
-				if(WaitNum < WaitTime)      //等待一定时间
+				if(DetectFlag==1)	
 				{
-					WaitNum++;
-				}else{
-					DetectFlag=1;  
+					Warm[BreakAlarmFlag] = BreakAlarmFlag;
+					LongPortFun[PusherCenter]=5;
+					return  0;
 				}
-				return 0;
-			} 
-		}
-	}else{
-		Warm[BreakAlarmFlag] = NoErrFlag;
-		DetectFlag=0;   //清0内部软开关
-		DetectNum=0;
-		WaitNum=0;	 
-		return out;
+				else
+				{
+					if(DetectNum<DetectTime)        //检测时间小于设定时间
+					{
+						DetectNum++;
+						return out;
+					}
+					else 							//检测时间大于设定时间，就停止输出
+					{    	
+						DetectFlag=1;  
+						return 0;
+					}
+				
+				}
+			}
+			else
+			{
+				Warm[BreakAlarmFlag] = NoErrFlag;
+				DetectFlag=0;   //清0内部软开关
+				DetectNum=0;
+				WaitNum=0;	 
+				return out;
+			}
+		case 1:		
+			if((out<-gNoDetectValve)||(out>gNoDetectValve)) //偏差超过阈值，等待
+			{
+				if(DetectFlag==1)	
+				{
+					Warm[BreakAlarmFlag] = BreakAlarmFlag;
+					return out;
+				}
+				else
+				{
+					if(DetectNum<DetectTime)        //检测时间小于设定时间
+					{
+						DetectNum++;
+						return out;
+					}
+					else
+					{                          //检测时间大于设定时间，就停止输出
+						if(*pHKeepWait == 0)
+						{
+							if(WaitNum < WaitTime)      //等待一定时间
+							{
+								WaitNum++;
+							}else{
+								DetectFlag=1;  
+							}
+						}
+						return 0;
+					} 
+				}
+			}
+			else
+			{
+				Warm[BreakAlarmFlag] = NoErrFlag;
+				DetectFlag=0;   //清0内部软开关
+				DetectNum=0;
+				WaitNum=0;	 
+				return out;
+			}	
+		break;
+		case 2:		return out;	
+		default:	return 0;	
 	}
+	
 }
 
-int WorkModeOut()
+int WorkModeOut(s8 OcclusionLrate,s8 OcclusionRrate)
 {
 	int out;
 
@@ -119,27 +174,23 @@ int WorkModeOut()
 	    case 1: 
 			switch(gSensorMode)   	//判断传感器选择
 			{
-				case 0:	 out = SetZone(gFineTune-80-OcclusionL_rate);	   break;        //设定值-测定值=偏差， 偏差为正，电机伸出   偏差为负，电机缩进
-				case 1:  out = SetZone(gFineTune-80-OcclusionR_rate);	   break;
-				case 2:	 if(((OcclusionL_rate>90)&&(OcclusionR_rate>90))||((OcclusionL_rate<-90)&&(OcclusionR_rate<-90)))	
+				case 0:	 out = SetZone(gFineTune-80-OcclusionLrate);	   break;        //设定值-测定值=偏差， 偏差为正，电机伸出   偏差为负，电机缩进
+				case 1:  out = SetZone(gFineTune-80-OcclusionRrate);	   break;
+				case 2:	 if(((OcclusionLrate>90)&&(OcclusionRrate>90))||((OcclusionLrate<-90)&&(OcclusionRrate<-90)))	
 						 {
 							out=0;
 						 }else{
-							out = SetZone(OcclusionR_rate-OcclusionL_rate+gFineTune-80);
+							out = SetZone(OcclusionRrate-OcclusionLrate+gFineTune-80);
 						 }	   
 				break;
-				case 3:  out=SPC_Control(OcclusionL_rate,OcclusionR_rate);				   break;
+				case 3:  out=SPC_Control(OcclusionLrate,OcclusionRrate);				   break;
 				default: out = 0;        break;
 			}
 			out = GetPolar(out, gAutoPolar);      		  //自动跟踪的极性切换
 		
 			if(gSensorMode!=3)                            //如果不是在SPC模式就进行
 			{
-				if(gNoWaitEN==0)	                      //无料等待使能   
-				{
-					out=No_Material_Detection(out);       //无料检测如开启就进入
-				}		            
-				out=PlacePID(out, gAutoSpeed);            //偏差deviation经过PID计算输出量
+				out=PlacePID(No_Material_Detection(out), gAutoSpeed);            //偏差deviation经过PID计算输出量
 			} 
 			out=Speed_limit(out, gAutoSpeed);             //自动时的最高速度限制=最大3000
 			
@@ -147,12 +198,15 @@ int WorkModeOut()
 			{
 				Warm[RunReadyFlag] = RunReadyFlag;
 				out=0;              //如果开启运行准备，但是无效，则不启动自动模式
-			}else{
+			}
+			else
+			{
 				Warm[RunReadyFlag] = NoErrFlag;
 			}
 		break;   //自动		   急停
 			
 		case 2:
+			LongPortFun[PusherCenter]=0;
 			out = CenterPID(gCenterLimit*10-HallRate,gCentSpeed);//中心归位
 		break;
 			
@@ -171,14 +225,14 @@ int WorkModeOut()
 	return out;
 }
 
-s16 getKeepOutRate(u16 SensorValue,u16 SensorH,u16 SensorL)
+u8 getKeepOutRate(u16 SensorValue,u16 SensorH,u16 SensorL)
 {
 	float f; 
 	//调用保存的当前材料的对应传感器的最大值、最小值。
 	f=200.0*(SensorH-SensorValue)/(SensorH-SensorL);    		//传感器最大（无遮挡）-最小值（全部遮挡）
 	if(f<0)       {f=0;}
 	if(f>200.0)   {f=200.0;}  
-	return ((s16)f-100);//范围-100~100
+	return f;//范围0~200
 }
 
 /**********************输出处理***************************/
@@ -186,19 +240,19 @@ int PlaceOutHandle(u16 sensorL,u16 sensorR)
 {
 	int out;      
 	
-	switch(*pHSignal)
+	switch(gSensorSignal)
 	{
-		case 0:		
-			OcclusionL_rate = getKeepOutRate(sensorL,*MatCal.MatValue[*MatCal.CurMatNum].PSensor1_H,*MatCal.MatValue[*MatCal.CurMatNum].PSensor1_L);	
-			OcclusionR_rate = getKeepOutRate(sensorR,*MatCal.MatValue[*MatCal.CurMatNum].PSensor2_H,*MatCal.MatValue[*MatCal.CurMatNum].PSensor2_L);
+		case 1:	
+			OcclusionL_rate = getKeepOutRate(sensorL,*MatCal.MatValue[*MatCal.CurMatNum].PSensorL_H,*MatCal.MatValue[*MatCal.CurMatNum].PSensorL_L);	
+			OcclusionR_rate = getKeepOutRate(sensorR,*MatCal.MatValue[*MatCal.CurMatNum].PSensorR_H,*MatCal.MatValue[*MatCal.CurMatNum].PSensorR_L);
 		break;
-		case 1:		
+		case 2:	
 			OcclusionL_rate = getKeepOutRate(sensorL,2979,125);
 			OcclusionR_rate = getKeepOutRate(sensorR,2979,125);
 		break;
-		case 2:		
-			OcclusionL_rate = getKeepOutRate(sensorL,3103,0);
-			OcclusionR_rate = getKeepOutRate(sensorR,3103,0);
+		case 4:	
+			OcclusionL_rate = getKeepOutRate(sensorL,2979,125);
+			OcclusionR_rate = getKeepOutRate(sensorR,2979,125);
 		break;
 		default:	break;
 	}
@@ -208,7 +262,7 @@ int PlaceOutHandle(u16 sensorL,u16 sensorR)
 	HallRate= (u16)(gCurrentPulseNum*1000/gMAXPulseNum); //计算当前霍尔占总行程的千分比
 
 	//如果校准行程标志为1，表示需要校准行程;如不是在测量行程就进行限位处理
-	out = (TravelCal.CaliFlag==1 ? TravelCalibration() : LimitProcessing(WorkModeOut()));                           
+	out = (TravelCal.CaliFlag==1 ? TravelCalibration() : LimitProcessing(WorkModeOut(OcclusionL_rate-100,OcclusionL_rate-100)));                           
 
     return out;                                      //更新输出值     
 }  
@@ -306,7 +360,7 @@ int SPC_Control(int V1,int V2)
 				}
 				break;
 				case 1:
-				if(V2>0)    //-1000~1000
+				if(V2>0)    //-100~100
 				{
 					num_spc_time++;
 					if(num_spc_time<time)
@@ -488,7 +542,6 @@ int TravelCalibration(void)
 		 duzhuan_num=0;								 //清0时间计数器
 		 Variation = LastPulseNum-gCurrentPulseNum;  //到时间时再比较霍尔变化数量
 			
-
 		 if(Variation<4 && Variation>-4)             //霍尔脉冲变化量,在规定时间内如变化数量少于4，就视为堵转了
 		 {
 			TravelCal.StallDir = GetDirection(out);	 //提取输入电压的方向           
