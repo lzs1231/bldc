@@ -20,6 +20,7 @@
 "..\wdg.o"
 "..\modbus.o"
 "..\lcdtest.o"
+"..\speedplan.o"
 "..\misc.o"
 "..\stm32f10x_dac.o"
 "..\stm32f10x_dma.o"

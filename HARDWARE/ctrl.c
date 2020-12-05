@@ -340,16 +340,6 @@ void BLDC_Start(void)
 	}          
 }
 
-void shut_mos(void)
-{
-    TIM_CCxCmd(TIM1, TIM_Channel_1, TIM_CCx_Disable);
-    TIM_CCxNCmd(TIM1, TIM_Channel_1, TIM_CCxN_Disable);
-    TIM_CCxCmd(TIM1, TIM_Channel_2, TIM_CCx_Disable);
-    TIM_CCxNCmd(TIM1, TIM_Channel_2, TIM_CCxN_Disable);
-    TIM_CCxCmd(TIM1, TIM_Channel_3, TIM_CCx_Disable);
-    TIM_CCxNCmd(TIM1, TIM_Channel_3, TIM_CCxN_Disable);
-}
-
 /**************停止******************/
 void BLDC_Stop(void)
 {
@@ -361,13 +351,7 @@ void BLDC_Stop(void)
 	
 	__nop();__nop();           //延时（加死区）    减速一定时间，之后
 	PAout(8)=0;PAout(9)=0;PAout(10)=0;         //下管打开，进行能耗制动
-//	while()
-//	{
-//		__nop();__nop();__nop();__nop();           //延时（加死区）    减速一定时间，之后
-//		PAout(8)=1;PAout(9)=1;PAout(10)=1;         //下管打开，进行能耗制动
-//		__nop();__nop();__nop();__nop();           //延时（加死区）    减速一定时间，之后
-//		PAout(8)=0;PAout(9)=0;PAout(10)=0;         //下管打开，进行能耗制动
-//	}
+
 //	TIM1->CCER=0;               //关闭TIM1的六路输出，关刹车      
 	                           
 /**不要关闭定时器3触发中断TIM_IT_Trigger，防止人为改变电机位置而中断关闭无法捕获记录电机位置**/
@@ -376,7 +360,7 @@ void BLDC_Stop(void)
 void PwmOut(int SpeedOut)     //100us调用一次，更新pwm
 {
 	static int IOut;		  //电流环输出
-	int SetPwmValue;
+	static int SetPwmValue;
 	static u16 IValue,UValue;
 	static u16 LastIValue,LastUValue;
 	
@@ -387,22 +371,29 @@ void PwmOut(int SpeedOut)     //100us调用一次，更新pwm
 	
 	IOut = CurrentProtection(SpeedOut,IValue,UValue);   //电流保护,掉电检测
 
-	if(bldc_dev.order_state == STOP){   //指令停止
+	if(bldc_dev.order_state == STOP)	//指令停止
+	{   
 		SetPwmValue=0;
 		BLDC_Stop();          			//关闭PWM输出，电机自然减速，然后刹车
-		time0=time1=time2 = 500000;		
+		time0=time1=time2 = 2500000;		
 		bldc_dev.motor_state = STOP;    //电机停止	  
-	}else{
+	}
+	else
+	{
 		if(IOut>0)
 		{
 			SetPwmValue=IOut;
 			if(SetPwmValue<100)      SetPwmValue=100;
 			bldc_dev.order_direction = CCW;
-		}else if(IOut<0){
+		}
+		else if(IOut<0)
+		{
 			SetPwmValue=-IOut;
 			if(SetPwmValue<100)      SetPwmValue=100;
 			bldc_dev.order_direction = CW;
-		}else{
+		}
+		else
+		{
 			SetPwmValue=0;
 			BLDC_Stop();          			//关闭PWM输出，电机自然减速，然后刹车
 //			bldc_dev.motor_state = STOP;    //电机停止	

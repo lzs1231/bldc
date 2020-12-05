@@ -13,32 +13,32 @@
 //增量式PID
 typedef struct IncrementPID
 {
-	float Target;     //设定目标
-	float Uk;         //PID输出
-	float Udk;        //PID增量
-	float Uk_1;       //保存上一次PID输出
+	int Target;     //设定目标
+	int Uk;         //PID输出
+	int Udk;        //PID增量
+	int Uk_1;       //保存上一次PID输出
 	float P;
 	float I;
 	u8  Flg;        //为1表示进行积分运算，为0表示不进行积分运算
 	float D;
-	float ek_0;       //当前误差
-	float ek_1;       //上一次误差
-	float ek_2;       //上上次误差
+	int ek_0;       //当前误差
+	int ek_1;       //上一次误差
+	int ek_2;       //上上次误差
 }IncPID;
 
 //位置式PID
 typedef struct PositionPID
 {
-	float Target;     //设定目标
-	float Uk;         //PID输出
-	float Uk_1;       //保存上一次PID输出
+	int Target;     //设定目标
+	int Uk;         //PID输出
+	int Uk_1;       //保存上一次PID输出
 	float P;
 	float I;
 	u8  Flg;         //为1表示进行积分运算，为0表示不进行积分运算
 	float D;
-	float ek_Sum;      //误差积分和
-	float ek_0;       //当前误差
-	float ek_1;       //上一次误差
+	int ek_Sum;      //误差积分和
+	int ek_0;       //当前误差
+	int ek_1;       //上一次误差
 }PosPID;
 
 /***********对中PID*************/
@@ -110,7 +110,7 @@ void PIDInit()
 
 int CenterPID(int PlaceEk,int LimitSpeed)
 {
-	Center_Point->ek_0 = (float)PlaceEk;
+	Center_Point->ek_0 = PlaceEk;
 
 	if((Center_Point->ek_0<=50) && (Center_Point->ek_0>=-50))
 	{
@@ -160,8 +160,8 @@ SEGGER_RTT_printf(0,"%5d\t",t_PlaceOut);
 	
 	if(t_PlaceOut!=0)
 	{	
-		Speed_Point->ek_0 = (float)(t_PlaceOut-MeasuSpeed);            //偏差
-		if(Speed_Point->ek_0<10 && Speed_Point->ek_0>-10)        //-2~2不进行pid
+		Speed_Point->ek_0 = (t_PlaceOut-MeasuSpeed);            //偏差
+		if(Speed_Point->ek_0<1 && Speed_Point->ek_0>-1)        //-2~2不进行pid
 		{
 			Speed_Point->ek_0=0;
 			Speed_Point->Uk = Speed_Point->Uk_1;
@@ -169,12 +169,11 @@ SEGGER_RTT_printf(0,"%5d\t",t_PlaceOut);
 			Speed_Point->Udk = Speed_Point->P*(Speed_Point->ek_0-Speed_Point->ek_1)+Speed_Point->I*Speed_Point->ek_0+Speed_Point->D*(Speed_Point->ek_0+Speed_Point->ek_2-2*Speed_Point->ek_1);
 
 #ifdef  _TEST_Speed
-SEGGER_RTT_printf(0,"+%4d\t",(int)Speed_Point->Udk);	
-//printf("+%4d\t  ",(int)Speed_Point->Udk);
+SEGGER_RTT_printf(0,"+%4d\t",Speed_Point->Udk);	
+//printf("+%4d\t  ",Speed_Point->Udk);
 #endif
 			Speed_Point->Uk = Speed_Point->Uk_1+Speed_Point->Udk;
 
-//			if(Speed_Point->Uk*t_PlaceOut < 0)     Speed_Point->Uk = 0;    //输出与设定值反向了，说明补偿过大
 			if(Speed_Point->Uk*t_PlaceOut < 0)     Speed_Point->Uk = t_PlaceOut>0?1:-1;    //输出与设定值反向了，说明补偿过大
 		}
 		
@@ -198,9 +197,9 @@ SEGGER_RTT_printf(0,"+%4d\t",(int)Speed_Point->Udk);
 	}
 #ifdef  _TEST_Speed
 SEGGER_RTT_printf(0,"S%5d\t",MeasuSpeed);
-SEGGER_RTT_printf(0,"P%4d\t\n",(int)Speed_Point->Target);
+SEGGER_RTT_printf(0,"P%4d\n",Speed_Point->Target);
 //printf("S%5d\t",MeasuSpeed);
-//printf("P%4d\t  \n",(int)Speed_Point->Target);
+//printf("P%4d\n",Speed_Point->Target);
 #endif
 	return(Speed_Point->Target);
 }
@@ -286,8 +285,8 @@ int SPCPID(int SensorValue,int SPC_Out,int SPCBit)
 //SEGGER_RTT_printf(0,"E%5d\t",SPC_Point->ek_0);
 //SEGGER_RTT_printf(0,"P%5d\n",SPC_Point->Uk);
 printf("E%4d\t",SPCBit);
-printf("E%4.4f\t",SPC_Point->ek_0);
-printf("P%4.4f\t  \n",SPC_Point->Uk);
+printf("E%4d\t",SPC_Point->ek_0);
+printf("P%4d\t  \n",SPC_Point->Uk);
 #endif
 	
 	return (SPCBit == 1?SPC_Point->Uk:-SPC_Point->Uk);

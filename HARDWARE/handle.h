@@ -3,8 +3,7 @@
 
 #include "sys.h"
 
-/***********************获取方向**********************/
-int GetDirection(int out);
+
 
 /*********************无料检测程序**********************/
 int No_Material_Detection(int P);

@@ -4,24 +4,22 @@
 #include "stmflash.h"
 #include "lcdtest.h"
 #include "longkey.h"
+#include "speedplan.h"
 
-#define CalibSpeed 500             	 	//Ğ£×¼ËÙ¶È100
+#define CalibSpeed 400             	 	//Ğ£×¼ËÙ¶È100
 #define SPC_Out_Max 3000
 #define HighVal 1516					    //µçÑ¹¸ßÓÚ28V
 #define LowVal 	1070           				//µçÑ¹µÍÓÚ20V	
 #define StopVal 557 						//µçÑ¹µÍÓÚ16V¶ÔÓ¦891    10V¶ÔÓ¦557
 
 
+
+
 u16  HallRate;                 		 //µ±Ç°Âö³åµã×ÜĞĞ³ÌÖĞµÄ±ÈÀı  
 
 u8 OcclusionL_rate,OcclusionR_rate;       //´«¸ĞÆ÷ÕÚµ²ÂÊ
      
-int GetDirection(int out)
-{
-	if(out==0)		return 0;  
-	else if(out<0)	return -1;   
-	else			return 1; 
-}
+
 
 int GetPolar(int out, u16 palor)
 {
@@ -64,9 +62,9 @@ int LimitOutput(int SOut, int DirOut, int TorqueEK, u16 SetTorque)
 	
 	switch(DirOut)                                 //µçÁ÷¶ÔĞÅºÅÏŞÖÆ
 	{														   
-		 case -1: IOut=SOut+(TorqueEK*5);  if(IOut>-SetTorque) IOut = -SetTorque;  break;//I_Out = LimitOutput(I_Out,-1);  break;
+		 case -1: IOut=SOut+(TorqueEK>>3);  if(IOut>-SetTorque) IOut = -SetTorque;  break;//I_Out = LimitOutput(I_Out,-1);  break;
 		 case  0: IOut=0;                                   break;
-		 case  1: IOut=SOut-(TorqueEK*5);  if(IOut<SetTorque)  IOut = SetTorque;   break;//I_Out = LimitOutput(I_Out,1);  break;    //µçÁ÷ÓĞ³¬ÏŞ£¬ÂıÂı¼õĞ¡Êä³ö
+		 case  1: IOut=SOut-(TorqueEK>>3);  if(IOut<SetTorque)  IOut = SetTorque;   break;//I_Out = LimitOutput(I_Out,1);  break;    //µçÁ÷ÓĞ³¬ÏŞ£¬ÂıÂı¼õĞ¡Êä³ö
 		 default:  break;
 	}
 	return IOut;
@@ -76,7 +74,6 @@ int LimitOutput(int SOut, int DirOut, int TorqueEK, u16 SetTorque)
 //ÎŞÁÏ¼ì²â³ÌĞò
 int No_Material_Detection(int out)                  //gNoWaitEN 0»Øµ½ÖĞĞÄ;1µç»úÍ£Ö¹;2ÎŞ²Ù×÷;
 {  
-	static u8  DetectFlag=0;                        //ÎŞÁÏµÈ´ıÊÇ·ñ¿ªÆôÈí¿ª¹Ø
 	static u16 DetectNum=0;
 	static u16 WaitNum=0;
 	u16 DetectTime = gNoDetectTime*20;              //¼ì²âÊ±¼ä£¬
@@ -87,31 +84,23 @@ int No_Material_Detection(int out)                  //gNoWaitEN 0»Øµ½ÖĞĞÄ;1µç»úÍ
 		case 0:			
 			if((out<-gNoDetectValve)||(out>gNoDetectValve)) //Æ«²î³¬¹ıãĞÖµ£¬µÈ´ı
 			{
-				if(DetectFlag==1)	
+				if(DetectNum<DetectTime)        //¼ì²âÊ±¼äĞ¡ÓÚÉè¶¨Ê±¼ä
 				{
-					Warm[BreakAlarmFlag] = BreakAlarmFlag;
-					LongPortFun[PusherCenter]=5;
-					return  0;
+					DetectNum++;
+					return out;
 				}
-				else
-				{
-					if(DetectNum<DetectTime)        //¼ì²âÊ±¼äĞ¡ÓÚÉè¶¨Ê±¼ä
-					{
-						DetectNum++;
-						return out;
-					}
-					else 							//¼ì²âÊ±¼ä´óÓÚÉè¶¨Ê±¼ä£¬¾ÍÍ£Ö¹Êä³ö
-					{    	
-						DetectFlag=1;  
-						return 0;
-					}
-				
+				else 							//¼ì²âÊ±¼ä´óÓÚÉè¶¨Ê±¼ä£¬¾ÍÍ£Ö¹Êä³ö
+				{   
+					Warm[BreakAlarmFlag] = BreakAlarmFlag;
+					gWorkMode = 2;
+					LongPortFun[PusherCenter]=5;	 
+					return 0;
 				}
 			}
 			else
 			{
+				LongPortFun[PusherCenter]=0;
 				Warm[BreakAlarmFlag] = NoErrFlag;
-				DetectFlag=0;   //Çå0ÄÚ²¿Èí¿ª¹Ø
 				DetectNum=0;
 				WaitNum=0;	 
 				return out;
@@ -119,37 +108,28 @@ int No_Material_Detection(int out)                  //gNoWaitEN 0»Øµ½ÖĞĞÄ;1µç»úÍ
 		case 1:		
 			if((out<-gNoDetectValve)||(out>gNoDetectValve)) //Æ«²î³¬¹ıãĞÖµ£¬µÈ´ı
 			{
-				if(DetectFlag==1)	
+				if(DetectNum<DetectTime)        //¼ì²âÊ±¼äĞ¡ÓÚÉè¶¨Ê±¼ä
 				{
-					Warm[BreakAlarmFlag] = BreakAlarmFlag;
+					DetectNum++;
 					return out;
 				}
-				else
-				{
-					if(DetectNum<DetectTime)        //¼ì²âÊ±¼äĞ¡ÓÚÉè¶¨Ê±¼ä
+				else							//¼ì²âÊ±¼ä´óÓÚÉè¶¨Ê±¼ä£¬¾ÍµÈ´ı
+				{              
+					Warm[BreakAlarmFlag] = BreakAlarmFlag;
+					if(WaitNum < WaitTime)      //µÈ´ıÒ»¶¨Ê±¼ä
 					{
-						DetectNum++;
-						return out;
+						if(*pHKeepWait == 0) WaitNum++;
+						return 0;
 					}
 					else
-					{                          //¼ì²âÊ±¼ä´óÓÚÉè¶¨Ê±¼ä£¬¾ÍÍ£Ö¹Êä³ö
-						if(*pHKeepWait == 0)
-						{
-							if(WaitNum < WaitTime)      //µÈ´ıÒ»¶¨Ê±¼ä
-							{
-								WaitNum++;
-							}else{
-								DetectFlag=1;  
-							}
-						}
-						return 0;
-					} 
-				}
+					{
+						return out; 
+					}
+				} 
 			}
 			else
 			{
 				Warm[BreakAlarmFlag] = NoErrFlag;
-				DetectFlag=0;   //Çå0ÄÚ²¿Èí¿ª¹Ø
 				DetectNum=0;
 				WaitNum=0;	 
 				return out;
@@ -206,7 +186,7 @@ int WorkModeOut(s8 OcclusionLrate,s8 OcclusionRrate)
 		break;   //×Ô¶¯		   ¼±Í£
 			
 		case 2:
-			LongPortFun[PusherCenter]=0;
+			
 			out = CenterPID(gCenterLimit*10-HallRate,gCentSpeed);//ÖĞĞÄ¹éÎ»
 		break;
 			
@@ -222,7 +202,7 @@ int WorkModeOut(s8 OcclusionLrate,s8 OcclusionRrate)
 		default:	out = 0;									break;									
 	}
 	
-	return out;
+	return SpeedPlan(out);
 }
 
 u8 getKeepOutRate(u16 SensorValue,u16 SensorH,u16 SensorL)
@@ -262,7 +242,7 @@ int PlaceOutHandle(u16 sensorL,u16 sensorR)
 	HallRate= (u16)(gCurrentPulseNum*1000/gMAXPulseNum); //¼ÆËãµ±Ç°»ô¶ûÕ¼×ÜĞĞ³ÌµÄÇ§·Ö±È
 
 	//Èç¹ûĞ£×¼ĞĞ³Ì±êÖ¾Îª1£¬±íÊ¾ĞèÒªĞ£×¼ĞĞ³Ì;Èç²»ÊÇÔÚ²âÁ¿ĞĞ³Ì¾Í½øĞĞÏŞÎ»´¦Àí
-	out = (TravelCal.CaliFlag==1 ? TravelCalibration() : LimitProcessing(WorkModeOut(OcclusionL_rate-100,OcclusionL_rate-100)));                           
+	out = (TravelCal.CaliFlag==1 ? TravelCalibration() : LimitProcessing(WorkModeOut(OcclusionL_rate-100,OcclusionR_rate-100)));                           
 
     return out;                                      //¸üĞÂÊä³öÖµ     
 }  
@@ -389,6 +369,7 @@ int LimitProcessing(int P)
 	u16 DEC_S_Min = stop_Min+30;      //Âö³å±ÈÀı¾àÀëÏŞÎ»µã>20       70~920Ö®¼äÈ«ËÙÔËĞĞ
 	u16 DEC_S_Max = stop_Max-30;
 	u8  LimitFlag1,LimitFlag2;
+	float f1,f2;
 	
 	if(gLimitMode == 0) //ÄÚ²¿ÏŞÎ»
 	{
@@ -412,13 +393,17 @@ int LimitProcessing(int P)
 				Warm[LimitFlag] = NoErrFlag;
 				if((HallRate<=DEC_S_Min)&&(HallRate>stop_Min))      //50~70
 				{
+					f1 = (HallRate-stop_Min)/20.0;
+					if(f1>1) f1=1;
 					//µç»ú¼ÌĞøÏòËõ½øÏŞÎ»µã¿¿½ü£¬´ËÊ±ĞèÒªÏŞÖÆËÙ¶È       µç»úÔ¶ÀëËõ½øÏŞÎ»µã£¬²»ÓÃ½øĞĞËÙ¶ÈÏŞÖÆ
-					OUT =  (P<0?(int)(P*(HallRate-stop_Min)/30):P);
+					OUT =  (P<0?(int)(P*f1):P);
 				}
 				if((HallRate>=DEC_S_Max) && (HallRate<stop_Max))      //930~950
 				{
+					f2 = (stop_Max-HallRate)/20.0;
+					if(f2>1) f2=1;
 					//µç»ú¼ÌĞøÏòÉì³öÏŞÎ»µã¿¿½ü£¬´ËÊ±ĞèÒªÏŞÖÆËÙ¶È        µç»úÔ¶ÀëÉì³öÏŞÎ»µã£¬²»ÓÃ½øĞĞËÙ¶ÈÏŞÖÆ
-					OUT =  (P>0?(int)(P*(stop_Max-HallRate)/30):P);
+					OUT =  (P>0?(int)(P*f2):P);
 				}
 			}
 		}
@@ -460,13 +445,17 @@ int LimitProcessing(int P)
 			LimitFlag1=0;
 			if((HallRate<=DEC_S_Min)&&(HallRate>stop_Min))     		 //50~70
 			{
+				f1 = (HallRate-stop_Min)/20.0;
+				if(f1>1) f1=1;
 				//µç»ú¼ÌĞøÏòËõ½øÏŞÎ»µã¿¿½ü£¬´ËÊ±ĞèÒªÏŞÖÆËÙ¶È       µç»úÔ¶ÀëËõ½øÏŞÎ»µã£¬²»ÓÃ½øĞĞËÙ¶ÈÏŞÖÆ
-				OUT =  (P<0?(int)(P*(HallRate-stop_Min)/30):P);
+				OUT =  (P<0?(int)(P*f1):P);
 			}
 			if((HallRate>=DEC_S_Max)&&(HallRate<stop_Max))     		//930~950
 			{
+				f2 = (stop_Max-HallRate)/20.0;
+				if(f2>1) f2=1;
 				//µç»ú¼ÌĞøÏòÉì³öÏŞÎ»µã¿¿½ü£¬´ËÊ±ĞèÒªÏŞÖÆËÙ¶È        µç»úÔ¶ÀëÉì³öÏŞÎ»µã£¬²»ÓÃ½øĞĞËÙ¶ÈÏŞÖÆ
-				OUT =  (P>0?(int)(P*(stop_Max-HallRate)/30):P);
+				OUT =  (P>0?(int)(P*f2):P);
 			}
 		}else{
 			LimitFlag1=0;
@@ -542,6 +531,7 @@ int TravelCalibration(void)
 		 duzhuan_num=0;								 //Çå0Ê±¼ä¼ÆÊıÆ÷
 		 Variation = LastPulseNum-gCurrentPulseNum;  //µ½Ê±¼äÊ±ÔÙ±È½Ï»ô¶û±ä»¯ÊıÁ¿
 			
+
 		 if(Variation<4 && Variation>-4)             //»ô¶ûÂö³å±ä»¯Á¿,ÔÚ¹æ¶¨Ê±¼äÄÚÈç±ä»¯ÊıÁ¿ÉÙÓÚ4£¬¾ÍÊÓÎª¶Â×ªÁË
 		 {
 			TravelCal.StallDir = GetDirection(out);	 //ÌáÈ¡ÊäÈëµçÑ¹µÄ·½Ïò           
@@ -577,7 +567,9 @@ int CurrentProtection(int S_Out,u16 IBus,u16 UBus)
 		if(CaliEK>0)                  	 //µçÁ÷ÓĞ³¬ÏŞ
 		{
 			I_Out = LimitOutput(S_Out,Dir_Xinghao,CaliEK,CaliTorque);    //¶ÔÊä³ö½øĞĞÏŞÖÆ
-		}else{
+		}
+		else
+		{
 			I_Out=S_Out;
 		}
 	}
@@ -590,7 +582,9 @@ int CurrentProtection(int S_Out,u16 IBus,u16 UBus)
 			    num_I=0;
 				num_I_stop=0;
 				I_Out=0;
-			}else{
+			}
+			else
+			{
 			    if(num_I<20000)                                             //2Ãë¼ÆÊ±
 				{
 				    num_I++;
@@ -600,31 +594,41 @@ int CurrentProtection(int S_Out,u16 IBus,u16 UBus)
 					    num_I_stop++;                                       //2ÃëÄÚµçÁ÷³¬ÏŞ´ÎÊı
 
 						I_Out = LimitOutput(S_Out,Dir_Xinghao,FuncEK,FuncTorque);      //µçÁ÷¶ÔĞÅºÅÏŞÖÆ								      
-					}else{                                                 //Ã»ÓĞµçÁ÷³¬ÏŞ¾ÍÕı³£Êä³ö
+					}
+					else
+					{                                                 //Ã»ÓĞµçÁ÷³¬ÏŞ¾ÍÕı³£Êä³ö
 						I_Out = S_Out;  
 						Warm[OverrunFlag] = NoErrFlag;
 					}                                      
-				}else{                                                      //2Ãë¼ÆÊ±µ½ÁË
+				}
+				else
+				{                                                      //2Ãë¼ÆÊ±µ½ÁË
 				    if(num_I_stop>=10000)                                    //ÈçµçÁ÷³¬ÏŞ´ÎÊı´ïµ½1°ëÒÔÉÏ¾Í¹Ø±ÕÊä³ö
 					{ 
 					     I_Out=0;
 		                 bit_I=1;                                           //ÏÔÊ¾±¨¾¯±êÖ¾
 						 Warm[StallFlag] = StallFlag;
 						 Dir_I_stop=Dir_Xinghao;                            //±£´æµçÁ÷¹Ø±ÕÊ±µÄĞÅºÅ·½Ïò		
-					}else{
-					     I_Out=S_Out;
+					}
+					else
+					{
+						I_Out=S_Out;
 					}
 					num_I_stop=0;                                           //Çå0¼ÆÊıÆ÷
 					num_I=0;
 				}
 	        }
-		}else{
+		}
+		else
+		{
 		     if((Dir_Xinghao!=Dir_I_stop)&&(Dir_Xinghao!=0)&&(Dir_I_stop!=0))//ÓĞ·´ÏòĞÅºÅÊäÈë²ÅÄÜÖØÆôÊä³ö
 			 {
 				 Warm[StallFlag] = NoErrFlag;
 			     I_Out=S_Out;
 	             bit_I=0;		
-			 }else{
+			 }
+			 else
+			 {
 			     I_Out=0;
 			 }
 		 }
@@ -636,9 +640,11 @@ int CurrentProtection(int S_Out,u16 IBus,u16 UBus)
 	   Warm[VolHighFlag] = NoErrFlag;
 	   Warm[VolLowFlag]  = NoErrFlag;
 //	   PBout(12) = 0;	
-   }else{
+   }
+   else
+   {
 	   if(UBus>HighVal) Warm[VolHighFlag] = VolHighFlag; //µçÑ¹¹ı¸ß
-	   if(UBus<LowVal) Warm[VolLowFlag]  = VolLowFlag;   //µçÑ¹¹ıµÍ 
+	   if(UBus<LowVal)  Warm[VolLowFlag]  = VolLowFlag;   //µçÑ¹¹ıµÍ 
 //	   PBout(12) = 1;	
    	   I_Out = 0;
 	   if(UBus<=StopVal)                       			 //µçÑ¹µÍÓÚ16V¶ÔÓ¦891    10V¶ÔÓ¦557

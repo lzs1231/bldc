@@ -38,3 +38,4 @@
 ..\handle.o: ..\HARDWARE\pid_control.h
 ..\handle.o: ..\HARDWARE\STMFLASH\stmflash.h
 ..\handle.o: ..\HARDWARE\lcdtest.h
+..\handle.o: ..\HARDWARE\speedplan.h

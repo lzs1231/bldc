@@ -227,7 +227,7 @@ void SetDataInit()                 //设置参数初始化
 	
 	gAutoPolar=0;                //自动极性，0=负极，1=正极;
 	gManuPolar=0;                //手动极性，0=负极，1=正极;
-	gMotorType = 1;              //电机类型   0无刷电机4   1无刷电机5   2有刷电机
+	gMotorType = 0;              //电机类型   0无刷电机4   1无刷电机5   2有刷电机
 	gPowerOnMode  =0;            //开机工作模式，,0=手动，1=自动，2=中心，3=上次 
 	gCurMatNum=0;                //默认材料
 
@@ -235,9 +235,9 @@ void SetDataInit()                 //设置参数初始化
 	gDeadZone = 1;               //盲区设置，传感器识别盲区，当材料边沿有缺口时，防止抖动
 	gFineTune = 80;              //微调=补偿，当需要微调材料位置时候，需要改变传感器位置，通过设置微调参数，避免调整传感器位置
 
-	gAutoSpeed = 1800;            //自动速度
-	gManuSpeed = 1800;            //手动速度
-	gCentSpeed = 1800;            //对中速度
+	gAutoSpeed = 800;            //自动速度
+	gManuSpeed = 600;            //手动速度
+	gCentSpeed = 600;            //对中速度
 	
 	gCaliTorque=10;
 	gFuncTorque = 5;             //正常支行时转矩限制，最大为10A
@@ -252,7 +252,7 @@ void SetDataInit()                 //设置参数初始化
 	gNoWaitEN=2;                 //无料等待功能，0回到中心;1电机停止;2无操作;
 	gNoDetectValve=95;           //无料检测阀值  
 	gNoDetectTime=1;             //无料检测时间=0.1秒
-	gNoWaitTime=15;              //无料等待时间=1.5秒  
+	gNoWaitTime=50;              //无料等待时间=5秒  
 
 	gSPCMode = 0;                //蛇形纠偏模式  0：内部编码器  1：外部传感器
 	gSPCStopTime=2;              //spc停止时间=0.2秒
