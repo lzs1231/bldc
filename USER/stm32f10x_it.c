@@ -119,8 +119,8 @@ void TIM3_IRQHandler(void)
 	{
 		TIM3->SR&=0xffef;	    	//清中断标志  CC4IF
 		
-		time_over = time_over>100?100:++time_over;/*溢出清零　堵转计数*/
-		if(time_over%10 == 0)   bldc_dev.motor_state = STOP;
+		time_over = time_over>=100?100:++time_over;/*溢出清零　堵转计数*/
+		if(time_over%4 == 0)   bldc_dev.motor_state = STOP;
 		switch(PhaseCnt%3)
 		{
 			case 0:    time0=((10000*time_over));  break;      //hall1到hall2换相时间

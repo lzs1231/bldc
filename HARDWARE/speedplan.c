@@ -1,5 +1,5 @@
-#include "sys.h"
 #include "main.h"
+#include "speedplan.h"
 
 #define PosNeg(a,b) ((a^b)<0?1:0)     //符号相同返回0
 
@@ -66,10 +66,9 @@ int SpeedPlan(int PlaceOut)
 				SpeedIn = decspeed(LastPlaceOut,gMFlexDec);
 				LastPlaceOut = SpeedIn;
 				if(SpeedIn == 0)		    	 //减速状态结束
-				{
 					stateMachine.state = state_1b;
-				}
-			}else{
+			}else
+			{
 				stateMachine.state = state_1b;    
 				SpeedIn = T_Mplan(reversal(PlaceOut,10), LastPlaceOut, gMFlexAcc, gMFlexDec);
 				LastPlaceOut = SpeedIn;
@@ -88,15 +87,15 @@ int SpeedPlan(int PlaceOut)
 					SpeedIn = decspeed(LastPlaceOut,gMFlexDec);
 					LastPlaceOut = SpeedIn;
 					if(SpeedIn == 0)		    	 //减速状态结束
-					{
 						stateMachine.state = state_2b;
-					}
-				}else{
+				}else
+				{
 					stateMachine.state = state_2b; 
 					SpeedIn = T_Mplan(reversal(PlaceOut,10), LastPlaceOut, gMFlexAcc, gMFlexDec);
 					LastPlaceOut = SpeedIn;
 				}
-			}else{	
+			}else
+			{
 				/*当前状态为自动远程点动关*/
 				inputEvent = event_3;			 //事件3
 				
@@ -107,10 +106,9 @@ int SpeedPlan(int PlaceOut)
 					SpeedIn = decspeed(LastPlaceOut,gMFlexDec);
 					LastPlaceOut = SpeedIn;
 					if(SpeedIn == 0)		    	 //减速状态结束
-					{
 						stateMachine.state = state_3b;
-					}
-				}else{
+				}else
+				{
 					stateMachine.state = state_3b; 
 					SpeedIn = T_Aplan(reversal(PlaceOut,5), LastPlaceOut, gAFlexAcc, gAFlexDec);
 					LastPlaceOut = SpeedIn;
@@ -119,7 +117,8 @@ int SpeedPlan(int PlaceOut)
 		break;
 		
 		case 2:	
-			if(LongPortFun[PusherLeft]!=0 || ClickButton!=0){    	//远程点动打开
+			if(LongPortFun[PusherLeft]!=0 || ClickButton!=0)
+			{    	//远程点动打开
 				/*当前状态为中心点动开*/
 				inputEvent = event_4;			 //事件4
 				
@@ -130,15 +129,15 @@ int SpeedPlan(int PlaceOut)
 					SpeedIn = decspeed(LastPlaceOut,gMFlexDec<<1);
 					LastPlaceOut = SpeedIn;
 					if(SpeedIn == 0)		    	 //减速状态结束
-					{
 						stateMachine.state = state_4b;
-					}
-				}else{
+				}else
+				{
 					stateMachine.state = state_4b; 
 					SpeedIn = T_Mplan(reversal(PlaceOut,10), LastPlaceOut, gMFlexAcc, gMFlexDec);
 					LastPlaceOut = SpeedIn;
 				}
-			}else{	
+			}else
+			{	
 				/*当前状态为中心点动关*/						
 				inputEvent = event_5;			//事件5
 				
@@ -149,10 +148,9 @@ int SpeedPlan(int PlaceOut)
 					SpeedIn = decspeed(LastPlaceOut,gMFlexDec);
 					LastPlaceOut = SpeedIn;
 					if(SpeedIn == 0)		    	 //减速状态结束
-					{
 						stateMachine.state = state_5b;
-					}
-				}else{
+				}else
+				{
 					stateMachine.state = state_5b; 
 					SpeedIn = T_Cplan(reversal(PlaceOut,10), LastPlaceOut, gMFlexAcc, gMFlexDec);
 					LastPlaceOut = SpeedIn;
@@ -178,7 +176,8 @@ int decspeed(int LastPlaceOut,u16 FlexDec)
 	{
 		SpeedIn = LastPlaceOut-(FlexDec<<1);
 		if(SpeedIn < 0)	SpeedIn = 0;
-	}else if(LastPlaceOut < 0)	{
+	}else if(LastPlaceOut < 0)	
+	{
 		SpeedIn = LastPlaceOut+(FlexDec<<1);
 		if(SpeedIn > 0)	SpeedIn = 0;
 	}
@@ -194,16 +193,20 @@ int T_Mplan(int PlaceOut,int LastPlaceOut,u16 acc,u16 dec)
 	{	
 		SpeedIn = LastPlaceOut+acc;
 		if(SpeedIn>PlaceOut)   SpeedIn = PlaceOut;
-	}else if((PlaceOut>=0)&&(PEk < 0)){
+	}else if((PlaceOut>=0)&&(PEk < 0))
+	{
 		SpeedIn = LastPlaceOut-dec;
 		if(SpeedIn<PlaceOut)  SpeedIn = PlaceOut;
-	}else if((PlaceOut<0)&&(PEk < 0)){
+	}else if((PlaceOut<0)&&(PEk < 0))
+	{
 		SpeedIn = LastPlaceOut-acc;
 		if(SpeedIn<PlaceOut)   SpeedIn = PlaceOut;
-	}else if((PlaceOut<=0)&&(PEk > 0)){
+	}else if((PlaceOut<=0)&&(PEk > 0))
+	{
 		SpeedIn = LastPlaceOut+dec;
 		if(SpeedIn>PlaceOut)  SpeedIn = PlaceOut;
-	}else{
+	}else
+	{
 		SpeedIn = PlaceOut;
 	}
 	
@@ -220,10 +223,12 @@ int T_Aplan(int PlaceOut,int LastPlaceOut,u16 acc,u16 dec)
 	{	
 		SpeedIn = LastPlaceOut+acc;
 		if(SpeedIn>PlaceOut)   SpeedIn = PlaceOut;
-	}else if((PlaceOut<0)&&(PEk < 0)){
+	}else if((PlaceOut<0)&&(PEk < 0))
+	{
 		SpeedIn = LastPlaceOut-acc;
 		if(SpeedIn<PlaceOut)   SpeedIn = PlaceOut;
-	}else{
+	}else
+	{
 		SpeedIn = PlaceOut;
 	}
 	
@@ -240,10 +245,35 @@ int T_Cplan(int PlaceOut,int LastPlaceOut,u16 acc,u16 dec)
 	{	
 		SpeedIn = LastPlaceOut+acc;
 		if(SpeedIn>PlaceOut)   SpeedIn = PlaceOut;
-	}else if((PlaceOut<0)&&(PEk < 0)){
+	}else if((PlaceOut<0)&&(PEk < 0))
+	{
 		SpeedIn = LastPlaceOut-acc;
 		if(SpeedIn<PlaceOut)   SpeedIn = PlaceOut;
-	}else{
+	}else
+	{
+		SpeedIn = PlaceOut;
+	}
+	
+	return SpeedIn;
+}
+
+//行程校准速度规划
+int T_TCplan(int PlaceOut,int LastPlaceOut,u16 acc,u16 dec)
+{
+	int SpeedIn,PEk;
+	
+	PEk = PlaceOut-LastPlaceOut;
+	
+	if((PlaceOut>0)&&(PEk > 0))
+	{	
+		SpeedIn = LastPlaceOut+acc;
+		if(SpeedIn>PlaceOut)   SpeedIn = PlaceOut;
+	}else if((PlaceOut<0)&&(PEk < 0))
+	{
+		SpeedIn = LastPlaceOut-acc;
+		if(SpeedIn<PlaceOut)   SpeedIn = PlaceOut;
+	}else
+	{
 		SpeedIn = PlaceOut;
 	}
 	
@@ -273,12 +303,14 @@ int reversal(int P,u8 TimeCnt)
 		{
 			Number_Pwm++;
 			return 0;
-		}else{
+		}else
+		{
 			Number_Pwm=0;
 			Last_Dir_Deviation=Dir_Deviation;
 			return P;
 		}
-	}else{
+	}else
+	{
 		Number_Pwm=0;				
 		Last_Dir_Deviation=Dir_Deviation;
 		return P;

@@ -239,7 +239,7 @@ void SetDataInit()                 //设置参数初始化
 	gManuSpeed = 600;            //手动速度
 	gCentSpeed = 600;            //对中速度
 	
-	gCaliTorque=10;
+	gCaliTorque=1;
 	gFuncTorque = 5;             //正常支行时转矩限制，最大为10A
 	gCurrentPulseNum=200;        //当前所在位置脉冲数
 	gMAXPulseNum=500;            //行程最大脉冲数
@@ -456,10 +456,10 @@ void lcd_task(void *pdata)
 		gPowerOnMode = *pHPowerOnMode;    //保存上电状态
 		gCurMatNum	 = *pHMatNum;         //保存当前材料标号
 		
-		if(*pHTCaliTorque == 0)			gCaliTorque	 =10;
-		else if(*pHTCaliTorque == 1)	gCaliTorque	 =15;
-		else if(*pHTCaliTorque == 2)	gCaliTorque	 =20;
-		else if(*pHTCaliTorque == 3)	gCaliTorque	 =30;
+		if(*pHTCaliTorque == 0)			gCaliTorque	 =1;
+		else if(*pHTCaliTorque == 1)	gCaliTorque	 =2;
+		else if(*pHTCaliTorque == 2)	gCaliTorque	 =3;
+		else if(*pHTCaliTorque == 3)	gCaliTorque	 =4;
 		
 		gLimitMode	 = *pHLimitMode;
 		gSPCMode	 = *pHSPCMode;        //保存SPC模式

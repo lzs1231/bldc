@@ -1,4 +1,6 @@
 ..\speedplan.o: ..\HARDWARE\speedplan.c
+..\speedplan.o: ..\USER\main.h
+..\speedplan.o: ..\HARDWARE\longkey.h
 ..\speedplan.o: ..\SYSTEM\sys\sys.h
 ..\speedplan.o: ..\USER\stm32f10x.h
 ..\speedplan.o: ..\CORE\core_cm3.h
@@ -32,5 +34,4 @@
 ..\speedplan.o: F:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\speedplan.o: ..\RTT\SEGGER_RTT.h
 ..\speedplan.o: ..\HARDWARE\macro_define.h
-..\speedplan.o: ..\USER\main.h
-..\speedplan.o: ..\HARDWARE\longkey.h
+..\speedplan.o: ..\HARDWARE\speedplan.h

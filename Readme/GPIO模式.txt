@@ -22,3 +22,5 @@ GPIOD->ODR ^= (1<<2);           //GPIOD.2取反
 复用推挽输出，此时IO受内部外设控制，比如定时器的PWM,比如SPI的MOSI,MISO等。
 而普通的推挽输出，则IO受ODR控制。
 设置为复用推挽输出，那么IO就不受ODR控制了
+
+porta.3  端口A引脚3

@@ -8,9 +8,9 @@
 
 #define CalibSpeed 400             	 	//校准速度100
 #define SPC_Out_Max 3000
-#define HighVal 1516					    //电压高于28V
-#define LowVal 	1070           				//电压低于20V	
-#define StopVal 557 						//电压低于16V对应891    10V对应557
+#define HighVal 1516					//电压高于28V
+#define LowVal 	1070           		    //电压低于20V	
+#define StopVal 557 				    //电压低于16V对应891    10V对应557
 
 
 
@@ -62,9 +62,9 @@ int LimitOutput(int SOut, int DirOut, int TorqueEK, u16 SetTorque)
 	
 	switch(DirOut)                                 //电流对信号限制
 	{														   
-		 case -1: IOut=SOut+(TorqueEK>>3);  if(IOut>-SetTorque) IOut = -SetTorque;  break;//I_Out = LimitOutput(I_Out,-1);  break;
+		 case -1: IOut=SOut+(TorqueEK<<4);  if(IOut>-SetTorque) IOut = -200;  break;//I_Out = LimitOutput(I_Out,-1);  break;
 		 case  0: IOut=0;                                   break;
-		 case  1: IOut=SOut-(TorqueEK>>3);  if(IOut<SetTorque)  IOut = SetTorque;   break;//I_Out = LimitOutput(I_Out,1);  break;    //电流有超限，慢慢减小输出
+		 case  1: IOut=SOut-(TorqueEK<<4);  if(IOut<SetTorque)  IOut = 200;   break;//I_Out = LimitOutput(I_Out,1);  break;    //电流有超限，慢慢减小输出
 		 default:  break;
 	}
 	return IOut;
@@ -201,8 +201,9 @@ int WorkModeOut(s8 OcclusionLrate,s8 OcclusionRrate)
 		case 3:		out = 0;									break;	
 		default:	out = 0;									break;									
 	}
+	out = SpeedPlan(out);
 	
-	return SpeedPlan(out);
+	return LimitProcessing(out);
 }
 
 u8 getKeepOutRate(u16 SensorValue,u16 SensorH,u16 SensorL)
@@ -242,7 +243,7 @@ int PlaceOutHandle(u16 sensorL,u16 sensorR)
 	HallRate= (u16)(gCurrentPulseNum*1000/gMAXPulseNum); //计算当前霍尔占总行程的千分比
 
 	//如果校准行程标志为1，表示需要校准行程;如不是在测量行程就进行限位处理
-	out = (TravelCal.CaliFlag==1 ? TravelCalibration() : LimitProcessing(WorkModeOut(OcclusionL_rate-100,OcclusionR_rate-100)));                           
+	out = (TravelCal.CaliFlag==1 ? TravelCalibration() : WorkModeOut(OcclusionL_rate-100,OcclusionR_rate-100));                           
 
     return out;                                      //更新输出值     
 }  
@@ -487,6 +488,7 @@ int TravelCalibration(void)
 {
 	static u16 duzhuan_num=0;
 	static int LastPulseNum=0;
+	static int LastOut=0;
 	
     int out=0;
 	int Variation;                     				   //变化量
@@ -537,6 +539,8 @@ int TravelCalibration(void)
 			TravelCal.StallDir = GetDirection(out);	 //提取输入电压的方向           
 		 }
 	}
+	out = T_TCplan(out,LastOut,50,0);
+	LastOut = out;
 	
     return out;
 }
@@ -550,31 +554,27 @@ int CurrentProtection(int S_Out,u16 IBus,u16 UBus)
 	static u16 num_I_stop;
 	int I_Out=0;
 	static int FuncEK ;                 //正常运行时电流差值,测量电流与设定电流差值FunctionEK
-	static int CaliEK   ;                //校准时电流差值 CalibrEK    实际电流I*0.01(电阻)*10(放大倍数)=BusI*3.3/4096
-	int Dir_Xinghao;                 //输入信号的方向	
+	static int CaliEK ;                 //校准时电流差值 CalibrEK    实际电流I*0.01(电阻)*10(放大倍数)=BusI*3.3/4096
+	int Dir_Xinghao;                    //输入信号的方向	
 
-	int CaliTorque = gCaliTorque*10;
-	int FuncTorque = gFuncTorque*100;
+	int CaliTorque[4] = {100,200,300,400};
+	int FuncTorque[9] = {150,200,350,500,600,700,800,900,1000};     //2,3,4,5,6,7,8,9,10
 	
-	CaliEK = IBus-(gCaliTorque*11.6);
-	FuncEK = IBus-(gFuncTorque*116);
 	
 	Dir_Xinghao = GetDirection(S_Out);   //提取输入电压的方向
 
 /************电流保护，限制电流***********/	
 	if(TravelCal.CaliFlag==1)            //校准时的电流控制
 	{
+		CaliEK = IBus-CaliTorque[gCaliTorque-1];
 		if(CaliEK>0)                  	 //电流有超限
-		{
-			I_Out = LimitOutput(S_Out,Dir_Xinghao,CaliEK,CaliTorque);    //对输出进行限制
-		}
+			I_Out = LimitOutput(S_Out,Dir_Xinghao,CaliEK,CaliTorque[gCaliTorque-1]);    //对输出进行限制
 		else
-		{
 			I_Out=S_Out;
-		}
 	}
 	else
-	{                     				//正常运行时的电流控制
+	{    		//正常运行时的电流控制
+		FuncEK = IBus-FuncTorque[gFuncTorque-2];
 		if(bit_I==0)                                                        //如果电流还没有关闭输出 
 		{
 		    if(S_Out==0)                                                    //信号输入为0，就停止所有计数器，输出也为0
@@ -585,7 +585,7 @@ int CurrentProtection(int S_Out,u16 IBus,u16 UBus)
 			}
 			else
 			{
-			    if(num_I<20000)                                             //2秒计时
+			    if(num_I<10000)                                             //2秒计时
 				{
 				    num_I++;
 					if(FuncEK>0)                                            //电流有超限
@@ -593,7 +593,7 @@ int CurrentProtection(int S_Out,u16 IBus,u16 UBus)
 						Warm[OverrunFlag] = OverrunFlag;
 					    num_I_stop++;                                       //2秒内电流超限次数
 
-						I_Out = LimitOutput(S_Out,Dir_Xinghao,FuncEK,FuncTorque);      //电流对信号限制								      
+						I_Out = LimitOutput(S_Out,Dir_Xinghao,FuncEK,FuncTorque[gFuncTorque-2]);      //电流对信号限制								      
 					}
 					else
 					{                                                 //没有电流超限就正常输出
@@ -603,7 +603,7 @@ int CurrentProtection(int S_Out,u16 IBus,u16 UBus)
 				}
 				else
 				{                                                      //2秒计时到了
-				    if(num_I_stop>=10000)                                    //如电流超限次数达到1半以上就关闭输出
+				    if(num_I_stop>=5000)                                    //如电流超限次数达到1半以上就关闭输出
 					{ 
 					     I_Out=0;
 		                 bit_I=1;                                           //显示报警标志

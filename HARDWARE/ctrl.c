@@ -402,7 +402,7 @@ void PwmOut(int SpeedOut)     //100us调用一次，更新pwm
 		TIM1->CCR1=SetPwmValue;	         	//输出到TIM1的PWM寄存器
 		TIM1->CCR2=SetPwmValue;
 		TIM1->CCR3=SetPwmValue; 
-		if(bldc_dev.motor_state==STOP && SetPwmValue>=100) 	//如果电机是停止状态，则需要调用启动程序
+		if(bldc_dev.motor_state==STOP && SetPwmValue>=50) 	//如果电机是停止状态，则需要调用启动程序
 		{
 			BLDC_Start();
 		}
